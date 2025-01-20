@@ -1,22 +1,22 @@
-after initializing the projetc you can run the projetc easily with "cmd /c start.bat"
+Project Setup
 
-To initialize environment
+To initialize and run the project:
 
-cd api
-python3 -m venv venv OR
-python -m venv venv
+1.  **Backend (API):**
+    *   Navigate to the API directory: `cd api`
+    *   Create a virtual environment: `python3 -m venv venv` (Use `python` if `python3` isn't available)
+    *   Activate the virtual environment: `.\venv\Scripts\activate` 
+    *   Install Flask: `pip install Flask`
 
-Activate virtual environment
-.\venv\Scripts\activate
+2.  **Frontend (Client):**
+    *   Navigate to the client directory: `cd client`
+    *   Install dependencies: `npm install`
 
-Install flask
-pip install Flask
+3.  **Run the Project:**
+    *   Execute the `start.bat` script: `cmd /c start.bat`
 
-Initialize react
-cd client
-npm install
 
-These instructions may or may not work. I did not test them.
+**Note:** These instructions have been reviewed for clarity but have not been tested.
 
 
 
