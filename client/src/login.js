@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
+import './login.css'; 
 
-function Login({ setUserId }) {
+function Login({ setUserId ,setAuthView}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -39,8 +40,15 @@ function Login({ setUserId }) {
           required
         />
         <button type="submit">Login</button>
+    
       </form>
+      <p className="notRegistered">
+        Don't have an account?{" "}
+        <button onClick={() => setAuthView("register")}>Register</button>
+      </p>
+
     </div>
+    
   );
 }
 

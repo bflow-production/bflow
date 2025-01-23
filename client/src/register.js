@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
+import './login.css'; 
 
-function Register({ onRegister }) {
+function Register({ onRegister, setAuthView }) {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -89,6 +90,11 @@ function Register({ onRegister }) {
         />
         <button type="submit">Register</button>
       </form>
+
+      <p className="notRegistered">
+        Already have an account?{" "}
+        <button onClick={() => setAuthView("login")}>Login</button>
+      </p>
     </div>
   );
 }

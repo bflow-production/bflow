@@ -9,6 +9,7 @@ CORS(app)
 
 db = Database("BFLOW.db")
 
+#Todo This needs to use  a hashed password
 @app.route('/api/login', methods=['POST'])
 def login():
 
@@ -44,7 +45,7 @@ def get_user_data(user_id):
     }
     return jsonify(user_data)
 
-
+#Todo This needs to store password as a hash
 @app.route('/api/register', methods=['POST'])
 def add_user():
     data = request.json

@@ -60,27 +60,13 @@ function App() {
   };
 
   if (!userId) {
-    // Show Login or Register view
     return (
       <div className="auth-container">
         {authView === "login" ? (
-          <Login setUserId={setUserId} />
+          <Login setUserId={setUserId} setAuthView={setAuthView} />
         ) : (
-          <Register onRegister={() => setAuthView("login")} />
+          <Register setAuthView={setAuthView} />
         )}
-        <p>
-          {authView === "login" ? (
-            <>
-              Don't have an account?{" "}
-              <button onClick={() => setAuthView("register")}>Register</button>
-            </>
-          ) : (
-            <>
-              Already have an account?{" "}
-              <button onClick={() => setAuthView("login")}>Login</button>
-            </>
-          )}
-        </p>
       </div>
     );
   }
