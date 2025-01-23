@@ -1,8 +1,8 @@
 .login {
   display: flex;
   flex-direction: column; /* Stack items vertically */
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+
+  align-items: center; 
   height: 100vh; /* Full height of the viewport */
   padding: 20px;
   border: 1px solid #ccc;
@@ -61,11 +61,26 @@ form {
   border-radius: 8px;
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4);
 }
+.header {
+  background-color: #333; /* Dark background for contrast */
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: left;
+}
 
 form label {
   margin: 5px 0;
 }
-
+.title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 20px; /* Adjust as needed for spacing */
+  font-size: 2rem; /* Adjust font size for visibility */
+  font-weight: bold; /* Optional: Make the title stand out */
+}
 form input {
   width: 100%;
   padding: 8px;

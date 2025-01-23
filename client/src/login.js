@@ -21,6 +21,10 @@ function Login({ setUserId ,setAuthView}) {
   };
 
   return (
+    <>
+    <header className="header">
+      <h1 className="headerTitle">Welcome to B'FLOW</h1>
+    </header>
     <div className="login">
       <h1>Login</h1>
       {error && <p className="error">{error}</p>}
@@ -40,14 +44,13 @@ function Login({ setUserId ,setAuthView}) {
           required
         />
         <button type="submit">Login</button>
-    
       </form>
       <p className="notRegistered">
         Don't have an account?{" "}
         <button onClick={() => setAuthView("register")}>Register</button>
       </p>
-
     </div>
+  </>
     
   );
 }

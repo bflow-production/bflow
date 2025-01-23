@@ -36,8 +36,13 @@ function Register({ onRegister, setAuthView }) {
   };
 
   return (
+    <>
+    <header className="header">
+    <h1 className="headerTitle">Welcome to B'FLOW</h1>
+  </header>
     <div className="register">
       <h1>Register</h1>
+
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>
         <label>Name:</label>
@@ -96,6 +101,7 @@ function Register({ onRegister, setAuthView }) {
         <button onClick={() => setAuthView("login")}>Login</button>
       </p>
     </div>
+    </>
   );
 }
 
