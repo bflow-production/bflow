@@ -18,7 +18,7 @@ def login():
 
     user = db.get_user_by_email(email)
 
-    if not user or user[1] != password:  
+    if not user or user[2] != password:  
         return jsonify({"error": "Invalid username or password"}), 401
 
     return jsonify({"message": "Login successful", "user_id": user[0]})
@@ -52,14 +52,14 @@ def add_user():
         app.logger.debug(f"Received data: {data}")
         
         user_id = db.add_user(
-            kayttajatunnus=data["username"], 
-            salasana=data["password"],
-            mailiosoite=data["email"],
-            nimi=data["name"],
-            syntymavuosi=data["birthYear"],
-            maa=data["country"],
-            pelinumero=data.get("pelinumero", 0),  
-            joukkue_id=data.get("joukkue_id", None)  
+            username=data["username"], 
+            password=data["password"],
+            email=data["email"],
+            name=data["name"],
+            birthYear=data["birthYear"],
+            country=data["country"],
+            number=data.get("pelinumero", 0),  
+            team_id=data.get("joukkue_id", None)  
         )
     
         app.logger.debug(f"User added with ID: {user_id}")
