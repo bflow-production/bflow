@@ -1,38 +1,119 @@
+html,
+body,
+#root {
+    height: 100%; /* Make all parent elements fill their parent */
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  background-color: #f4f4f4;
+  color: #333;
+  height: 100%;
+
+}
+
 .App {
-  text-align: center;
-}
+  display: flex;
+  flex-direction: column; 
+  background-color: white;
+  width: 100%; 
+  height: 100%;
+  flex: 1;
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background-color: #13be00;
+  color: white;
+  font-size: 10px;
+  height: 20px;
+  padding: 1rem;
+  
+}
+.App-header .app-title {
+  font-weight: 800;
+  color: #000000;
+  text-transform: uppercase;
+  letter-spacing: 0.1em; 
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5em; 
+}
+
+.App-header h2 {
+  font-size: 10;
+  margin: 0 auto; /* Center horizontally */
+  color: rgb(255, 255, 255);
+}
+
+.app-content { 
+  display: flex;
+  flex-direction: row; 
+  flex: 1; 
+  overflow: hidden;
+  
+}
+
+.nav {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-items: stretch;
+  border-right: 1px solid #ddd;
+  padding: 1rem;
+  width: 150px;
+  background-color: #f9f9f9;
+}
+
+.nav button {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  text-align: left;
+}
+
+.nav button:hover {
+  background-color: #e9ecef;
+  transform: scale(1.02);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav button.active {
+  background-color: #13be00;
   color: white;
+  border-color: #129104;
 }
 
-.App-link {
-  color: #61dafb;
+.main {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.profile-view h2,
+.stats-view h2,
+.training-view h2 {
+  color: #13be00;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.5rem;
+}
+
+.training-view ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.training-view li {
+  margin-bottom: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f9f9f9;
 }
