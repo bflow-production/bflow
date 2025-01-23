@@ -1,23 +1,27 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./App.css";
+import Login from "./login";
+import Register from "./register";
+import "./register.js";
 
 function App() {
   const [userData, setUserData] = useState(null);
+  const [userId, setUserId] = useState(null);
   const [activeView, setActiveView] = useState("profile");
-  const userId = 2;
+  const [authView, setAuthView] = useState("login");
   const backendURL = "http://127.0.0.1:5000";
 
+ 
   useEffect(() => {
-    axios
-      .get(`${backendURL}/api/user/${userId}`)
-      .then((response) => setUserData(response.data))
-      .catch((error) => console.error("Error fetching data:", error));
+    if (userId) {
+      axios
+        .get(`${backendURL}/api/user/${userId}`)
+        .then((response) => setUserData(response.data))
+        .catch((error) => console.error("Error fetching user data:", error));
+    }
   }, [userId]);
 
-  if (!userData) {
-    return <div>Loading...</div>;
-  }
 
   const renderView = () => {
     switch (activeView) {
@@ -54,6 +58,32 @@ function App() {
         return <div>Invalid View</div>;
     }
   };
+
+  if (!userId) {
+    // Show Login or Register view
+    return (
+      <div className="auth-container">
+        {authView === "login" ? (
+          <Login setUserId={setUserId} />
+        ) : (
+          <Register onRegister={() => setAuthView("login")} />
+        )}
+        <p>
+          {authView === "login" ? (
+            <>
+              Don't have an account?{" "}
+              <button onClick={() => setAuthView("register")}>Register</button>
+            </>
+          ) : (
+            <>
+              Already have an account?{" "}
+              <button onClick={() => setAuthView("login")}>Login</button>
+            </>
+          )}
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="App">

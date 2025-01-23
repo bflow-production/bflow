@@ -1,0 +1,96 @@
+import React, { useState } from "react";
+import axios from "axios";
+
+function Register({ onRegister }) {
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    name: "",
+    birthYear: "",
+    country: "",
+  });
+  const [error, setError] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("http://127.0.0.1:5000/api/register", {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        name: formData.name,
+        birthYear: parseInt(formData.birthYear),
+        country: formData.country,
+      });
+      onRegister();
+    } catch (err) {
+        setError(`Registration failed. Please try again. ${err.response?.data?.message || err.message}`);
+    }
+  };
+
+  return (
+    <div className="register">
+      <h1>Register</h1>
+      {error && <p className="error">{error}</p>}
+      <form onSubmit={handleSubmit}>
+        <label>Name:</label>
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+        />
+        <label>Email:</label>
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+        <label>Username:</label>
+        <input
+          type="text"
+          name="username"
+          value={formData.username}
+          onChange={handleChange}
+          required
+        />
+        <label>Password:</label>
+        <input
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+        />
+        <label>Birth Year:</label>
+        <input
+          type="number"
+          name="birthYear"
+          value={formData.birthYear}
+          onChange={handleChange}
+          required
+        />
+        <label>Country:</label>
+        <input
+          type="text"
+          name="country"
+          value={formData.country}
+          onChange={handleChange}
+          required
+        />
+        <button type="submit">Register</button>
+      </form>
+    </div>
+  );
+}
+
+export default Register;
