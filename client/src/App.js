@@ -4,6 +4,9 @@ import "./App.css";
 import Login from "./login";
 import Register from "./register";
 import "./register.js";
+import ProfileView from './profileView';
+import StatsView from './statsView';
+import TrainingView from './trainingView';
 
 function App() {
   const [userData, setUserData] = useState(null);
@@ -26,34 +29,11 @@ function App() {
   const renderView = () => {
     switch (activeView) {
       case "profile":
-        return (
-          <div className="profile-view">
-            <h2>Profile</h2>
-            <p>Age: {userData?.profile?.age}</p>
-            <p>Location: {userData?.profile?.location}</p>
-          </div>
-        );
+        return <ProfileView userData={userData} />;
       case "stats":
-        return (
-          <div className="stats-view">
-            <h2>Stats</h2>
-            <p>Workouts: {userData?.stats?.workouts}</p>
-            <p>Total Time: {userData?.stats?.total_time}</p>
-          </div>
-        );
+        return <StatsView userData={userData} />;
       case "training":
-        return (
-          <div className="training-view">
-            <h2>Training</h2>
-            <ul>
-              {userData?.training?.map((item, index) => (
-                <li key={index}>
-                  {item?.date}: {item?.workout}
-                </li>
-              ))}
-            </ul>
-          </div>
-        );
+        return <TrainingView userData={userData} />;
       default:
         return <div>Invalid View</div>;
     }
