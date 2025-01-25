@@ -1,11 +1,11 @@
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from database import Database 
 from werkzeug.security import check_password_hash
 from werkzeug.security import check_password_hash, generate_password_hash
 import os
 import jwt
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
@@ -15,10 +15,10 @@ db = Database("BFLOW.db")
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'secret_key')
 
 def generate_token(user_id):
-    expiration_time = timedelta(hours=1) 
+    expiration_time = timedelta(hours=1)
     payload = {
         'user_id': user_id,
-        'exp': datetime.utcnow() + expiration_time
+        'exp': datetime.now(timezone.utc) + expiration_time 
     }
     token = jwt.encode(payload, app.config['SECRET_KEY'], algorithm='HS256')
     return token
