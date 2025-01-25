@@ -55,6 +55,17 @@ function App() {
     }
   }, [userData?.userId]); 
 
+  useEffect(() => {
+    // Function to clear local storage before the window is closed
+    const clearLocalStorage = () => {
+      localStorage.clear();
+    };
+    window.onbeforeunload = clearLocalStorage;
+    return () => {
+      window.onbeforeunload = null;
+    };
+  }, []);
+
   const renderView = () => {
     switch (activeView) {
       case "profile":
