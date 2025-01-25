@@ -39,7 +39,9 @@ def login():
     
     return jsonify({
         "message": "Login successful",
-        "token": token  
+        "token": token,
+        "user_id": user[0],  
+        "user_name": user[1], 
     })
 
 
@@ -48,20 +50,33 @@ def get_user_data(user_id):
     user = db.get_user(user_id) 
     if not user:
         return jsonify({"error": "User not found"}), 404
- 
+ #INDEXING MAY NOT BE CORRECT
     user_data = {
         "id": user[0],  
-        "name": user[4], 
+        "username": user[1], 
+        "password": user[2],  
+        "email": user[3],  
+        "name": user[4],  
+        "picture": user[5],  
+        "birthYear": user[6],  
+        "country": user[7], 
+        "shirtNumber": user[16],  
+        "team": user[15],  
+        "coach": user[12],  
+        "coachEmail": user[13], 
+        "parent": user[9],  
+        "parentEmail": user[10],    
         "profile": {
-            "age": 2025 - user[6], 
+            "age": 2025 - user[6],  
             "location": user[7],  
         },
         "stats": { 
-            "workouts": 0,
-            "total_time": "0h",
+            "workouts": 0,  
+            "total_time": "0h",  
         },
-        "training": []  
+        "training": []  # Empty training array
     }
+
     return jsonify(user_data)
 
 #Todo This needs to store password as a hash
