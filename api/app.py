@@ -1,28 +1,47 @@
-from flask import Flask, jsonify, request
+from flask import Flask, request, jsonify, session
 from flask_cors import CORS
 from database import Database 
 from werkzeug.security import check_password_hash
-from flask_jwt_extended import JWTManager, create_access_token
+from werkzeug.security import check_password_hash, generate_password_hash
+import os
+import jwt
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
 
 db = Database("BFLOW.db")
 
-#Todo This needs to use  a hashed password
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'secret_key')
+
+def generate_token(user_id):
+    expiration_time = timedelta(hours=1) 
+    payload = {
+        'user_id': user_id,
+        'exp': datetime.utcnow() + expiration_time
+    }
+    token = jwt.encode(payload, app.config['SECRET_KEY'], algorithm='HS256')
+    return token
+
+
 @app.route('/api/login', methods=['POST'])
 def login():
-
     data = request.json
     email = data.get('email')
     password = data.get('password')
 
     user = db.get_user_by_email(email)
 
-    if not user or user[2] != password:  
+    if not user or not check_password_hash(user[2], password): 
         return jsonify({"error": "Invalid username or password"}), 401
+    
+    token = generate_token(user[0])
+    
+    return jsonify({
+        "message": "Login successful",
+        "token": token  
+    })
 
-    return jsonify({"message": "Login successful", "user_id": user[0]})
 
 @app.route('/api/user/<int:user_id>', methods=['GET'])
 def get_user_data(user_id):
@@ -51,10 +70,11 @@ def add_user():
     data = request.json
     try:
         app.logger.debug(f"Received data: {data}")
+        hashed_password = generate_password_hash(data["password"])
         
         user_id = db.add_user(
             username=data["username"], 
-            password=data["password"],
+            password=hashed_password,
             email=data["email"],
             name=data["name"],
             birthYear=data["birthYear"],
@@ -68,6 +88,29 @@ def add_user():
     except Exception as e:
         app.logger.error(f"Error: {str(e)}")
         return jsonify({"error": str(e)}), 400
+    
+@app.route('/api/verify-session', methods=['GET'])
+def verify_session():
+    token = request.headers.get('Authorization')
+    if not token:
+        return jsonify({"error": "Token is missing"}), 401
+
+    try:
+        token = token.split(" ")[1]
+        payload = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+        user_id = payload['user_id']
+
+   
+        user = db.get_user(user_id)
+        if user:
+            return jsonify({"valid": True, "userId": user_id}), 200
+        else:
+            return jsonify({"valid": False}), 401
+
+    except jwt.ExpiredSignatureError:
+        return jsonify({"error": "Token has expired"}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({"error": "Invalid token"}), 401
 
 
 

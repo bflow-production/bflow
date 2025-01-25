@@ -2,23 +2,45 @@ import React, { useState } from "react";
 import axios from "axios";
 import './login.css'; 
 
-function Login({ setUserId ,setAuthView}) {
+function Login({setAuthView, setUserData, setActiveView}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const backendURL = "http://127.0.0.1:5000";
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+    
     try {
-      const response = await axios.post("http://127.0.0.1:5000/api/login", {
-        email: email,
-        password: password,
+    
+      const response = await axios.post(`${backendURL}/api/login`, {
+        email,
+        password,
       });
-      setUserId(response.data.user_id); 
-    } catch (err) {
-      setError("Invalid email or password");
+  
+      if (response.data.message === "Login successful") {
+
+        const { token, user_id, user_name } = response.data; 
+        localStorage.setItem("jwtToken", token); 
+        setActiveView("profile");
+
+        setUserData({
+          userId: user_id, 
+          username: user_name, 
+        });
+
+      } else {
+        setError("Invalid credentials");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setError("An error occurred during login.");
     }
   };
+  
+  
+  
+
 
   return (
     <>
@@ -28,7 +50,7 @@ function Login({ setUserId ,setAuthView}) {
     <div className="login">
       <h1>Login</h1>
       {error && <p className="error">{error}</p>}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleLogin}>
         <label>Email:</label>
         <input
           type="email"

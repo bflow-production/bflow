@@ -1,23 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
 import "./profileView.css";
+
 const ProfileView = ({ userData }) => {
   const [profile, setProfile] = useState({
-    username: userData?.profile?.username || "",
-    password: userData?.profile?.password || "",
-    email: userData?.profile?.email || "",
-    name: userData?.profile?.name || "",
-    picture: userData?.profile?.picture || "",
-    birthYear: userData?.profile?.birthYear || "",
-    country: userData?.profile?.country || "",
-    playerNumber: userData?.profile?.playerNumber || "",
-    team: userData?.profile?.team || "",
-    coach: userData?.profile?.coach || "",
-    coachEmail: userData?.profile?.coachEmail || "",
-    parent1: userData?.profile?.parent1 || "",
-    parent1Email: userData?.profile?.parent1Email || "",
-    parent2: userData?.profile?.parent2 || "",
-    parent2Email: userData?.profile?.parent2Email || "",
+    username: "",
+    password: "",
+    email: "",
+    name: "",
+    picture: "",
+    birthYear: "",
+    country: "",
+    playerNumber: "",
+    team: "",
+    coach: "",
+    coachEmail: "",
+    parent1: "",
+    parent1Email: "",
+    parent2: "",
+    parent2Email: "",
   });
+
+  useEffect(() => {
+    if (userData?.profile) {
+      setProfile({
+        username: userData.profile.username || "",
+        password: userData.profile.password || "",
+        email: userData.profile.email || "",
+        name: userData.profile.name || "",
+        picture: userData.profile.picture || "",
+        birthYear: userData.profile.birthYear || "",
+        country: userData.profile.country || "",
+        playerNumber: userData.profile.playerNumber || "",
+        team: userData.profile.team || "",
+        coach: userData.profile.coach || "",
+        coachEmail: userData.profile.coachEmail || "",
+        parent1: userData.profile.parent1 || "",
+        parent1Email: userData.profile.parent1Email || "",
+        parent2: userData.profile.parent2 || "",
+        parent2Email: userData.profile.parent2Email || "",
+      });
+    }
+  }, [userData]); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;

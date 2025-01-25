@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import './login.css'; 
 
-function Register({ onRegister, setAuthView }) {
+function Register({ onRegister,setAuthView }) {
   const [formData, setFormData] = useState({
     username: "",
     email: "",

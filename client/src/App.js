@@ -1,30 +1,59 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { jwtDecode } from 'jwt-decode';
 import "./App.css";
 import Login from "./login";
 import Register from "./register";
-import "./register.js";
 import ProfileView from './profileView';
 import StatsView from './statsView';
 import TrainingView from './trainingView';
 
+const backendURL = "http://127.0.0.1:5000";
+
 function App() {
   const [userData, setUserData] = useState(null);
-  const [userId, setUserId] = useState(null);
   const [activeView, setActiveView] = useState("profile");
   const [authView, setAuthView] = useState("login");
-  const backendURL = "http://127.0.0.1:5000";
 
- 
+
   useEffect(() => {
-    if (userId) {
-      axios
-        .get(`${backendURL}/api/user/${userId}`)
-        .then((response) => setUserData(response.data))
-        .catch((error) => console.error("Error fetching user data:", error));
-    }
-  }, [userId]);
+    const token = localStorage.getItem("jwtToken");
 
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        // Validate token expiration 
+        if (decodedToken.exp * 1000 < Date.now()) {
+          throw new Error("Token expired");
+        }
+        setUserData({
+          userId: decodedToken.user_id,
+          username: decodedToken.username,
+          // Any other user-specific data in the token
+        });
+      } catch (error) {
+        console.error("Invalid or expired token:", error);
+        localStorage.removeItem("jwtToken"); 
+        setUserData(null); 
+      }
+    }
+  }, []);  
+
+  // Fetch user data from the backend using userId 
+  useEffect(() => {
+    if (userData?.userId) {
+      axios
+        .get(`${backendURL}/api/user/${userData.userId}`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("jwtToken")}` }
+        })
+        .then((response) => {
+          setUserData((prevData) => ({ ...prevData, ...response.data }));
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
+        });
+    }
+  }, [userData?.userId]); 
 
   const renderView = () => {
     switch (activeView) {
@@ -38,18 +67,25 @@ function App() {
         return <div>Invalid View</div>;
     }
   };
+  
 
-  if (!userId) {
+  if (!userData) {
     return (
       <div className="auth-container">
         {authView === "login" ? (
-          <Login setUserId={setUserId} setAuthView={setAuthView} />
+          <Login setAuthView={setAuthView} setUserData={setUserData} setActiveView={setActiveView} />
         ) : (
           <Register setAuthView={setAuthView} />
         )}
       </div>
     );
   }
+
+  const handleLogout = () => {
+    localStorage.removeItem("jwtToken");
+    setUserData(null);
+    setActiveView("login")
+  };
 
   return (
     <div className="App">
@@ -58,9 +94,9 @@ function App() {
           <span className="app-title">B'FLOW</span>
         </h1>
         <h2>{userData?.name}</h2>
+        <button onClick={handleLogout}>Log Out</button>
       </header>
       <div className="app-content">
-        {" "}
         <nav className="nav">
           <button
             onClick={() => setActiveView("profile")}
