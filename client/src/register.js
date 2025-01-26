@@ -29,7 +29,6 @@ function Register({ onRegister,setAuthView }) {
         birthYear: parseInt(formData.birthYear),
         country: formData.country,
       });
-      onRegister();
     } catch (err) {
         setError(`Registration failed. Please try again. ${err.response?.data?.message || err.message}`);
     }

@@ -95,8 +95,9 @@ const ProfileView = ({ userData }) => {
  
 
   return (
+
     <div className="profile-view">
-      <h2>PROFIILI</h2>
+      <h2 className="header-profile">Profile</h2>
   
       <div className="right-container">
         {/* HBox container */}

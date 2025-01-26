@@ -65,19 +65,33 @@ def get_user_data(user_id):
         "coach": user[12],  
         "coachEmail": user[13], 
         "parent": user[9],  
-        "parentEmail": user[10],    
-        "profile": {
-            "age": 2025 - user[6],  
-            "location": user[7],  
-        },
-        "stats": { 
-            "workouts": 0,  
-            "total_time": "0h",  
-        },
-        "training": []  # Empty training array
+        "parentEmail": user[10]
     }
 
     return jsonify(user_data)
+
+@app.route('/api/training/<int:user_id>', methods=['GET'])
+def get_user_training_data(user_id):
+   
+    training_data = db.get_categories_and_exercises_with_ratings(user_id)
+
+    if not training_data:
+        return jsonify({"error": "No training data found for this user"}), 404
+
+    return jsonify(training_data)
+
+@app.route('/api/training/<int:user_id>', methods=['PUT'])
+def update_training_data(user_id):
+    data = request.json
+    try:
+        db.update_exercise(data)
+        return jsonify({"message": "Training data updated successfully"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+
+
+
 
 #Todo This needs to store password as a hash
 @app.route('/api/register', methods=['POST'])
