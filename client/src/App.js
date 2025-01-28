@@ -40,6 +40,7 @@ function App() {
   }, []);  
 
   // Fetch user data from the backend using userId 
+  //todo: API needs a decorator to check the token(unimplemented)
   useEffect(() => {
     if (userData?.userId) {
       axios

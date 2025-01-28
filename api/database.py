@@ -65,14 +65,11 @@ class Database:
             player_id INTEGER NOT NULL,
             exercise_id INTEGER NOT NULL,
             result TEXT DEFAULT NULL, -- Example: "45 km/h" for SHO exercises
-            rating INTEGER DEFAULT NULL CHECK (rating BETWEEN 1 AND 5), -- Self-assessment scale
+            rating INTEGER DEFAULT NULL CHECK (rating BETWEEN 1 AND 5), -- Self-assessment scale, --Convert to TEXT in client?
             FOREIGN KEY (player_id) REFERENCES PLAYER(id) ON DELETE CASCADE,
             FOREIGN KEY (exercise_id) REFERENCES EXERCISE(id) ON DELETE CASCADE
         )
         """)
-        
-        cursor.execute("SELECT * FROM PLAYER_EXERCISE")
-        print(cursor.fetchall()) 
 
         # Insert categories
         categories = ['PAC', 'SHO', 'PAS', 'DRI', 'DEF', 'PHY']
@@ -133,9 +130,6 @@ class Database:
         INSERT INTO PLAYER_EXERCISE (player_id, exercise_id)
         VALUES (?, ?)
         """, player_exercises)
-        
-        cursor.execute("SELECT * FROM PLAYER_EXERCISE")
-        print(cursor.fetchall())
         
         conn.commit()
         return cursor.lastrowid

@@ -90,9 +90,6 @@ def update_training_data(user_id):
         return jsonify({"error": str(e)}), 400
 
 
-
-
-
 #Todo This needs to store password as a hash
 @app.route('/api/register', methods=['POST'])
 def add_user():
