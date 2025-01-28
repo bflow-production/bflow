@@ -69,6 +69,7 @@
   button:hover {
     background-color: #45a049;
   }
+  /*for smaller devices*/
   @media (max-width: 768px) {
     .hbox {
       flex-direction: column; 
