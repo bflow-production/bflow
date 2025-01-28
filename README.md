@@ -7,6 +7,8 @@ To initialize and run the project:
     *   Create a virtual environment: `python3 -m venv venv` (Use `python` if `python3` isn't available)
     *   Activate the virtual environment: `.\venv\Scripts\activate` (It may also be the bin folder for your system)
     *   Install Flask: `pip install -r requirements.txt
+    *   Install Flask-Cors: `pip install Flask-Cors
+    *   Install pyjwt: `pip install pyjwt
 
 2.  **Frontend (Client):**
     *   Navigate to the client directory: `cd client`
