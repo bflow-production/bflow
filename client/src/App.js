@@ -14,6 +14,7 @@ function App() {
   const [userData, setUserData] = useState(null);
   const [activeView, setActiveView] = useState("profile");
   const [authView, setAuthView] = useState("login");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
 
   useEffect(() => {
@@ -74,6 +75,8 @@ function App() {
         return <StatsView userData={userData} />;
       case "training":
         return <TrainingView userData={userData} />;
+      case "settings":
+        return <div>Settings View (coming soon!)</div>;
       default:
         return <div>Invalid View</div>;
     }
@@ -96,6 +99,16 @@ function App() {
     localStorage.removeItem("jwtToken");
     setUserData(null);
     setActiveView("login")
+    setDropdownOpen(false);
+  };
+
+  const handleSettings = () => {
+    setActiveView("settings");
+    setDropdownOpen(false); // Close the dropdown when navigating to settings
+  };
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
   };
 
   return (
@@ -105,8 +118,20 @@ function App() {
           <span className="app-title">B'FLOW</span>
         </h1>
         <h2>{userData?.name}</h2>
-        <button onClick={handleLogout}>Log Out</button>
+        
+      <div className="dropdown">
+          <button className="dropdown-toggle" onClick={toggleDropdown}>
+          ☰
+          </button>
+          {dropdownOpen && (
+            <div className="dropdown-menu">
+              <button className="settings-button" onClick={handleSettings}>Settings</button>
+              <button className="logout-button" onClick={handleLogout}>Log Out</button>
+            </div>
+          )}
+        </div>
       </header>
+
       <div className="app-content">
         <nav className="nav">
           <button
