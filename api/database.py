@@ -16,9 +16,9 @@ class Database:
         with self._get_connection() as conn:
             cursor = conn.cursor()
             
-            # Create PLAYER table
-            cursor.execute("""
-            CREATE TABLE IF NOT EXISTS PLAYER (
+        # Create PLAYER table
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS PLAYER (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT UNIQUE NOT NULL,
                 password TEXT NOT NULL,
@@ -40,7 +40,48 @@ class Database:
                 FOREIGN KEY (team_id) REFERENCES TEAM(id) ON DELETE SET NULL
             )
             """)
-            cursor.execute("""
+        # Create COACH table
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS COACH (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            name TEXT NOT NULL,
+            picture TEXT DEFAULT NULL,
+            birthYear INTEGER NOT NULL,
+            country TEXT NOT NULL,
+            team TEXT DEFAULT NULL,
+            team_id INTEGER DEFAULT NULL,
+            FOREIGN KEY (team_id) REFERENCES TEAM(id) ON DELETE SET NULL
+        )
+        """)
+        # Create PARENT table
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS PARENT (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            name TEXT NOT NULL,
+            picture TEXT DEFAULT NULL,
+            birthYear INTEGER NOT NULL,
+            country TEXT NOT NULL
+        )
+        """)
+        # CREATE CHILD table
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS PARENT_PLAYER (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            parent_id INTEGER NOT NULL,
+            player_id INTEGER NOT NULL,
+            FOREIGN KEY (parent_id) REFERENCES PARENT(id) ON DELETE CASCADE,
+            FOREIGN KEY (player_id) REFERENCES PLAYER(id) ON DELETE CASCADE
+        )
+        """)
+            
+        # Create CATEGORY table
+        cursor.execute("""
         CREATE TABLE IF NOT EXISTS CATEGORY (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT UNIQUE NOT NULL
