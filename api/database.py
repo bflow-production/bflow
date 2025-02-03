@@ -40,10 +40,49 @@ class Database:
                 FOREIGN KEY (team_id) REFERENCES TEAM(id) ON DELETE SET NULL
             )
             """)
-            cursor.execute("""
+        cursor.execute("""
         CREATE TABLE IF NOT EXISTS CATEGORY (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT UNIQUE NOT NULL
+        )
+        """)
+        # Create COACH table
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS COACH (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            name TEXT NOT NULL,
+            picture TEXT DEFAULT NULL,
+            birthYear INTEGER NOT NULL,
+            country TEXT NOT NULL,
+            team TEXT DEFAULT NULL,
+            team_id INTEGER DEFAULT NULL,
+            FOREIGN KEY (team_id) REFERENCES TEAM(id) ON DELETE SET NULL
+        )
+        """)
+        # Create PARENT table
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS PARENT (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            name TEXT NOT NULL,
+            picture TEXT DEFAULT NULL,
+            birthYear INTEGER NOT NULL,
+            country TEXT NOT NULL
+        )
+        """)
+        # CREATE CHILD table
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS PARENT_PLAYER (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            parent_id INTEGER NOT NULL,
+            player_id INTEGER NOT NULL,
+            FOREIGN KEY (parent_id) REFERENCES PARENT(id) ON DELETE CASCADE,
+            FOREIGN KEY (player_id) REFERENCES PLAYER(id) ON DELETE CASCADE
         )
         """)
 
@@ -107,33 +146,51 @@ class Database:
         return sqlite3.connect(self.db_name)
 
 
-    def add_user(self, username, password, email, name, birthYear, country, number=None, team_id=None):
-     """
-    Add a new user to the PLAYER table.
-    """
-     number = number if number is not None else 0  
-     team_id = team_id if team_id is not None else None
-    
-     with self._get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute("""
-        INSERT INTO PLAYER (username, password, email, name, birthYear, country, number, team_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        """, (username, password, email, name, birthYear, country, number, team_id))
-        player_id = cursor.lastrowid  
+    def add_user(self, username, password, email, name, birthYear, country, role, number=None, team_id=None):
+        """
+        Add a new user to the appropriate table based on their role.
+        """
+        number = number if number is not None else 0  
+        team_id = team_id if team_id is not None else None
         
-        # Prepopulate PLAYER_EXERCISE
-        cursor.execute("SELECT id FROM EXERCISE")
-        exercises = cursor.fetchall()
-        player_exercises = [(player_id, exercise_id[0]) for exercise_id in exercises]
-        cursor.executemany("""
-        INSERT INTO PLAYER_EXERCISE (player_id, exercise_id)
-        VALUES (?, ?)
-        """, player_exercises)
-        
-        conn.commit()
-        return cursor.lastrowid
-
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            
+            if role == 'player':
+                cursor.execute("""
+                INSERT INTO PLAYER (username, password, email, name, birthYear, country, number, team_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """, (username, password, email, name, birthYear, country, number, team_id))
+                user_id = cursor.lastrowid
+                
+                # Prepopulate PLAYER_EXERCISE
+                cursor.execute("SELECT id FROM EXERCISE")
+                exercises = cursor.fetchall()
+                player_exercises = [(user_id, exercise_id[0]) for exercise_id in exercises]
+                cursor.executemany("""
+                INSERT INTO PLAYER_EXERCISE (player_id, exercise_id)
+                VALUES (?, ?)
+                """, player_exercises)
+            
+            elif role == 'coach':
+                cursor.execute("""
+                INSERT INTO COACH (username, password, email, name, birthYear, country, team_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+                """, (username, password, email, name, birthYear, country, team_id))
+                user_id = cursor.lastrowid
+            
+            elif role == 'parent':
+                cursor.execute("""
+                INSERT INTO PARENT (username, password, email, name, birthYear, country)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """, (username, password, email, name, birthYear, country))
+                user_id = cursor.lastrowid
+            
+            else:
+                raise ValueError("Invalid role provided")
+            
+            conn.commit()
+            return user_id
 
     def get_user(self, id):
         """
@@ -147,13 +204,31 @@ class Database:
             return cursor.fetchone()
         
     def get_user_by_email(self, email):
-        conn = sqlite3.connect(self.db_name)
-        cursor = conn.cursor()
-
-        query = "SELECT * FROM PLAYER WHERE email = ?"
-        cursor.execute(query, (email,))
-        return cursor.fetchone()
-
+        """
+        Retrieve a user by their email and determine their role.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            
+            # Check PLAYER table
+            cursor.execute("SELECT * FROM PLAYER WHERE email = ?", (email,))
+            user = cursor.fetchone()
+            if user:
+                return user, 'player'
+            
+            # Check COACH table
+            cursor.execute("SELECT * FROM COACH WHERE email = ?", (email,))
+            user = cursor.fetchone()
+            if user:
+                return user, 'coach'
+            
+            # Check PARENT table
+            cursor.execute("SELECT * FROM PARENT WHERE email = ?", (email,))
+            user = cursor.fetchone()
+            if user:
+                return user, 'parent'
+            
+            return None, None
     def update_user(self, id, **kwargs):
         """
         Update user information.
