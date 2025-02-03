@@ -30,7 +30,7 @@ def login():
     email = data.get('email')
     password = data.get('password')
 
-    user = db.get_user_by_email(email)
+    user, role = db.get_user_by_email(email)
 
     if not user or not check_password_hash(user[2], password): 
         return jsonify({"error": "Invalid username or password"}), 401
@@ -42,6 +42,7 @@ def login():
         "token": token,
         "user_id": user[0],  
         "user_name": user[1], 
+        "role": role
     })
 
 
@@ -105,6 +106,7 @@ def add_user():
             name=data["name"],
             birthYear=data["birthYear"],
             country=data["country"],
+            role = data.get('role'),
             number=data.get("pelinumero", 0),  
             team_id=data.get("joukkue_id", None)  
         )
