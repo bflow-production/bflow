@@ -48,9 +48,14 @@ def login():
 
 @app.route('/api/user/<int:user_id>', methods=['GET'])
 def get_user_data(user_id):
-    user = db.get_user(user_id) 
+    role = request.args.get('role')
+    if not role:
+        return jsonify({"error": "Role is required"}), 400
+
+    user = db.get_user(user_id, role)
     if not user:
         return jsonify({"error": "User not found"}), 404
+
  #INDEXING MAY NOT BE CORRECT
     user_data = {
         "id": user[0],  

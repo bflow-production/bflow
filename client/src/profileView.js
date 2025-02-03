@@ -5,6 +5,7 @@ import "./profileView.css";
 const ProfileView = ({ userData }) => {
  
  const id = userData.userId;
+ const role = userData.role;
  const backendURL = "http://127.0.0.1:5000";
 
   const [profile, setProfile] = useState({
@@ -20,15 +21,16 @@ const ProfileView = ({ userData }) => {
     coach: "",
     coachEmail: "",
     parent: "",
-    parentEmail: ""
+    parentEmail: "",
+    role: ""
   });
 
   useEffect(() => {
-    const id = userData.userId;
-    
+    //const id = userData.userId;
+    const role = userData.role;
     const fetchProfileData = async () => {
       try {
-        const response = await fetch(`${backendURL}/api/user/${id}`);
+        const response = await fetch(`${backendURL}/api/user/${id}?role=${role}`);
   
         if (!response.ok) {
           throw new Error("Failed to fetch profile data");
@@ -57,7 +59,7 @@ const ProfileView = ({ userData }) => {
     };
   
     fetchProfileData();
-  }, [id]);
+  }, [id, role]);
   
 
   const handleChange = (e) => {

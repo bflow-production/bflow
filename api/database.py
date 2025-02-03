@@ -233,17 +233,23 @@ class Database:
             conn.commit()
             return user_id
 
-    def get_user(self, id):
+    def get_user(self, id, role):
         """
-        Retrieve a user by their ID.
+        Retrieve a user by their ID and role.
         """
         with self._get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute("""
-            SELECT * FROM PLAYER WHERE id = ?
-            """, (id,))
+            if role == 'player':
+                query = "SELECT * FROM PLAYER WHERE id = ?"
+            elif role == 'coach':
+                query = "SELECT * FROM COACH WHERE id = ?"
+            elif role == 'parent':
+                query = "SELECT * FROM PARENT WHERE id = ?"
+            else:
+                raise ValueError("Invalid role provided")
+            
+            cursor.execute(query, (id,))
             return cursor.fetchone()
-        
     def get_user_by_email(self, email):
         """
         Retrieve a user by their email and determine their role.
