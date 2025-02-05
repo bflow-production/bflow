@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
-
+import axios from 'axios';
 import "./profileView.css";
 
 const ProfileView = ({ userData }) => {
- 
- const id = userData.userId;
- const role = userData.role;
- const backendURL = "http://127.0.0.1:5000";
+  const { userId, role } = userData;
+  const backendURL = "http://127.0.0.1:5000";
 
   const [profile, setProfile] = useState({
     username: "",
@@ -16,95 +14,67 @@ const ProfileView = ({ userData }) => {
     picture: "",
     birthYear: "",
     country: "",
-    shirtNumber: "",
+    number: "",
     team: "",
     coach: "",
     coachEmail: "",
     parent: "",
     parentEmail: "",
-    role: ""
+    childName: "",
+    childEmail: "",
+    role: role, // Ensure role is set correctly
   });
 
   useEffect(() => {
-    //const id = userData.userId;
-    const role = userData.role;
-    const fetchProfileData = async () => {
+    const fetchProfile = async () => {
       try {
-        const response = await fetch(`${backendURL}/api/user/${id}?role=${role}`);
-  
-        if (!response.ok) {
-          throw new Error("Failed to fetch profile data");
-        }
-  
-        const data = await response.json();
-        console.log(data)
-  
-        setProfile({
-          username: data.username || "",
-          email: data.email || "",
-          name: data.name || "",
-          picture: data.picture || "",
-          birthYear: data.birthYear || "",
-          country: data.country || "",
-          shirtNumber: data.shirtNumber || "",
-          team: data.team || "",
-          coach: data.coach || "",
-          coachEmail: data.coachEmail || "",
-          parent: data.parent || "",
-          parentEmail: data.parentEmail || ""
+        const response = await axios.get(`${backendURL}/api/user/${userId}?role=${role}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+          }
         });
+        setProfile(response.data);
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
     };
-  
-    fetchProfileData();
-  }, [id, role]);
-  
+
+    fetchProfile();
+  }, [userId, role, backendURL]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProfile((prev) => ({
-      ...prev,
-      [name]: value,  
-      
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      [name]: value
     }));
   };
 
   const handleSave = async () => {
     try {
-        const response = await fetch(`${backendURL}/api/user/${userData.userId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem("jwtToken")}`, 
-            },
-            body: JSON.stringify(profile),
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            console.log("User updated:", data.message);
-        } else {
-            const errorData = await response.json();
-            console.error("Error updating user:", errorData.error);
+      const profileData = { ...profile, role }; 
+      const response = await axios.put(`${backendURL}/api/user/${userId}`, profileData, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
         }
+      });
+      alert("Profile updated successfully");
     } catch (error) {
-        console.error("Error during save operation:", error);
+      if (error.response) {
+        alert(`Error updating profile: ${JSON.stringify(error.response.data)}`);
+      } else if (error.request) {
+        alert("Error updating profile: No response from server");
+      } else {
+        alert(`Error updating profile: ${error.message}`);
+      }
     }
-};
-
- 
+  };
 
   return (
-
     <div className="profile-view">
       <h2 className="header-profile">Profile</h2>
-  
       <div className="right-container">
-        {/* HBox container */}
         <div className="hbox">
-          {/* VBox 1 */}
           <div className="vbox">
             <div className="row">
               <div>
@@ -112,7 +82,7 @@ const ProfileView = ({ userData }) => {
                 <input
                   type="text"
                   name="username"
-                  value={profile.username }
+                  value={profile.username}
                   onChange={handleChange}
                 />
               </div>
@@ -126,29 +96,16 @@ const ProfileView = ({ userData }) => {
                 />
               </div>
             </div>
-  
             <div className="row">
-              <div>
-                <label>Mailiosoite:</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={profile.email }
-                  onChange={handleChange}
-                />
-              </div>
               <div>
                 <label>Nimi:</label>
                 <input
                   type="text"
                   name="name"
-                  value={profile.name }
+                  value={profile.name}
                   onChange={handleChange}
                 />
               </div>
-            </div>
-  
-            <div className="row">
               <div>
                 <label>Syntymävuosi:</label>
                 <input
@@ -159,10 +116,6 @@ const ProfileView = ({ userData }) => {
                 />
               </div>
             </div>
-          </div>
-  
-          {/* VBox 2 */}
-          <div className="vbox">
             <div className="row">
               <div>
                 <label>Maa:</label>
@@ -173,80 +126,122 @@ const ProfileView = ({ userData }) => {
                   onChange={handleChange}
                 />
               </div>
-            </div>
-  
-            <div className="row">
-              <div>
-                <label>Pelinumero:</label>
-                <input
-                  type="text"
-                  name="shirtNumber"
-                  value={profile.shirtNumber}
-                  onChange={handleChange}
-                />
-              </div>
               <div>
                 <label>Joukkue:</label>
                 <input
                   type="text"
                   name="team"
-                  value={profile.team }
+                  value={profile.team}
                   onChange={handleChange}
                 />
               </div>
             </div>
-  
-            <div className="row">
-              <div>
-                <label>Joukkueen valmentaja:</label>
-                <input
-                  type="text"
-                  name="coach"
-                  value={profile.coach }
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label>Valmentajan mailiosoite:</label>
-                <input
-                  type="email"
-                  name="coachEmail"
-                  value={profile.coachEmail }
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-  
-            <div className="row">
-              <div>
-                <label>Vanhempi 1:</label>
-                <input
-                  type="text"
-                  name="parent"
-                  value={profile.parent}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label>Mailiosoite:</label>
-                <input
-                  type="email"
-                  name="parentEmail"
-                  value={profile.parentEmail}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-  
+            {role === 'player' && (
+              <>
+                <div className="row">
+                  <div>
+                    <label>Joukkueen valmentaja:</label>
+                    <input
+                      type="text"
+                      name="coach"
+                      value={profile.coach}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div>
+                    <label>Valmentajan mailiosoite:</label>
+                    <input
+                      type="email"
+                      name="coachEmail"
+                      value={profile.coachEmail}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+                <div className="row">
+                  <div>
+                    <label>Vanhempi 1:</label>
+                    <input
+                      type="text"
+                      name="parent"
+                      value={profile.parent}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div>
+                    <label>Mailiosoite:</label>
+                    <input
+                      type="email"
+                      name="parentEmail"
+                      value={profile.parentEmail}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+                <div className="row">
+                  <div>
+                    <label>Pelinumero:</label>
+                    <input
+                      type="number"
+                      name="number"
+                      value={profile.number}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
             
-            </div>
+            {role === 'parent' && (
+              <>
+                <div className="row">
+                  <div>
+                    <label>Lapsen nimi:</label>
+                    <input
+                      type="text"
+                      name="childName"
+                      value={profile.childName}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div>
+                    <label>Lapsen mailiosoite:</label>
+                    <input
+                      type="email"
+                      name="childEmail"
+                      value={profile.childEmail}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+                <div className="row">
+                  <div>
+                    <label>Joukkueen valmentaja:</label>
+                    <input
+                      type="text"
+                      name="coach"
+                      value={profile.coach}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div>
+                    <label>Valmentajan mailiosoite:</label>
+                    <input
+                      type="email"
+                      name="coachEmail"
+                      value={profile.coachEmail}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
         <button className="hbox-button" onClick={handleSave}>Tallenna</button>
       </div>
-   
+    </div>
   );
-  
 };
 
 export default ProfileView;

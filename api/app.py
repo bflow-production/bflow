@@ -49,30 +49,64 @@ def login():
 @app.route('/api/user/<int:user_id>', methods=['GET'])
 def get_user_data(user_id):
     role = request.args.get('role')
+    print(f"Role: {role}")  # Print the role for debugging
     if not role:
         return jsonify({"error": "Role is required"}), 400
 
-    user = db.get_user(user_id, role)
+    try:
+        user = db.get_user(user_id, role)
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+
     if not user:
         return jsonify({"error": "User not found"}), 404
 
- #INDEXING MAY NOT BE CORRECT
-    user_data = {
-        "id": user[0],  
-        "username": user[1], 
-        "password": user[2],  
-        "email": user[3],  
-        "name": user[4],  
-        "picture": user[5],  
-        "birthYear": user[6],  
-        "country": user[7], 
-        "shirtNumber": user[16],  
-        "team": user[15],  
-        "coach": user[12],  
-        "coachEmail": user[13], 
-        "parent": user[9],  
-        "parentEmail": user[10]
-    }
+    if role == 'player':
+        user_data = {
+            "id": user[0],
+            "username": user[1],
+            "password": user[2],
+            "email": user[3],
+            "name": user[4],
+            "birthYear": user[6],
+            "country": user[7],
+            "number": user[8],
+            "parent": user[9],
+            "parentEmail": user[10],
+            "parentPhone": user[11],
+            "coach": user[12],
+            "coachEmail": user[13],
+            "coachPhone": user[14],
+            "team": user[15],
+            "shirtNumber": user[16],
+            "team_id": user[17]
+        }
+    elif role == 'coach':
+        user_data = {
+            "id": user[0],
+            "username": user[1],
+            "password": user[2],
+            "email": user[3],
+            "name": user[4],
+            "birthYear": user[6],
+            "country": user[7],
+            "team": user[8],
+            "team_id": user[9]
+        }
+    elif role == 'parent':
+        user_data = {
+            "id": user[0],
+            "username": user[1],
+            "password": user[2],
+            "email": user[3],
+            "name": user[4],
+            "birthYear": user[6],
+            "country": user[7],
+            "child_name": user[8],
+            "child_email": user[9]
+        }
+    else:
+        return {"error": "Invalid role provided"}, 400
 
     return jsonify(user_data)
 
@@ -148,17 +182,23 @@ def verify_session():
 
 
 
-@app.route('/api/user/<int:user_id>', methods=['PUT'])
-def update_user(user_id):
-
+@app.route('/api/user/<int:id>', methods=['PUT'])
+def update_user(id):
     data = request.json
+    role = data.get('role')
+    if not role:
+        return jsonify({"error": "Role is required"}), 400
+
+    if 'id' in data:
+        del data['id']
+    if 'role' in data:
+        del data['role']
     try:
-        db.update_user(user_id, **data)
+        db.update_user(id, role, **data)
         return jsonify({"message": "User updated successfully"})
     except Exception as e:
         return jsonify({"error": str(e)}), 400
-
-
+    
 @app.route('/api/user/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
     try:
