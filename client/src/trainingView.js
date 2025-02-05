@@ -145,6 +145,3 @@ const TrainingView = ({ userData }) => {
 };
 
 export default TrainingView;
-
-
-

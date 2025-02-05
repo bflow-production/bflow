@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
 import "./App.css";
 import Login from "./login";
 import Register from "./register";
-import ProfileView from './profileView';
-import StatsView from './statsView';
-import TrainingView from './trainingView';
+import ProfileView from "./profileView";
+import StatsView from "./statsView";
+import TrainingView from "./trainingView";
+import CompletedTrainingsView from "./CompletedTrainingsView";
 
 const backendURL = "http://127.0.0.1:5000";
 
@@ -16,14 +17,13 @@ function App() {
   const [authView, setAuthView] = useState("login");
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
 
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
-        // Validate token expiration 
+        // Validate token expiration
         if (decodedToken.exp * 1000 < Date.now()) {
           throw new Error("Token expired");
         }
@@ -34,19 +34,21 @@ function App() {
         });
       } catch (error) {
         console.error("Invalid or expired token:", error);
-        localStorage.removeItem("jwtToken"); 
-        setUserData(null); 
+        localStorage.removeItem("jwtToken");
+        setUserData(null);
       }
     }
-  }, []);  
+  }, []);
 
-  // Fetch user data from the backend using userId 
+  // Fetch user data from the backend using userId
   //todo: API needs a decorator to check the token(unimplemented)
   useEffect(() => {
     if (userData?.userId) {
       axios
         .get(`${backendURL}/api/user/${userData.userId}`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("jwtToken")}` }
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          },
         })
         .then((response) => {
           setUserData((prevData) => ({ ...prevData, ...response.data }));
@@ -55,7 +57,7 @@ function App() {
           console.error("Error fetching user data:", error);
         });
     }
-  }, [userData?.userId]); 
+  }, [userData?.userId]);
 
   useEffect(() => {
     const clearLocalStorage = () => {
@@ -73,21 +75,26 @@ function App() {
         return <ProfileView userData={userData} />;
       case "stats":
         return <StatsView userData={userData} />;
-      case "training":
+      case "startTraining":
         return <TrainingView userData={userData} />;
+      case "completedTrainings":
+        return <CompletedTrainingsView userData={userData} />;
       case "settings":
         return <div>Settings View (coming soon!)</div>;
       default:
         return <div>Invalid View</div>;
     }
   };
-  
 
   if (!userData) {
     return (
       <div className="auth-container">
         {authView === "login" ? (
-          <Login setAuthView={setAuthView} setUserData={setUserData} setActiveView={setActiveView} />
+          <Login
+            setAuthView={setAuthView}
+            setUserData={setUserData}
+            setActiveView={setActiveView}
+          />
         ) : (
           <Register setAuthView={setAuthView} />
         )}
@@ -98,7 +105,7 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem("jwtToken");
     setUserData(null);
-    setActiveView("login")
+    setActiveView("login");
     setDropdownOpen(false);
   };
 
@@ -118,15 +125,19 @@ function App() {
           <span className="app-title">B'FLOW</span>
         </h1>
         <h2>{userData?.name}</h2>
-        
-      <div className="dropdown">
+
+        <div className="dropdown">
           <button className="dropdown-toggle" onClick={toggleDropdown}>
-          ☰
+            ☰
           </button>
           {dropdownOpen && (
             <div className="dropdown-menu">
-              <button className="settings-button" onClick={handleSettings}>Settings</button>
-              <button className="logout-button" onClick={handleLogout}>Log Out</button>
+              <button className="settings-button" onClick={handleSettings}>
+                Settings
+              </button>
+              <button className="logout-button" onClick={handleLogout}>
+                Log Out
+              </button>
             </div>
           )}
         </div>
@@ -147,10 +158,16 @@ function App() {
             Stats
           </button>
           <button
-            onClick={() => setActiveView("training")}
-            className={activeView === "training" ? "active" : ""}
+            onClick={() => setActiveView("startTraining")}
+            className={activeView === "startTraining" ? "active" : ""}
           >
-            Training
+            Start Training
+          </button>
+          <button
+            onClick={() => setActiveView("completedTrainings")}
+            className={activeView === "completedTrainings" ? "active" : ""}
+          >
+            Completed Trainings
           </button>
         </nav>
         <main className="main">{renderView()}</main>
