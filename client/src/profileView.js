@@ -34,6 +34,50 @@ const ProfileView = ({ userData }) => {
           }
         });
         setProfile(response.data);
+
+        if (role === 'coach') {
+          const teamResponse = await axios.get(`${backendURL}/api/team/${userId}`, {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+            }
+          });
+          if (teamResponse.data.teamName) {
+            setProfile((prevProfile) => ({
+              ...prevProfile,
+              team: teamResponse.data.teamName
+            }));
+          }
+        }
+        if (role === 'player' && response.data.team_id) {
+          const teamResponse = await axios.get(`${backendURL}/api/team/${response.data.team_id}`, {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+            }
+          });
+          if (teamResponse.data.teamName) {
+            setProfile((prevProfile) => ({
+              ...prevProfile,
+              team: teamResponse.data.teamName,
+              coach: teamResponse.data.coachName,
+              coachEmail: teamResponse.data.coachEmail
+            }));
+          }
+        }
+        if (role === 'parent' && response.data.child_id) {
+          const childResponse = await axios.get(`${backendURL}/api/user/${response.data.child_id}?role=player`, {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+            }
+          });
+          console.log("Parent profile data:", response.data);
+          if (childResponse.data.name) {
+            setProfile((prevProfile) => ({
+              ...prevProfile,
+              childName: childResponse.data.name,
+              childEmail: childResponse.data.email
+            }));
+          }
+        }
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
