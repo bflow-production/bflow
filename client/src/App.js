@@ -6,7 +6,7 @@ import Login from "./login";
 import Register from "./register";
 import ProfileView from "./profileView";
 import StatsView from "./statsView";
-import TrainingView from "./trainingView";
+import TrainingView from "./TrainingView";
 import CompletedTrainingsView from "./CompletedTrainingsView";
 
 const backendURL = "http://127.0.0.1:5000";
@@ -16,6 +16,7 @@ function App() {
   const [activeView, setActiveView] = useState("profile");
   const [authView, setAuthView] = useState("login");
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [completedTrainings, setCompletedTrainings] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
@@ -69,6 +70,10 @@ function App() {
     };
   }, []);
 
+  const handleTrainingDone = (exercise) => {
+    setCompletedTrainings((prev) => [...prev, exercise]);
+  };
+
   const renderView = () => {
     switch (activeView) {
       case "profile":
@@ -76,9 +81,9 @@ function App() {
       case "stats":
         return <StatsView userData={userData} />;
       case "startTraining":
-        return <TrainingView userData={userData} />;
+        return <TrainingView userData={userData} onTrainingDone={handleTrainingDone} />;
       case "completedTrainings":
-        return <CompletedTrainingsView userData={userData} />;
+        return <CompletedTrainingsView userData={userData} completedTrainings={completedTrainings} />;
       case "settings":
         return <div>Settings View (coming soon!)</div>;
       default:
