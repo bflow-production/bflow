@@ -20,13 +20,14 @@ function Login({setAuthView, setUserData, setActiveView}) {
   
       if (response.data.message === "Login successful") {
 
-        const { token, user_id, user_name } = response.data; 
+        const { token, user_id, user_name, role } = response.data; 
         localStorage.setItem("jwtToken", token); 
         setActiveView("profile");
 
         setUserData({
           userId: user_id, 
           username: user_name, 
+          role: role,
         });
 
       } else {

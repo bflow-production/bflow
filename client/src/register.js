@@ -10,7 +10,7 @@ function Register({ setAuthView }) {
     name: "",
     birthYear: "",
     country: "",
-    role: "" // Default role
+    role: "" ,// Default role
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false); // State to handle success message

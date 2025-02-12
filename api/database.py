@@ -56,40 +56,17 @@ class Database:
             FOREIGN KEY (team_id) REFERENCES TEAM(id) ON DELETE SET NULL
         )
         """)
+        # Create TEAM table
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS TEAM (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT UNIQUE NOT NULL,
+            coach_id INTEGER NOT NULL
+        )
+        """)
         # Create PARENT table
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS PARENT (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL,
-            email TEXT NOT NULL UNIQUE,
-            name TEXT NOT NULL,
-            picture TEXT DEFAULT NULL,
-            birthYear INTEGER NOT NULL,
-            country TEXT NOT NULL
-        )
-        """)
-        # CREATE CHILD table
-        cursor.execute("""
-        CREATE TABLE IF NOT EXISTS PARENT_PLAYER (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            parent_id INTEGER NOT NULL,
-            player_id INTEGER NOT NULL,
-            FOREIGN KEY (parent_id) REFERENCES PARENT(id) ON DELETE CASCADE,
-            FOREIGN KEY (player_id) REFERENCES PLAYER(id) ON DELETE CASCADE
-        )
-        """)
-            
-        # Create CATEGORY table
-        cursor.execute("""
-        CREATE TABLE IF NOT EXISTS CATEGORY (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT UNIQUE NOT NULL
-        )
-        """)
-        # Create COACH table
-        cursor.execute("""
-        CREATE TABLE IF NOT EXISTS COACH (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE NOT NULL,
             password TEXT NOT NULL,
@@ -98,24 +75,18 @@ class Database:
             picture TEXT DEFAULT NULL,
             birthYear INTEGER NOT NULL,
             country TEXT NOT NULL,
-            team TEXT DEFAULT NULL,
-            team_id INTEGER DEFAULT NULL,
-            FOREIGN KEY (team_id) REFERENCES TEAM(id) ON DELETE SET NULL
+            child_name TEXT DEFAULT NULL,
+            child_email TEXT DEFAULT NULL 
         )
-        """)
-        # Create PARENT table
+        """)           
+        # Create CATEGORY table
         cursor.execute("""
-        CREATE TABLE IF NOT EXISTS PARENT (
+        CREATE TABLE IF NOT EXISTS CATEGORY (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL,
-            email TEXT NOT NULL UNIQUE,
-            name TEXT NOT NULL,
-            picture TEXT DEFAULT NULL,
-            birthYear INTEGER NOT NULL,
-            country TEXT NOT NULL
+            name TEXT UNIQUE NOT NULL
         )
         """)
+       
         # CREATE CHILD table
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS PARENT_PLAYER (
@@ -276,18 +247,26 @@ class Database:
                 return user, 'parent'
             
             return None, None
-    def update_user(self, id, **kwargs):
+    def update_user(self, id, role, **kwargs):
         """
-        Update user information.
+        Update user information based on their role.
         """
         with self._get_connection() as conn:
             cursor = conn.cursor()
+            if role == 'player':
+                table = 'PLAYER'
+            elif role == 'coach':
+                table = 'COACH'
+            elif role == 'parent':
+                table = 'PARENT'
+            else:
+                raise ValueError("Invalid role provided")
+
             for key, value in kwargs.items():
                 cursor.execute(f"""
-                UPDATE PLAYER SET {key} = ? WHERE id = ?
+                UPDATE {table} SET {key} = ? WHERE id = ?
                 """, (value, id))
             conn.commit()
-
     def delete_user(self, id):
         """
         Delete a user from the PLAYER table.
@@ -341,6 +320,28 @@ class Database:
      
      return category_data
 
+    def create_team(self, team_name, coach_id):
+        """
+        Create a new team and assign the coach.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT id FROM TEAM WHERE name = ?", (team_name,))
+            team = cursor.fetchone()
+            if team:
+                raise ValueError("Team name already exists")
+
+            # Check if the coach is already associated with a team
+            cursor.execute("SELECT id FROM TEAM WHERE coach_id = ?", (coach_id,))
+            existing_team = cursor.fetchone()
+            if existing_team:
+                raise ValueError("Coach already has a team")
+            
+            cursor.execute("""
+            INSERT INTO TEAM (name, coach_id)
+            VALUES (?, ?)
+            """, (team_name, coach_id))
+            conn.commit()
    
     def update_exercise(self, data):
      exercise_name = data.get("exercise")
@@ -394,10 +395,90 @@ class Database:
                  return {"error": "No matching exercise found for this player."}
      except Exception as e:
          raise e
- 
+     
+    def get_team_by_coach(self, coach_id):
+        """
+        Retrieve a team by the coach ID.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+            SELECT name FROM TEAM WHERE coach_id = ?
+            """, (coach_id,))
+            team = cursor.fetchone()
+            if team:
+                return {"teamName": team[0]}
+            return None
                                   
+    def join_team(self, team_name, player_id):
+        """
+        Add a player to a team and update the player's profile with the coach's information.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT id, coach_id FROM TEAM WHERE name = ?", (team_name,))
+            team = cursor.fetchone()
+            if not team:
+                raise ValueError("Team not found")
+
+            team_id = team[0]
+            coach_id = team[1]
+
+            cursor.execute("SELECT name, email FROM COACH WHERE id = ?", (coach_id,))
+            coach = cursor.fetchone()
+            if not coach:
+                raise ValueError("Coach not found")
+
+            coach_name = coach[0]
+            coach_email = coach[1]
+
+            cursor.execute("""
+            UPDATE PLAYER
+            SET team_id = ?, coach = ?, coachEmail = ?
+            WHERE id = ?
+            """, (team_id, coach_name, coach_email, player_id))
+            conn.commit()
+        
+    def link_child(self, child_username, parent_id):
+        """
+        Link a child to a parent and update the parent's profile with the child's information.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT id, name, email FROM PLAYER WHERE username = ?", (child_username,))
+            child = cursor.fetchone()
+            if not child:
+                raise ValueError("Child not found")
+
+            child_id = child[0]
+            child_name = child[1]
+            child_email = child[2]
+
+            cursor.execute("SELECT name, email FROM PARENT WHERE id = ?", (parent_id,))
+            parent = cursor.fetchone()
+            if not parent:
+                raise ValueError("Parent not found")
+
+            parent_name = parent[0]
+            parent_email = parent[1]
+
+            cursor.execute("""
+            UPDATE PARENT
+            SET child_name = ?, child_email = ?
+            WHERE id = ?
+            """, (child_name, child_email, parent_id))
+
+            cursor.execute("""
+            UPDATE PLAYER
+            SET parent = ?, parentEmail = ?
+            WHERE id = ?
+            """, (parent_name, parent_email, child_id))
+                
+            # Link the parent and child in the PARENT_PLAYER table
+            cursor.execute("""
+            INSERT OR IGNORE INTO PARENT_PLAYER (parent_id, player_id)
+            VALUES (?, ?)
+            """, (parent_id, child_id))
+            
+            conn.commit()
     
-       
-
-
-   

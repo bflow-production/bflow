@@ -8,6 +8,9 @@ import ProfileView from "./profileView";
 import StatsView from "./statsView";
 import TrainingView from "./TrainingView";
 import CompletedTrainingsView from "./CompletedTrainingsView";
+import CoachView from "./coachView";
+import JoinTeamView from "./joinTeamView";
+import LinkChildView from "./linkChildView";
 
 const backendURL = "http://127.0.0.1:5000";
 
@@ -31,6 +34,7 @@ function App() {
         setUserData({
           userId: decodedToken.user_id,
           username: decodedToken.username,
+          role: decodedToken.role,
           // Any other user-specific data in the token
         });
       } catch (error) {
@@ -84,6 +88,12 @@ function App() {
         return <TrainingView userData={userData} onTrainingDone={handleTrainingDone} />;
       case "completedTrainings":
         return <CompletedTrainingsView userData={userData} completedTrainings={completedTrainings} />;
+      case "coach":
+        return userData.role === "coach" ? <CoachView userData={userData} /> : <div>Invalid View</div>;
+      case "joinTeam":
+        return userData.role === "player" ? <JoinTeamView userData={userData} /> : <div>Invalid View</div>;
+      case "linkChild":
+        return userData.role === "parent" ? <LinkChildView userData={userData} /> : <div>Invalid View</div>;
       case "settings":
         return <div>Settings View (coming soon!)</div>;
       default:
@@ -174,6 +184,30 @@ function App() {
           >
             Completed Trainings
           </button>
+          {userData.role === "coach" && (
+            <button
+              onClick={() => setActiveView("coach")}
+              className={activeView === "coach" ? "active" : ""}
+            >
+              Coach
+            </button>
+          )}
+          {userData.role === "player" && (
+            <button
+              onClick={() => setActiveView("joinTeam")}
+              className={activeView === "joinTeam" ? "active" : ""}
+            >
+              Join Team
+            </button>
+          )}
+          {userData.role === "parent" && (
+            <button
+              onClick={() => setActiveView("linkChild")}
+              className={activeView === "linkChild" ? "active" : ""}
+            >
+              Link Child
+            </button>
+          )}
         </nav>
         <main className="main">{renderView()}</main>
       </div>
