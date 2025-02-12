@@ -2,44 +2,25 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "./TrainingView.css";
 
-const CompletedTrainingsView = ({ userData }) => {
-  const [trainingData, setTrainingData] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [resultOrRating, setResultOrRating] = useState({});
+const CompletedTrainingsView = ({ userData, completedTrainings }) => {
+  const [categories, setCategories] = useState([]);
   const [expandedCategories, setExpandedCategories] = useState({});
   const backendURL = "http://127.0.0.1:5000";
 
   useEffect(() => {
-    const fetchTrainingData = async () => {
-      try {
-        const response = await axios.get(
-          `${backendURL}/api/training/${userData.userId}`
-        );
-
-        console.log("Training Data Response:", response.data);
-
-        if (response.data && !response.data.error) {
-          setTrainingData(response.data);
-        } else {
-          throw new Error("Training data not available for this player");
-        }
-      } catch (error) {
-        console.error("Error fetching training data:", error);
-        setError("Error fetching training data");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchTrainingData();
+    axios
+      .get(`${backendURL}/api/training/${userData.userId}`)
+      .then((response) => {
+        const data = response.data;
+        setCategories(Object.keys(data));
+      })
+      .catch((error) => {
+        console.error("Error", error);
+      });
   }, [userData.userId]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
+  if (categories.length === 0) {
+    return <div>No data available...</div>;
   }
 
   const toggleCategory = (category) => {
@@ -52,41 +33,31 @@ const CompletedTrainingsView = ({ userData }) => {
   return (
     <div className="training-view">
       <h2 className="header-execise">Training Overview</h2>
-      {Object.keys(trainingData).map((category) => (
+      {categories.map((category) => (
         <div key={category} className="category-card">
-          <h3
+          <button
             className="category-header"
             onClick={() => toggleCategory(category)}
           >
             {category}
-          </h3>
+          </button>
           {expandedCategories[category] && (
             <div className="exercise-grid">
-              {trainingData[category].map((exercise, index) => (
-                <div key={index} className="exercise-card">
-                  <strong className="exercise-title">
-                    {exercise.exercise}
-                  </strong>
-                  <div className="exercise-inputs">
-                    <div className="input-group">
-                      <p>
-                        {`Result: ${
-                          resultOrRating[exercise.exercise]?.result ||
-                          exercise.result ||
-                          "0"
-                        }`}
-                      </p>
-                      <p>
-                        {`Rating: ${
-                          resultOrRating[exercise.exercise]?.rating ||
-                          exercise.rating ||
-                          "0"
-                        }`}
-                      </p>
+              {completedTrainings
+                .filter((exercise) => exercise.category === category)
+                .map((exercise, index) => (
+                  <div key={index} className="exercise-card">
+                    <strong className="exercise-title">
+                      {exercise.exercise}
+                    </strong>
+                    <div className="exercise-inputs">
+                      <div className="input-group">
+                        <p>{`Result: ${exercise.result || "No result"}`}</p>
+                        <p>{`Rating: ${exercise.rating || "0"}`}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           )}
         </div>
