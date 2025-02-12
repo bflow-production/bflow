@@ -56,14 +56,29 @@ body {
   
 }
 
+.sidebar-toggle {
+  background-color: #4CAF50;
+  color: white;
+  font-size: 30px;
+  border: none;
+  cursor: pointer;
+  padding-right: 20px;
+}
+
 .nav {
   display: flex;
   flex-direction: column;
   align-items: stretch;
   border-right: 1px solid #ddd;
-  padding: 1rem;
-  width: 150px;
+  width: 0;
   background-color: #f9f9f9;
+  overflow: hidden;
+  transition: width 0.3s ease;
+}
+
+.nav.open {
+  padding: 15px;
+  width: 250px; /* Adjust this value to control the width of the sidebar */
 }
 
 .nav button {
