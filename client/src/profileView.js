@@ -3,25 +3,29 @@ import React, { useState, useEffect } from "react";
 import "./profileView.css";
 
 const ProfileView = ({ userData }) => {
+
+const [editMode, setEditMode] = useState(false);
+const [isFlipped, setIsFlipped] = useState(false);
+
  
  const id = userData.userId;
  const role = userData.role;
  const backendURL = "http://127.0.0.1:5000";
 
   const [profile, setProfile] = useState({
-    username: "",
-    password: "",
-    email: "",
+    username: "MMatti",
+    password: "'''''",
+    email: "Matti@gmail.com",
     name: "",
     picture: "",
-    birthYear: "",
-    country: "",
-    shirtNumber: "",
-    team: "",
-    coach: "",
-    coachEmail: "",
-    parent: "",
-    parentEmail: "",
+    birthYear: "2000",
+    country: "Suomi",
+    shirtNumber: "92",
+    team: "Manu",
+    coach: "ölakdölas",
+    coachEmail: "fdhkjdhasjkhd",
+    parent: "klfjlkad",
+    parentEmail: "kajdkasjkö",
     role: ""
   });
 
@@ -40,7 +44,7 @@ const ProfileView = ({ userData }) => {
         console.log(data)
   
         setProfile({
-          username: data.username || "",
+          username: data.username || "Matti",
           email: data.email || "",
           name: data.name || "",
           picture: data.picture || "",
@@ -95,158 +99,111 @@ const ProfileView = ({ userData }) => {
 };
 
  
+return (
+  <div className="profile-container">
+    {/* Top Section: Player Info and Image */}
+    <div className="top-section">
+    <div className="player-image">
+        {profile.picture ? (
+          <img src={profile.picture} alt="Profile" />
+        ) : (
+          <div className="placeholder">Ei kuvaa</div>
+        )}
+      </div>
+      <div className="player-info">
+        <h2>{profile.name}</h2>
+        {['Käyttäjänimi', 'Syntymävuosi', 'Pelipaikka', 'joukkue', 'Pelinumero'].map((field) => (
+          <p key={field}>
+            <strong>{field}:</strong>
+            {editMode ? (
+              <input
+                type="text"
+                name={field}
+                value={profile[field]}
+                onChange={(e) => setProfile({ ...profile, [field]: e.target.value })}
+                className="profile-input"
+              />
+            ) : (
+              <span className="editable-field" onClick={() => setEditMode(true)}>
+                {profile[field]} <span className="edit-icon">✏️</span>
+              </span>
+            )}
+          </p>
+        ))}
+      </div>
+    </div>
 
-  return (
+    {/* Bottom Section: Coach & Parent Info */}
+    <div className="bottom-section">
+      <div className="coach-info">
+        <h3>Valmentajan Tiedot</h3>
+        {['Valmentaja', 'Sähköposti'].map((field) => (
+          <p key={field}>
+            <strong>{field}:</strong>
+            {editMode ? (
+              <input
+                type="text"
+                name={field}
+                value={profile[field]}
+                onChange={(e) => setProfile({ ...profile, [field]: e.target.value })}
+                className="profile-input"
+              />
+            ) : (
+              <span className="editable-field" onClick={() => setEditMode(true)}>
+                {profile[field]} <span className="edit-icon">✏️</span>
+              </span>
+            )}
+          </p>
+        ))}
+      </div>
 
-    <div className="profile-view">
-      <h2 className="header-profile">Profile</h2>
-  
-      <div className="right-container">
-        {/* HBox container */}
-        <div className="hbox">
-          {/* VBox 1 */}
-          <div className="vbox">
-            <div className="row">
-              <div>
-                <label>Käyttäjätunnus:</label>
-                <input
-                  type="text"
-                  name="username"
-                  value={profile.username }
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label>Salasana:</label>
-                <input
-                  type="password"
-                  name="password"
-                  value={"*****"}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-  
-            <div className="row">
-              <div>
-                <label>Mailiosoite:</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={profile.email }
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label>Nimi:</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={profile.name }
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-  
-            <div className="row">
-              <div>
-                <label>Syntymävuosi:</label>
-                <input
-                  type="number"
-                  name="birthYear"
-                  value={profile.birthYear}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
+       {/* FLIPPING CARD: Huoltajan Tiedot */}
+       <div className="parent-card" onClick={() => setIsFlipped(!isFlipped)}>
+        <div className={`card-inner ${isFlipped ? "flipped" : ""}`}>
+          {/* Front Side */}
+          <div className="card-front">
+            <h3>Huoltajan Tiedot</h3>
+            {["Huoltaja", "Sähköposti"].map((field) => (
+              <p key={field}>
+                <strong>{field}:</strong>
+                {editMode ? (
+                  <input
+                    type="text"
+                    name={field}
+                    value={profile[field]}
+                    onChange={(e) => setProfile({ ...profile, [field]: e.target.value })}
+                    className="profile-input"
+                  />
+                ) : (
+                  <span className="editable-field" onClick={() => setEditMode(true)}>
+                    {profile[field]} <span className="edit-icon">✏️</span>
+                  </span>
+                )}
+              </p>
+            ))}
           </div>
-  
-          {/* VBox 2 */}
-          <div className="vbox">
-            <div className="row">
-              <div>
-                <label>Maa:</label>
-                <input
-                  type="text"
-                  name="country"
-                  value={profile.country}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-  
-            <div className="row">
-              <div>
-                <label>Pelinumero:</label>
-                <input
-                  type="text"
-                  name="shirtNumber"
-                  value={profile.shirtNumber}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label>Joukkue:</label>
-                <input
-                  type="text"
-                  name="team"
-                  value={profile.team }
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-  
-            <div className="row">
-              <div>
-                <label>Joukkueen valmentaja:</label>
-                <input
-                  type="text"
-                  name="coach"
-                  value={profile.coach }
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label>Valmentajan mailiosoite:</label>
-                <input
-                  type="email"
-                  name="coachEmail"
-                  value={profile.coachEmail }
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-  
-            <div className="row">
-              <div>
-                <label>Vanhempi 1:</label>
-                <input
-                  type="text"
-                  name="parent"
-                  value={profile.parent}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label>Mailiosoite:</label>
-                <input
-                  type="email"
-                  name="parentEmail"
-                  value={profile.parentEmail}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-  
-            
-            </div>
+
+          {/* Back Side */}
+          <div className="card-back">
+            <h3>Lisätiedot</h3>
+            <p>Muu tärkeä tieto tähän...</p>
           </div>
         </div>
-        <button className="hbox-button" onClick={handleSave}>Tallenna</button>
       </div>
-   
-  );
+    </div>
+    <div className = "buttonDiv">
+        {/* Edit Button */}
+    <button className="edit-button" onClick={() => setEditMode(!editMode)}>
+      {editMode ? "Tallenna" : "Muokkaa"}
+    </button>
+     {/* Delete Button */}
+     <button className="edit-button" onClick={() => setEditMode(!editMode)}>
+      { "Poista profiili"}
+    </button>
+    </div>
   
-};
+  </div>
+);
+}
 
 export default ProfileView;
