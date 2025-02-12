@@ -9,9 +9,9 @@ const ProfileView = ({ userData }) => {
   const backendURL = "http://127.0.0.1:5000";
 
   const [profile, setProfile] = useState({
-    username: "MMatti",
-    password: "'''''",
-    email: "Matti@gmail.com",
+    username: "",
+    password: "",
+    email: "",
     name: "",
     picture: "",
     birthYear: "",
@@ -94,128 +94,142 @@ const ProfileView = ({ userData }) => {
       ...prevProfile,
       [name]: value
     }));
+
   };
 
   const handleSave = async () => {
     try {
-      const profileData = { ...profile, role }; 
+      const profileData = { ...profile, role };
       const response = await axios.put(`${backendURL}/api/user/${userId}`, profileData, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
         }
       });
+      setEditMode(false);
       alert("Profile updated successfully");
     } catch (error) {
-        console.error("Error during save operation:", error);
+      console.error("Error during save operation:", error);
     }
-};
+  };
 
- 
-return (
-  <div className="profile-container">
-    {/* Top Section: Player Info and Image */}
-    <div className="top-section">
-    <div className="player-image">
-        {profile.picture ? (
-          <img src={profile.picture} alt="Profile" />
-        ) : (
-          <div className="placeholder">Ei kuvaa</div>
-        )}
-      </div>
-      <div className="player-info">
-        <h2>{profile.name}</h2>
-        {['Käyttäjänimi', 'Syntymävuosi', 'Pelipaikka', 'joukkue', 'Pelinumero'].map((field) => (
-          <p key={field}>
-            <strong>{field}:</strong>
-            {editMode ? (
-              <input
-                type="text"
-                name={field}
-                value={profile[field]}
-                onChange={(e) => setProfile({ ...profile, [field]: e.target.value })}
-                className="profile-input"
-              />
-            ) : (
-              <span className="editable-field" onClick={() => setEditMode(true)}>
-                {profile[field]} <span className="edit-icon">✏️</span>
-              </span>
-            )}
-          </p>
-        ))}
-      </div>
-    </div>
+  const handleCardClick = () => {
+    if (!editMode) {
+      setIsFlipped((prev) => !prev);
+    }
+  };
 
-    {/* Bottom Section: Coach & Parent Info */}
-    <div className="bottom-section">
-      <div className="coach-info">
-        <h3>Valmentajan Tiedot</h3>
-        {['Valmentaja', 'Sähköposti'].map((field) => (
-          <p key={field}>
-            <strong>{field}:</strong>
-            {editMode ? (
-              <input
-                type="text"
-                name={field}
-                value={profile[field]}
-                onChange={(e) => setProfile({ ...profile, [field]: e.target.value })}
-                className="profile-input"
-              />
-            ) : (
-              <span className="editable-field" onClick={() => setEditMode(true)}>
-                {profile[field]} <span className="edit-icon">✏️</span>
-              </span>
-            )}
-          </p>
-        ))}
+
+  return (
+    <div className="profile-container">
+      {/* Top Section: Player Info and Image */}
+      <div className="top-section">
+        <div className="player-image">
+          {profile.picture ? (
+            <img src={profile.picture} alt="Profile" />
+          ) : (
+            <div className="placeholder">Ei kuvaa</div>
+          )}
+        </div>
+        <div className="player-info">
+          <h2>{profile.name}</h2>
+          {['username', 'birthYear', 'position', 'team', 'number'].map((field) => (
+            <p key={field}>
+              <strong>{field}:</strong>
+              {editMode ? (
+                <input
+                  type="text"
+                  name={field}
+                  value={profile[field]}
+                  onChange={handleChange} 
+                  className="profile-input"
+                />
+              ) : (
+                <span className="editable-field" onClick={() => setEditMode(true)}>
+                  {profile[field]} <span className="edit-icon">✏️</span>
+                </span>
+              )}
+            </p>
+          ))}
+
+        </div>
       </div>
 
-       {/* FLIPPING CARD: Huoltajan Tiedot */}
-       <div className="parent-card" onClick={() => setIsFlipped(!isFlipped)}>
-        <div className={`card-inner ${isFlipped ? "flipped" : ""}`}>
-          {/* Front Side */}
-          <div className="card-front">
-            <h3>Huoltajan Tiedot</h3>
-            {["Huoltaja", "Sähköposti"].map((field) => (
-              <p key={field}>
-                <strong>{field}:</strong>
-                {editMode ? (
-                  <input
-                    type="text"
-                    name={field}
-                    value={profile[field]}
-                    onChange={(e) => setProfile({ ...profile, [field]: e.target.value })}
-                    className="profile-input"
-                  />
-                ) : (
-                  <span className="editable-field" onClick={() => setEditMode(true)}>
-                    {profile[field]} <span className="edit-icon">✏️</span>
-                  </span>
-                )}
-              </p>
-            ))}
-          </div>
+      {/* Bottom Section: Coach & Parent Info */}
+      <div className="bottom-section">
+        <div className="coach-info">
+          <h3>Valmentajan Tiedot</h3>
+          {['Valmentaja', 'Sähköposti'].map((field) => (
+            <p key={field}>
+              <strong>{field}:</strong>
+              {editMode ? (
+                <input
+                  type="text"
+                  name={field}
+                  value={profile[field]}
+                  onChange={handleChange} 
+                  className="profile-input"
+                />
+              ) : (
+                <span className="editable-field" onClick={() => setEditMode(true)}>
+                  {profile[field]} <span className="edit-icon">✏️</span>
+                </span>
+              )}
+            </p>
+          ))}
+        </div>
 
-          {/* Back Side */}
-          <div className="card-back">
-            <h3>Lisätiedot</h3>
-            <p>Muu tärkeä tieto tähän...</p>
+        {/* FLIPPING CARD: Huoltajan Tiedot */}
+        <div className="parent-card" onClick={handleCardClick}>
+          <div className={`card-inner ${isFlipped ? "flipped" : ""}`}>
+            {/* Front Side */}
+            <div className="card-front">
+              <h3>Huoltajan Tiedot</h3>
+              {["Huoltaja", "Sähköposti"].map((field) => (
+                <p key={field}>
+                  <strong>{field}:</strong>
+                  {editMode ? (
+                    <input
+                      type="text"
+                      name={field}
+                      value={profile[field]}
+                      onChange={handleChange} 
+                      className="profile-input"
+                    />
+                  ) : (
+                    <span className="editable-field" onClick={() => setEditMode(true)}>
+                      {profile[field]} <span className="edit-icon">✏️</span>
+                    </span>
+                  )}
+                </p>
+              ))}
+            </div>
+
+            {/* Back Side */}
+            <div className="card-back">
+              <h3>Lisätiedot</h3>
+              <p>Muu tärkeä tieto tähän...</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div className = "buttonDiv">
+      <div className="buttonDiv">
         {/* Edit Button */}
-    <button className="edit-button" onClick={() => setEditMode(!editMode)}>
-      {editMode ? "Tallenna" : "Muokkaa"}
-    </button>
-     {/* Delete Button */}
-     <button className="edit-button" onClick={() => setEditMode(!editMode)}>
-      { "Poista profiili"}
-    </button>
+        {!editMode ? (
+          <button className="edit-button" onClick={() => setEditMode(true)}>
+            Muokkaa
+          </button>
+        ) : (
+          <button className="edit-button" onClick={handleSave}>
+            Tallenna
+          </button>
+        )}
+        {/* Delete Button */}
+        <button className="edit-button">
+          Poista profiili
+        </button>
+      </div>
     </div>
-  
-  </div>
-);
+  );
 }
 
 export default ProfileView;
