@@ -24,7 +24,7 @@ const ProfileView = ({ userData }) => {
     parentEmail: "",
     childName: "",
     childEmail: "",
-    role: role, // Ensure role is set correctly
+    role: role, 
   });
 
   useEffect(() => {
@@ -158,7 +158,7 @@ const ProfileView = ({ userData }) => {
       <div className="bottom-section">
         <div className="coach-info">
           <h3>Valmentajan Tiedot</h3>
-          {['Valmentaja', 'Sähköposti'].map((field) => (
+          {['coach', 'coachEmail'].map((field) => (
             <p key={field}>
               <strong>{field}:</strong>
               {editMode ? (
@@ -184,7 +184,7 @@ const ProfileView = ({ userData }) => {
             {/* Front Side */}
             <div className="card-front">
               <h3>Huoltajan Tiedot</h3>
-              {["Huoltaja", "Sähköposti"].map((field) => (
+              {["parent", "parentEmail"].map((field) => (
                 <p key={field}>
                   <strong>{field}:</strong>
                   {editMode ? (
