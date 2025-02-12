@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from "react";
-
+import axios from 'axios';
 import "./profileView.css";
 
 const ProfileView = ({ userData }) => {
-
-const [editMode, setEditMode] = useState(false);
-const [isFlipped, setIsFlipped] = useState(false);
-
- 
- const id = userData.userId;
- const role = userData.role;
- const backendURL = "http://127.0.0.1:5000";
+  const { userId, role } = userData;
+  const [editMode, setEditMode] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
+  const backendURL = "http://127.0.0.1:5000";
 
   const [profile, setProfile] = useState({
     username: "MMatti",
@@ -18,81 +14,97 @@ const [isFlipped, setIsFlipped] = useState(false);
     email: "Matti@gmail.com",
     name: "",
     picture: "",
-    birthYear: "2000",
-    country: "Suomi",
-    shirtNumber: "92",
-    team: "Manu",
-    coach: "ölakdölas",
-    coachEmail: "fdhkjdhasjkhd",
-    parent: "klfjlkad",
-    parentEmail: "kajdkasjkö",
-    role: ""
+    birthYear: "",
+    country: "",
+    number: "",
+    team: "",
+    coach: "",
+    coachEmail: "",
+    parent: "",
+    parentEmail: "",
+    childName: "",
+    childEmail: "",
+    role: role, // Ensure role is set correctly
   });
 
   useEffect(() => {
-    //const id = userData.userId;
-    const role = userData.role;
-    const fetchProfileData = async () => {
+    const fetchProfile = async () => {
       try {
-        const response = await fetch(`${backendURL}/api/user/${id}?role=${role}`);
-  
-        if (!response.ok) {
-          throw new Error("Failed to fetch profile data");
-        }
-  
-        const data = await response.json();
-        console.log(data)
-  
-        setProfile({
-          username: data.username || "Matti",
-          email: data.email || "",
-          name: data.name || "",
-          picture: data.picture || "",
-          birthYear: data.birthYear || "",
-          country: data.country || "",
-          shirtNumber: data.shirtNumber || "",
-          team: data.team || "",
-          coach: data.coach || "",
-          coachEmail: data.coachEmail || "",
-          parent: data.parent || "",
-          parentEmail: data.parentEmail || ""
+        const response = await axios.get(`${backendURL}/api/user/${userId}?role=${role}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+          }
         });
+        setProfile(response.data);
+
+        if (role === 'coach') {
+          const teamResponse = await axios.get(`${backendURL}/api/team/${userId}`, {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+            }
+          });
+          if (teamResponse.data.teamName) {
+            setProfile((prevProfile) => ({
+              ...prevProfile,
+              team: teamResponse.data.teamName
+            }));
+          }
+        }
+        if (role === 'player' && response.data.team_id) {
+          const teamResponse = await axios.get(`${backendURL}/api/team/${response.data.team_id}`, {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+            }
+          });
+          if (teamResponse.data.teamName) {
+            setProfile((prevProfile) => ({
+              ...prevProfile,
+              team: teamResponse.data.teamName,
+              coach: teamResponse.data.coachName,
+              coachEmail: teamResponse.data.coachEmail
+            }));
+          }
+        }
+        if (role === 'parent' && response.data.child_id) {
+          const childResponse = await axios.get(`${backendURL}/api/user/${response.data.child_id}?role=player`, {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+            }
+          });
+          console.log("Parent profile data:", response.data);
+          if (childResponse.data.name) {
+            setProfile((prevProfile) => ({
+              ...prevProfile,
+              childName: childResponse.data.name,
+              childEmail: childResponse.data.email
+            }));
+          }
+        }
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
     };
-  
-    fetchProfileData();
-  }, [id, role]);
-  
+
+    fetchProfile();
+  }, [userId, role, backendURL]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProfile((prev) => ({
-      ...prev,
-      [name]: value,  
-      
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      [name]: value
     }));
   };
 
   const handleSave = async () => {
     try {
-        const response = await fetch(`${backendURL}/api/user/${userData.userId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem("jwtToken")}`, 
-            },
-            body: JSON.stringify(profile),
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            console.log("User updated:", data.message);
-        } else {
-            const errorData = await response.json();
-            console.error("Error updating user:", errorData.error);
+      const profileData = { ...profile, role }; 
+      const response = await axios.put(`${backendURL}/api/user/${userId}`, profileData, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
         }
+      });
+      alert("Profile updated successfully");
     } catch (error) {
         console.error("Error during save operation:", error);
     }
