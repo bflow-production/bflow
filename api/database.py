@@ -1,4 +1,5 @@
 import sqlite3
+import os
 
 class Database:
     def __init__(self, db_name="BFLOW.db"):
@@ -6,7 +7,8 @@ class Database:
         Initialize the Database class.
         :param db_name: Name of the SQLite database file.
         """
-        self.db_name = db_name
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        self.db_path = os.path.join(BASE_DIR, db_name)
         self._initialize_database()
 
     def _initialize_database(self):
@@ -17,6 +19,7 @@ class Database:
             cursor = conn.cursor()
             
         # Create PLAYER table
+        # TODO: POSITION MISSING
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS PLAYER (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -155,7 +158,7 @@ class Database:
         Establish a connection to the SQLite database.
         :return: SQLite connection object.
         """
-        return sqlite3.connect(self.db_name)
+        return sqlite3.connect(self.db_path)
 
 
     def add_user(self, username, password, email, name, birthYear, country, role, number=None, team_id=None):

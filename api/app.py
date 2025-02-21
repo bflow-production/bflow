@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from database import Database 
 from werkzeug.security import check_password_hash
@@ -7,7 +7,7 @@ import os
 import jwt
 from datetime import datetime, timedelta, timezone
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='', static_folder='build', template_folder='build')
 CORS(app, supports_credentials=True)
 
 db = Database("BFLOW.db")
@@ -23,6 +23,10 @@ def generate_token(user_id):
     token = jwt.encode(payload, app.config['SECRET_KEY'], algorithm='HS256')
     return token
 
+
+@app.route('/')
+def serve():
+    return send_from_directory(app.static_folder, 'index.html')
 
 @app.route('/api/login', methods=['POST'])
 def login():

@@ -4,7 +4,7 @@ import "./coachView.css";
 
 const CoachView = ({ userData }) => {
   const { userId, role } = userData;
-  const backendURL = "http://127.0.0.1:5000";
+  const backendURL = "/api";
 
   const [teamName, setTeamName] = useState("");
 
@@ -15,7 +15,7 @@ const CoachView = ({ userData }) => {
   const handleSave = async () => {
     try {
       const teamData = { teamName, coachId: userId, role }; // Include team name and coach ID in the data
-      const response = await axios.post(`${backendURL}/api/team`, teamData, {
+      const response = await axios.post(`${backendURL}/team`, teamData, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
         }

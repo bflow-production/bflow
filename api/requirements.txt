@@ -3,3 +3,4 @@ Werkzeug
 pyjwt
 Flask-Cors
 requests==2.26.0
+gunicorn==23.0.0

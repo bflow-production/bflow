@@ -12,7 +12,7 @@ import CoachView from "./coachView";
 import JoinTeamView from "./joinTeamView";
 import LinkChildView from "./linkChildView";
 
-const backendURL = "http://127.0.0.1:5000";
+const backendURL = "/api";
 
 function App() {
   const [userData, setUserData] = useState(null);
@@ -50,7 +50,7 @@ function App() {
   useEffect(() => {
     if (userData?.userId) {
       axios
-        .get(`${backendURL}/api/user/${userData.userId}`, {
+        .get(`${backendURL}/user/${userData.userId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
           },

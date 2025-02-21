@@ -6,11 +6,11 @@ const TrainingView = ({ userData, onTrainingDone }) => {
   const [trainingData, setTrainingData] = useState({});
   const [resultOrRating, setResultOrRating] = useState({});
   const [expandedCategories, setExpandedCategories] = useState({});
-  const backendURL = "http://127.0.0.1:5000";
+  const backendURL = "/api";
 
   useEffect(() => {
     axios
-      .get(`${backendURL}/api/training/${userData.userId}`)
+      .get(`${backendURL}/training/${userData.userId}`)
       .then((response) => setTrainingData(response.data))
       .catch(() => setTrainingData(null));
   }, [userData.userId]);

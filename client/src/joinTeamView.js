@@ -4,7 +4,7 @@ import "./joinTeamView.css";
 
 const JoinTeamView = ({ userData }) => {
   const { userId, role } = userData;
-  const backendURL = "http://127.0.0.1:5000";
+  const backendURL = "/api";
 
   const [teamName, setTeamName] = useState("");
 
@@ -15,7 +15,7 @@ const JoinTeamView = ({ userData }) => {
   const handleJoinTeam = async () => {
     try {
       const teamData = { teamName, playerId: userId, role }; // Include team name and player ID in the data
-      const response = await axios.post(`${backendURL}/api/join-team`, teamData, {
+      const response = await axios.post(`${backendURL}/join-team`, teamData, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
         }

@@ -4,7 +4,7 @@ import "./linkChildView.css";
 
 const LinkChildView = ({ userData }) => {
   const { userId, role } = userData;
-  const backendURL = "http://127.0.0.1:5000";
+  const backendURL = "/api";
 
   const [childUsername, setChildUsername] = useState("");
 
@@ -15,7 +15,7 @@ const LinkChildView = ({ userData }) => {
   const handleLinkChild = async () => {
     try {
       const linkData = { childUsername, parentId: userId, role }; // Include child username and parent ID in the data
-      const response = await axios.post(`${backendURL}/api/link-child`, linkData, {
+      const response = await axios.post(`${backendURL}/link-child`, linkData, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
         }

@@ -6,7 +6,7 @@ const ProfileView = ({ userData }) => {
   const { userId, role } = userData;
   const [editMode, setEditMode] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
-  const backendURL = "http://127.0.0.1:5000";
+  const backendURL = "/api";
 
   const [profile, setProfile] = useState({
     username: "",
@@ -30,7 +30,7 @@ const ProfileView = ({ userData }) => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`${backendURL}/api/user/${userId}?role=${role}`, {
+        const response = await axios.get(`${backendURL}/user/${userId}?role=${role}`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
           }
@@ -38,7 +38,7 @@ const ProfileView = ({ userData }) => {
         setProfile(response.data);
 
         if (role === 'coach') {
-          const teamResponse = await axios.get(`${backendURL}/api/team/${userId}`, {
+          const teamResponse = await axios.get(`${backendURL}/team/${userId}`, {
             headers: {
               'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
             }
@@ -51,7 +51,7 @@ const ProfileView = ({ userData }) => {
           }
         }
         if (role === 'player' && response.data.team_id) {
-          const teamResponse = await axios.get(`${backendURL}/api/team/${response.data.team_id}`, {
+          const teamResponse = await axios.get(`${backendURL}/team/${response.data.team_id}`, {
             headers: {
               'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
             }
@@ -66,7 +66,7 @@ const ProfileView = ({ userData }) => {
           }
         }
         if (role === 'parent' && response.data.child_id) {
-          const childResponse = await axios.get(`${backendURL}/api/user/${response.data.child_id}?role=player`, {
+          const childResponse = await axios.get(`${backendURL}/user/${response.data.child_id}?role=player`, {
             headers: {
               'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
             }
@@ -100,7 +100,7 @@ const ProfileView = ({ userData }) => {
   const handleSave = async () => {
     try {
       const profileData = { ...profile, role };
-      const response = await axios.put(`${backendURL}/api/user/${userId}`, profileData, {
+      const response = await axios.put(`${backendURL}/user/${userId}`, profileData, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
         }
