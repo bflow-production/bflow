@@ -109,3 +109,41 @@ body {
   .role-buttons button:hover {
     background-color: #e0e0e0;
   }
+
+
+@media (max-width: 768px) {
+  .register-container {
+    padding: 10px;
+  }
+
+  .register {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .headerTitle {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-container {
+    padding: 10px;
+  }
+
+  .register {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 10px;
+  }
+
+  .headerTitle {
+    font-size: 1.2rem;
+  }
+}
