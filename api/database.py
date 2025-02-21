@@ -1,5 +1,7 @@
 import sqlite3
 
+from datetime import datetime
+
 class Database:
     def __init__(self, db_name="BFLOW.db"):
         """
@@ -115,8 +117,10 @@ class Database:
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             player_id INTEGER NOT NULL,
             exercise_id INTEGER NOT NULL,
-            result TEXT DEFAULT NULL, -- Example: "45 km/h" for SHO exercises
-            rating INTEGER DEFAULT NULL CHECK (rating BETWEEN 1 AND 5), -- Self-assessment scale, --Convert to TEXT in client?
+            result TEXT DEFAULT NULL, 
+            rating INTEGER DEFAULT NULL CHECK (rating BETWEEN 1 AND 5),
+            timestamp TEXT NOT NULL,
+            duration INTEGER DEFAULT NULL,
             FOREIGN KEY (player_id) REFERENCES PLAYER(id) ON DELETE CASCADE,
             FOREIGN KEY (exercise_id) REFERENCES EXERCISE(id) ON DELETE CASCADE
         )
@@ -176,13 +180,13 @@ class Database:
                 user_id = cursor.lastrowid
                 
                 # Prepopulate PLAYER_EXERCISE
-                cursor.execute("SELECT id FROM EXERCISE")
-                exercises = cursor.fetchall()
-                player_exercises = [(user_id, exercise_id[0]) for exercise_id in exercises]
-                cursor.executemany("""
-                INSERT INTO PLAYER_EXERCISE (player_id, exercise_id)
-                VALUES (?, ?)
-                """, player_exercises)
+               #ursor.execute("SELECT id FROM EXERCISE")
+                #exercises = cursor.fetchall()
+               #player_exercises = [(user_id, exercise_id[0]) for exercise_id in exercises]
+                #cursor.executemany("""
+                #INSERT INTO PLAYER_EXERCISE (player_id, exercise_id)
+               # VALUES (?, ?)
+               # """, player_exercises) ###
             
             elif role == 'coach':
                 cursor.execute("""
@@ -279,46 +283,117 @@ class Database:
             conn.commit()
             
     def get_categories_and_exercises_with_ratings(self, player_id):
-     """
-     Get all categories and exercises along with their current result and rating for a given player.
-     :param player_id: The ID of the player whose exercises and ratings are to be fetched.
-     :return: A dictionary with categories and exercises along with their results and ratings.
-     """
-     with self._get_connection() as conn:
-         cursor = conn.cursor()
-         
-         query = """
-         SELECT
-             c.name AS category,
-             e.name AS exercise,
-             pe.result,
-             pe.rating
-         FROM
-             CATEGORY c
-         JOIN EXERCISE e ON c.id = e.category_id
-         LEFT JOIN PLAYER_EXERCISE pe ON e.id = pe.exercise_id AND pe.player_id = ?
-         """
-         
-         cursor.execute(query, (player_id,))
-         exercises = cursor.fetchall()
-         
-         category_data = {}
-         for exercise in exercises:
-             category = exercise[0] 
-             exercise_name = exercise[1]  
-             result = exercise[2] if exercise[2] else None 
-             rating = exercise[3] if exercise[3] else None  
-             
-          
-             if category not in category_data:
-                 category_data[category] = []
-             category_data[category].append({
-                 "exercise": exercise_name,
-                 "result": result,
-                 "rating": rating
-             })
-     
-     return category_data
+    
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            print(player_id)
+
+            query = """SELECT exercise_id, result, rating FROM PLAYER_EXERCISE WHERE player_Id = ?
+            """
+            
+            cursor.execute(query, (player_id,))
+            exercises = cursor.fetchall()
+            
+            
+            category_data = {}
+            for exercise in exercises:
+
+                exercise_id = exercise[0]
+                exercisenameandid = self.get_exercise_name_category_id(exercise_id)
+                exercise_name = exercisenameandid[0]
+                category_id = exercisenameandid[1]
+                result = exercise[1]
+                rating = exercise[2]
+
+                if category_id not in category_data:
+                    category_data[category_id] = [] 
+
+                category_name = self.get_category_name(category_id)
+
+                category_data[category_id].append({
+                    "category": category_name,
+                    "exercise_id": exercise_id,
+                    "exercise": exercise_name,
+                    "result": result,
+                    "rating": rating
+                })
+    
+        return category_data
+    
+    def get_categories_and_exercises_for_training_view(self, player_id):
+
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            
+            query = """
+            SELECT
+                c.name AS category,
+                e.name AS exercise,
+                pe.result,
+                pe.rating
+            FROM
+                CATEGORY c
+            JOIN EXERCISE e ON c.id = e.category_id
+            LEFT JOIN PLAYER_EXERCISE pe ON e.id = pe.exercise_id AND pe.player_id = ?
+            """
+            
+            cursor.execute(query, (player_id,))
+            exercises = cursor.fetchall()
+            
+            category_data = {}
+            for exercise in exercises:
+                category = exercise[0] 
+                exercise_name = exercise[1]  
+                result = exercise[2] if exercise[2] else None 
+                rating = exercise[3] if exercise[3] else None  
+                
+            
+                if category not in category_data:
+                    category_data[category] = []
+                category_data[category].append({
+                    "exercise": exercise_name,
+                    "result": result,
+                    "rating": rating
+                })
+        
+                return category_data
+
+    
+    def get_exercise_name_category_id(self, exercise_id):
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT name, category_id FROM EXERCISE WHERE id = ?", (exercise_id,))
+            exercise = cursor.fetchone()
+            if exercise:
+                return exercise
+            return None
+    def get_category_name(self, category_id):
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT name FROM CATEGORY WHERE id = ?", (category_id,))
+            category = cursor.fetchone()
+            if category:
+                return category[0]
+            return None
+        
+    def get_default_exercises(self):
+        
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM EXERCISE")
+            exercises_data = cursor.fetchall()
+            exercises = []
+            for exercise in exercises_data:
+                category_id = exercises_data[1]
+                exercise_name = exercises_data[2]
+                
+                exercises.append({
+                    "category_id": category_id,
+                    "category": exercise_name
+                })
+
+            return exercises
+        
 
     def create_team(self, team_name, coach_id):
         """
@@ -344,57 +419,36 @@ class Database:
             conn.commit()
    
     def update_exercise(self, data):
-     exercise_name = data.get("exercise")
-     playerId = data.get("playerId")
-     result = data.get("result")
-     rating = data.get("rating")
-     
-     if not exercise_name:
-         raise ValueError("Exercise name is required")
-     
-     if (result is None or result == "N/A") and (rating is None or rating == 0):
-        raise ValueError("At least one of 'result' or 'rating' must be provided and valid")
-     
-     try:
-         with self._get_connection() as conn:
-             cursor = conn.cursor()
-           
-             cursor.execute("SELECT id FROM EXERCISE WHERE name = ?", (exercise_name,))
-             exercise_id_row = cursor.fetchone()
-             
-             if not exercise_id_row:
-                 raise ValueError(f"Exercise '{exercise_name}' not found")
-             
-             exercise_id = exercise_id_row[0]
-            
-             fields_to_update = []
-             values = []
-             
-             if result is not None and result != "N/A":
-                fields_to_update.append("result = ?")
-                values.append(result)
-            
-             if rating is not None and rating != 0:
-                fields_to_update.append("rating = ?")
-                values.append(rating)
-            
-             values.extend([playerId, exercise_id])
-             
-             query = f"""
-             UPDATE PLAYER_EXERCISE
-             SET {', '.join(fields_to_update)}
-             WHERE player_id = ? AND exercise_id = ?
-             """
+        exercise_name = data.get("exercise")
+        playerId = data.get("playerId")
+        duration = data.get("duration")
+        rating = data.get("rating")
+        extraInfo = data.get("extraInfo")
+        timestamp = datetime.now()
+    
+        if not exercise_name:
+            raise ValueError("Exercise name is required")
         
-             cursor.execute(query, tuple(values))
-             conn.commit()
-             
-             if cursor.rowcount > 0:
-                 return {"message": "Exercise updated successfully."}
-             else:
-                 return {"error": "No matching exercise found for this player."}
-     except Exception as e:
-         raise e
+        try:
+            with self._get_connection() as conn:
+                cursor = conn.cursor()
+                
+                cursor.execute("SELECT id FROM EXERCISE WHERE name = ?", (exercise_name,))
+                exercise_id_row = cursor.fetchone()
+                
+                if not exercise_id_row:
+                    raise ValueError(f"Exercise '{exercise_name}' not found")
+                
+                exercise_id = exercise_id_row[0]
+                
+                cursor.execute("""
+                    INSERT INTO PLAYER_EXERCISE (player_id, exercise_id, result, rating, timestamp, duration)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                """, (playerId, exercise_id, extraInfo, rating, timestamp, duration))
+                
+                conn.commit()
+        except Exception as e:
+            raise e
      
     def get_team_by_coach(self, coach_id):
         """

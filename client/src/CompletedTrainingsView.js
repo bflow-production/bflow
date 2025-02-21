@@ -7,19 +7,27 @@ const CompletedTrainingsView = ({ userData, completedTrainings }) => {
   const [expandedCategories, setExpandedCategories] = useState({});
   const backendURL = "http://127.0.0.1:5000";
 
+  const categoryNames = {
+    1: "Pace",
+    2: "Shooting",
+    3: "Passing",
+    4: "Dribbling",
+    5: "Defending",
+    6: "Physical",
+  };
+
   useEffect(() => {
     axios
       .get(`${backendURL}/api/training/${userData.userId}`)
       .then((response) => {
-        const data = response.data;
-        setCategories(Object.keys(data));
+        setCategories(response.data);
       })
       .catch((error) => {
         console.error("Error", error);
       });
   }, [userData.userId]);
 
-  if (categories.length === 0) {
+  if (Object.keys(categories).length === 0) {
     return <div>No data available...</div>;
   }
 
@@ -33,31 +41,30 @@ const CompletedTrainingsView = ({ userData, completedTrainings }) => {
   return (
     <div className="training-view">
       <h2 className="header-execise">Training Overview</h2>
-      {categories.map((category) => (
+      {Object.keys(categories).map((category) => (
         <div key={category} className="category-card">
           <button
             className="category-header"
             onClick={() => toggleCategory(category)}
           >
-            {category}
+            {categoryNames[category] || category}
           </button>
           {expandedCategories[category] && (
             <div className="exercise-grid">
-              {completedTrainings
-                .filter((exercise) => exercise.category === category)
-                .map((exercise, index) => (
-                  <div key={index} className="exercise-card">
-                    <strong className="exercise-title">
-                      {exercise.exercise}
-                    </strong>
-                    <div className="exercise-inputs">
-                      <div className="input-group">
-                        <p>{`Result: ${exercise.result || "No result"}`}</p>
-                        <p>{`Rating: ${exercise.rating || "0"}`}</p>
-                      </div>
+              {categories[category].map((exercise, index) => (
+                <div key={index} className="exercise-card">
+                  <strong className="exercise-title">
+                    {exercise.exercise}
+                  </strong>
+                  <div className="exercise-inputs">
+                    <div className="input-group">
+                      <p>{`Exercise Name: ${exercise.exercise}`}</p>
+                      <p>{`Info: ${exercise.result || "No result"}`}</p>
+                      <p>{`Rating: ${exercise.rating || "0"}`}</p>
                     </div>
                   </div>
-                ))}
+                </div>
+              ))}
             </div>
           )}
         </div>

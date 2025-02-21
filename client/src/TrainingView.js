@@ -10,14 +10,11 @@ const TrainingView = ({ userData, onTrainingDone }) => {
 
   useEffect(() => {
     axios
-      .get(`${backendURL}/api/training/${userData.userId}`)
+      .get(`${backendURL}/api/default_exercises/${userData.userId}`)
       .then((response) => setTrainingData(response.data))
       .catch(() => setTrainingData(null));
   }, [userData.userId]);
 
-  if (Object.keys(trainingData).length === 0) {
-    return <div>No data available...</div>;
-  }
 
   // const addExercise = async (exercise, result, rating) => {
   //   try {
