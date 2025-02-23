@@ -1,85 +1,228 @@
-.profile-view {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    font-family: 'Arial', sans-serif;
-    
-  }
-  .header-profile {
-    font-size: 2rem;
-    font-weight: bold;
-    text-align: center;
-    padding: 10px;
-    margin-bottom: 20px;
-    color: #333;
-    background-color: #333;;
-  }
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
+ 
+}
+
+.parent-card {
+  perspective: 1000px; /* Adds 3D effect */
+  cursor: pointer;
+}
+
+.card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 15px; 
+  box-sizing: border-box; 
   
-  .right-container {
-    display: flex;
+ 
+}
+
+.card-back {
+  transform: rotateY(180deg);
+  background: #f3f3f3;
+  
+}
+
+
+.top-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #ddd;
+}
+
+.player-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 20px;
+}
+
+.player-info p,
+.coach-info p,
+.parent-card p {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 25px; 
+  margin: 5px 0;
+  gap: 10px; 
+  flex-wrap: nowrap; 
+}
+
+.player-info strong, .coach-info strong, .parent-card strong {
+  margin-right: 5px; 
+  white-space: nowrap; 
+}
+.profile-input {
+  width: 150px; 
+  height: 20px;
+  padding: 3px 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex-grow: 0; 
+  position: inherit;
+}
+
+.edit-icon {
+  cursor: pointer;
+ 
+  color: #007bff;
+  font-size: 16px;
+}
+
+.edit-icon:hover {
+  color: #0056b3;
+}
+
+.player-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #e0e0e0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.player-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.placeholder {
+  text-align: center;
+  color: #777;
+  font-size: 16px;
+}
+
+.bottom-section {
+  display: flex;
+  justify-content: space-between; 
+  width: 100%;
+  margin-top: 20px;
+  gap: 20px;
+  flex-wrap: wrap; 
+}
+
+.coach-info {
+  flex: 1;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 15px; 
+}
+
+ .parent-card {
+  flex: 1; 
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box; 
+  background-color: #fff;
+}
+
+
+
+.buttonDiv {
+  display: flex;
+  justify-content: space-evenly; 
+  width: 100%; 
+  margin-top: 20px; 
+}
+
+.coach-info h3, .card-front h3 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.edit-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.edit-button:hover {
+  background-color: #45a049;
+}
+
+h2, h3 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+p {
+  margin: 5px 0;
+}
+
+@media (max-width: 768px) {
+  .top-section {
     flex-direction: column;
     align-items: center;
   }
-  
-  .hbox {
-    display: flex;
-    justify-content: space-between; 
-    width: 100%;
-    gap: 20px; 
-  }
-  
-  .vbox {
-    display: flex;
-    padding: 30px;
+
+  .bottom-section {
     flex-direction: column;
-    width: 48%; 
-    flex-grow: 1; 
+    align-items: center;
+    gap: 20px;
   }
-  
-  .row {
-    display: flex;
-    flex-direction: column; 
-    gap: 10px; 
-    margin-bottom: 15px;
+
+  .player-image {
+    width: 120px;
+    height: 120px;
   }
-  
-  input {
-    width: 100%; 
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
+
+  .profile-input {
+    width: 90%;  
   }
-  
-  .hbox-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #45a049;
-  }
-  /*for smaller devices*/
-  @media (max-width: 768px) {
-    .hbox {
-      flex-direction: column; 
-    }
-  
-    .vbox {
-      width: 100%; 
-      margin-bottom: 20px;
-    }
-  }  
+}
+
+
+
+
   
   
  

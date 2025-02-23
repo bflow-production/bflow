@@ -6,7 +6,7 @@ import Login from "./login";
 import Register from "./register";
 import ProfileView from "./profileView";
 import StatsView from "./statsView";
-import TrainingView from "./trainingView";
+import TrainingView from "./TrainingView";
 import CompletedTrainingsView from "./CompletedTrainingsView";
 import CoachView from "./coachView";
 import JoinTeamView from "./joinTeamView";
@@ -18,7 +18,8 @@ function App() {
   const [userData, setUserData] = useState(null);
   const [activeView, setActiveView] = useState("profile");
   const [authView, setAuthView] = useState("login");
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [sidebarOpen, setsidebarOpen] = useState(false);
+  const [completedTrainings, setCompletedTrainings] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
@@ -73,6 +74,10 @@ function App() {
     };
   }, []);
 
+  const handleTrainingDone = (exercise) => {
+    setCompletedTrainings((prev) => [...prev, exercise]);
+  };
+
   const renderView = () => {
     switch (activeView) {
       case "profile":
@@ -80,9 +85,9 @@ function App() {
       case "stats":
         return <StatsView userData={userData} />;
       case "startTraining":
-        return <TrainingView userData={userData} />;
+        return <TrainingView userData={userData} onTrainingDone={handleTrainingDone} />;
       case "completedTrainings":
-        return <CompletedTrainingsView userData={userData} />;
+        return <CompletedTrainingsView userData={userData} completedTrainings={completedTrainings} />;
       case "coach":
         return userData.role === "coach" ? <CoachView userData={userData} /> : <div>Invalid View</div>;
       case "joinTeam":
@@ -116,45 +121,30 @@ function App() {
     localStorage.removeItem("jwtToken");
     setUserData(null);
     setActiveView("login");
-    setDropdownOpen(false);
   };
 
   const handleSettings = () => {
     setActiveView("settings");
-    setDropdownOpen(false); // Close the dropdown when navigating to settings
   };
 
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
+  const togglesidebar = () => {
+    setsidebarOpen(!sidebarOpen);
   };
 
   return (
     <div className="App">
       <header className="App-header">
+      <button className="sidebar-toggle" onClick={togglesidebar}>
+          ☰
+        </button>
         <h1>
           <span className="app-title">B'FLOW</span>
         </h1>
         <h2>{userData?.name}</h2>
-
-        <div className="dropdown">
-          <button className="dropdown-toggle" onClick={toggleDropdown}>
-            ☰
-          </button>
-          {dropdownOpen && (
-            <div className="dropdown-menu">
-              <button className="settings-button" onClick={handleSettings}>
-                Settings
-              </button>
-              <button className="logout-button" onClick={handleLogout}>
-                Log Out
-              </button>
-            </div>
-          )}
-        </div>
       </header>
 
       <div className="app-content">
-        <nav className="nav">
+        <nav className={`nav ${sidebarOpen ? "open" : ""}`}>
           <button
             onClick={() => setActiveView("profile")}
             className={activeView === "profile" ? "active" : ""}
@@ -203,6 +193,12 @@ function App() {
               Link Child
             </button>
           )}
+          <button className="settings-button" onClick={handleSettings}>
+            Settings
+          </button>
+          <button className="logout-button" onClick={handleLogout}>
+            Log Out
+          </button>
         </nav>
         <main className="main">{renderView()}</main>
       </div>
