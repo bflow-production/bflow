@@ -325,38 +325,28 @@ class Database:
         with self._get_connection() as conn:
             cursor = conn.cursor()
             
-            query = """
-            SELECT
-                c.name AS category,
-                e.name AS exercise,
-                pe.result,
-                pe.rating
-            FROM
-                CATEGORY c
-            JOIN EXERCISE e ON c.id = e.category_id
-            LEFT JOIN PLAYER_EXERCISE pe ON e.id = pe.exercise_id AND pe.player_id = ?
+            query = """ SELECT * FROM EXERCISE;
             """
             
-            cursor.execute(query, (player_id,))
+            cursor.execute(query)
             exercises = cursor.fetchall()
             
             category_data = {}
             for exercise in exercises:
-                category = exercise[0] 
-                exercise_name = exercise[1]  
-                result = exercise[2] if exercise[2] else None 
-                rating = exercise[3] if exercise[3] else None  
-                
-            
-                if category not in category_data:
-                    category_data[category] = []
-                category_data[category].append({
-                    "exercise": exercise_name,
-                    "result": result,
-                    "rating": rating
+               
+                exercise_id = exercise[0]
+                category_id = exercise[1]
+                exercise_name = exercise[2]
+
+                if category_id not in category_data:
+                    category_data[category_id] = []
+
+                category_data[category_id].append({
+                    "exercise_id": exercise_id,
+                    "exercise": exercise_name
                 })
-        
-                return category_data
+
+        return category_data
 
     
     def get_exercise_name_category_id(self, exercise_id):
