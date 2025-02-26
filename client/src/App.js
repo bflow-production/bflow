@@ -11,6 +11,7 @@ import CompletedTrainingsView from "./CompletedTrainingsView";
 import CoachView from "./coachView";
 import JoinTeamView from "./joinTeamView";
 import LinkChildView from "./linkChildView";
+import SettingsView from "./settings";
 
 const backendURL = "http://127.0.0.1:5000";
 
@@ -95,7 +96,8 @@ function App() {
       case "linkChild":
         return userData.role === "parent" ? <LinkChildView userData={userData} /> : <div>Invalid View</div>;
       case "settings":
-        return <div>Settings View (coming soon!)</div>;
+        //return <div>Settings View (coming soon!)</div>;
+        return <SettingsView userData={userData} />;
       default:
         return <div>Invalid View</div>;
     }
