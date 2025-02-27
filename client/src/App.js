@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import "./App.css";
 import Login from "./login";
@@ -11,8 +10,7 @@ import CompletedTrainingsView from "./CompletedTrainingsView";
 import CoachView from "./coachView";
 import JoinTeamView from "./joinTeamView";
 import LinkChildView from "./linkChildView";
-
-const backendURL = "/api";
+import userService from "./services/user";
 
 function App() {
   const [userData, setUserData] = useState(null);
@@ -49,17 +47,14 @@ function App() {
   //todo: API needs a decorator to check the token(unimplemented)
   useEffect(() => {
     if (userData?.userId) {
-      axios
-        .get(`${backendURL}/user/${userData.userId}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
-        })
+      userService
+        .getUserByRole(userData.userId, userData.role)
         .then((response) => {
-          setUserData((prevData) => ({ ...prevData, ...response.data }));
+          setUserData((prevData) => ({ ...prevData, ...response}));
         })
         .catch((error) => {
           console.error("Error fetching user data:", error);
+          console.log(userData)
         });
     }
   }, [userData?.userId]);
@@ -85,15 +80,37 @@ function App() {
       case "stats":
         return <StatsView userData={userData} />;
       case "startTraining":
-        return <TrainingView userData={userData} onTrainingDone={handleTrainingDone} />;
+        return (
+          <TrainingView
+            userData={userData}
+            onTrainingDone={handleTrainingDone}
+          />
+        );
       case "completedTrainings":
-        return <CompletedTrainingsView userData={userData} completedTrainings={completedTrainings} />;
+        return (
+          <CompletedTrainingsView
+            userData={userData}
+            completedTrainings={completedTrainings}
+          />
+        );
       case "coach":
-        return userData.role === "coach" ? <CoachView userData={userData} /> : <div>Invalid View</div>;
+        return userData.role === "coach" ? (
+          <CoachView userData={userData} />
+        ) : (
+          <div>Invalid View</div>
+        );
       case "joinTeam":
-        return userData.role === "player" ? <JoinTeamView userData={userData} /> : <div>Invalid View</div>;
+        return userData.role === "player" ? (
+          <JoinTeamView userData={userData} />
+        ) : (
+          <div>Invalid View</div>
+        );
       case "linkChild":
-        return userData.role === "parent" ? <LinkChildView userData={userData} /> : <div>Invalid View</div>;
+        return userData.role === "parent" ? (
+          <LinkChildView userData={userData} />
+        ) : (
+          <div>Invalid View</div>
+        );
       case "settings":
         return <div>Settings View (coming soon!)</div>;
       default:
@@ -134,7 +151,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-      <button className="sidebar-toggle" onClick={togglesidebar}>
+        <button className="sidebar-toggle" onClick={togglesidebar}>
           ☰
         </button>
         <h1>

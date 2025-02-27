@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import axios from 'axios';
+import userService from "./services/user";
+import teamService from "./services/teams";
 import "./profileView.css";
 
 const ProfileView = ({ userData }) => {
   const { userId, role } = userData;
   const [editMode, setEditMode] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
-  const backendURL = "/api";
 
   const [profile, setProfile] = useState({
     username: "",
@@ -15,6 +15,7 @@ const ProfileView = ({ userData }) => {
     name: "",
     picture: "",
     birthYear: "",
+    position: "",
     country: "",
     number: "",
     team: "",
@@ -30,53 +31,44 @@ const ProfileView = ({ userData }) => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`${backendURL}/user/${userId}?role=${role}`, {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
-          }
-        });
-        setProfile(response.data);
+        const response = await userService.getUserByRole(userId, role);
+        setProfile(response);
+        console.log("Profile data:", response);
 
         if (role === 'coach') {
-          const teamResponse = await axios.get(`${backendURL}/team/${userId}`, {
-            headers: {
-              'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
-            }
-          });
-          if (teamResponse.data.teamName) {
+          const teamResponse = await teamService.getTeam(userId);
+          console.log("Coach team data:", teamResponse);
+
+          if (teamResponse.teamName) {
             setProfile((prevProfile) => ({
               ...prevProfile,
-              team: teamResponse.data.teamName
+              team: teamResponse.teamName
             }));
           }
         }
-        if (role === 'player' && response.data.team_id) {
-          const teamResponse = await axios.get(`${backendURL}/team/${response.data.team_id}`, {
-            headers: {
-              'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
-            }
-          });
-          if (teamResponse.data.teamName) {
+
+        if (role === 'player' && response.team_id) {
+          const teamResponse = await teamService.getTeam(response.team_id);
+          console.log("Player team data:", teamResponse);
+
+          if (teamResponse.teamName) {
             setProfile((prevProfile) => ({
               ...prevProfile,
-              team: teamResponse.data.teamName,
-              coach: teamResponse.data.coachName,
-              coachEmail: teamResponse.data.coachEmail
+              team: teamResponse.teamName,
+              coach: teamResponse.coachName,
+              coachEmail: teamResponse.coachEmail
             }));
           }
         }
-        if (role === 'parent' && response.data.child_id) {
-          const childResponse = await axios.get(`${backendURL}/user/${response.data.child_id}?role=player`, {
-            headers: {
-              'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
-            }
-          });
-          console.log("Parent profile data:", response.data);
-          if (childResponse.data.name) {
+        if (role === 'parent' && response.child_id) {
+          const childResponse = await userService.getUserByRole(response.child_id, 'player');
+          console.log("Parent profile data:", response);
+
+          if (childResponse.name) {
             setProfile((prevProfile) => ({
               ...prevProfile,
-              childName: childResponse.data.name,
-              childEmail: childResponse.data.email
+              childName: childResponse.name,
+              childEmail: childResponse.email
             }));
           }
         }
@@ -86,7 +78,7 @@ const ProfileView = ({ userData }) => {
     };
 
     fetchProfile();
-  }, [userId, role, backendURL]);
+  }, [userId, role]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -100,11 +92,11 @@ const ProfileView = ({ userData }) => {
   const handleSave = async () => {
     try {
       const profileData = { ...profile, role };
-      const response = await axios.put(`${backendURL}/user/${userId}`, profileData, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
-        }
-      });
+      console.log("Profile data to save:", profileData);
+      
+      const response = await userService.updateUser(userId, profileData);
+      console.log("Profile update response:", response);
+
       setEditMode(false);
       alert("Profile updated successfully");
     } catch (error) {
@@ -165,7 +157,7 @@ const ProfileView = ({ userData }) => {
                 <input
                   type="text"
                   name={field}
-                  value={profile[field]}
+                  defaultValue={profile[field]}
                   onChange={handleChange} 
                   className="profile-input"
                 />
