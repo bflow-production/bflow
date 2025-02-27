@@ -10,60 +10,55 @@ const TrainingView = ({ userData, onTrainingDone }) => {
 
   useEffect(() => {
     axios
-      .get(`${backendURL}/training/${userData.userId}`)
+      .get(`${backendURL}/default_exercises/${userData.userId}`)
       .then((response) => setTrainingData(response.data))
       .catch(() => setTrainingData(null));
   }, [userData.userId]);
 
-  if (Object.keys(trainingData).length === 0) {
-    return <div>No data available...</div>;
-  }
+  const categoryNames = {
+    1: "Pace",
+    2: "Shooting",
+    3: "Passing",
+    4: "Dribbling",
+    5: "Defending",
+    6: "Physical",
+  };
 
-  // const addExercise = async (exercise, result, rating) => {
-  //   try {
-  //     const response = await axios.put(`${backendURL}/api/training/${userData.userId}`, {
-  //       exercise,
-  //       result,
-  //       rating,
-  //       playerId: userData.userId
-  //     }, {
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'Authorization': `Bearer ${localStorage.getItem("jwtToken")}`
-  //       }
-  //     });
-  //     console.log("Exercise added/updated:", response.data.message);
-  //   } catch (error) {
-  //     console.error("Error during save operation:", error.response ? error.response.data : error.message);
-  //   }
-  // };
+  const handleMarkAsDone = async (category, exercise) => {
+    const hours = Number(resultOrRating[exercise.exercise]?.hours) || 0;
+    const minutes = Number(resultOrRating[exercise.exercise]?.minutes) || 0;
 
-  const handleMarkAsDone = (category, exercise) => {
     const updatedExercise = {
-      ...exercise,
-      result: resultOrRating[exercise.exercise]?.result || "",
+      exercise: exercise.exercise,
       rating: resultOrRating[exercise.exercise]?.rating || "",
-      category
+      extraInfo: resultOrRating[exercise.exercise]?.extraInfo || "",
+      duration: hours * 60 + minutes,
+      playerId: userData.userId,
     };
 
     console.log("Exercise done:", updatedExercise);
-    onTrainingDone(updatedExercise); // Lähetetään päivitetty harjoitus
-    
-    setTrainingData((prevData) => {
-      const updatedCategory = prevData[category].filter(
-        (ex) => ex.exercise !== exercise.exercise
-      );
-      return {
-        ...prevData,
-        [category]: updatedCategory,
-      };
-    });
+
+    try {
+      const response = await axios.put(`${backendURL}/training/${userData.userId}`, updatedExercise, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem("jwtToken")}`
+        }
+      });
+      console.log("Exercise added/updated:", response.data.message);
+    } catch (error) {
+      console.error("Error during save operation:", error.response ? error.response.data : error.message);
+    }
+
+    onTrainingDone(updatedExercise);
 
     setResultOrRating((prevState) => ({
       ...prevState,
       [exercise.exercise]: {
-        result: "",
+        hours: "",
+        minutes: "",
         rating: "",
+        extraInfo: "",
       },
     }));
   };
@@ -94,7 +89,7 @@ const TrainingView = ({ userData, onTrainingDone }) => {
             className="category-header"
             onClick={() => toggleCategory(category)}
           >
-            {category}
+            {categoryNames[category] || `Category ${category}`}
           </button>
           {expandedCategories[category] && (
             <div className="exercise-grid">
@@ -111,26 +106,67 @@ const TrainingView = ({ userData, onTrainingDone }) => {
                       {exercise.exercise}
                     </strong>
                     <div className="input-group">
-                      <input
-                        type="text"
-                        placeholder={"Give result..."}
-                        value={resultOrRating[exercise.exercise]?.result || ""}
-                        onChange={(e) =>
-                          handleInputChange(
-                            exercise.exercise,
-                            "result",
-                            e.target.value
-                          )
-                        }
-                      />
-                      <input
-                        type="number"
-                        placeholder={"Give rating..."}
+                      <div className="time-input-group">
+                        <label className="time-label">Time</label>
+                        <input
+                          type="number"
+                          min="0"
+                          placeholder="Hours"
+                          value={resultOrRating[exercise.exercise]?.hours || ""}
+                          onChange={(e) =>
+                            handleInputChange(
+                              exercise.exercise,
+                              "hours",
+                              e.target.value
+                            )
+                          }
+                        />
+                        <input
+                          type="number"
+                          min="0"
+                          max="59"
+                          placeholder="Minutes"
+                          value={
+                            resultOrRating[exercise.exercise]?.minutes || ""
+                          }
+                          onChange={(e) =>
+                            handleInputChange(
+                              exercise.exercise,
+                              "minutes",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </div>
+                      <select
                         value={resultOrRating[exercise.exercise]?.rating || ""}
                         onChange={(e) =>
                           handleInputChange(
                             exercise.exercise,
                             "rating",
+                            e.target.value
+                          )
+                        }
+                      >
+                        <option value="" disabled>
+                          Give rating...
+                        </option>
+                        <option value="1">Just started</option>
+                        <option value="2">Can do some</option>
+                        <option value="3">Can do it</option>
+                        <option value="4">Im good at it</option>
+                        <option value="5">Im excellent at it</option>
+                      </select>
+                      <input
+                        type="text"
+                        placeholder="Give extra info..."
+                        value={
+                          resultOrRating[exercise.exercise]?.extraInfo || ""
+                        }
+                        onChange={(e) =>
+                          handleInputChange(
+                            exercise.exercise,
+                            "extraInfo",
                             e.target.value
                           )
                         }

@@ -114,6 +114,16 @@ def get_user_data(user_id):
     print(f"Fetched user data for {role}: {user_data}")
     return jsonify(user_data)
 
+@app.route('/api/default_exercises/<int:user_id>', methods=['GET'])
+def get_default_exercises(user_id):
+    
+    training_data = db.get_categories_and_exercises_for_training_view(user_id)
+
+    if not training_data:
+        return jsonify({"error": "No training data found for this user"}), 404
+
+    return jsonify(training_data)
+
 @app.route('/api/training/<int:user_id>', methods=['GET'])
 def get_user_training_data(user_id):
    
