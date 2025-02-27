@@ -39,9 +39,9 @@ class Database:
                 coachEmail TEXT DEFAULT NULL,
                 coachPhone TEXT DEFAULT NULL,
                 team TEXT DEFAULT NULL,
-                position TEXT DEFAULT NULL,
                 shirtNumber INTEGER DEFAULT NULL,
                 team_id INTEGER DEFAULT NULL,
+                position TEXT DEFAULT NULL,
                 FOREIGN KEY (team_id) REFERENCES TEAM(id) ON DELETE SET NULL
             )
             """)

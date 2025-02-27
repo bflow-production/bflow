@@ -83,7 +83,8 @@ def get_user_data(user_id):
             "coachPhone": user[14],
             "team": user[15],
             "shirtNumber": user[16],
-            "team_id": user[17]
+            "team_id": user[17],
+            "position": user[18]
         }
     elif role == 'coach':
         user_data = {
@@ -192,8 +193,6 @@ def verify_session():
         return jsonify({"error": "Token has expired"}), 401
     except jwt.InvalidTokenError:
         return jsonify({"error": "Invalid token"}), 401
-
-
 
 
 @app.route('/api/user/<int:id>', methods=['PUT'])
