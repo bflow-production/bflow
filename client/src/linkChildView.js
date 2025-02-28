@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import axios from 'axios';
+import linkChildService from "./services/linkChild";
 import "./linkChildView.css";
 
 const LinkChildView = ({ userData }) => {
   const { userId, role } = userData;
-  const backendURL = "/api";
-
   const [childUsername, setChildUsername] = useState("");
 
   const handleChildUsernameChange = (e) => {
@@ -15,11 +13,7 @@ const LinkChildView = ({ userData }) => {
   const handleLinkChild = async () => {
     try {
       const linkData = { childUsername, parentId: userId, role }; // Include child username and parent ID in the data
-      const response = await axios.post(`${backendURL}/link-child`, linkData, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
-        }
-      });
+      await linkChildService.createLink(linkData);
       alert("Child linked successfully");
     } catch (error) {
       if (error.response) {

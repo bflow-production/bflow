@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import axios from 'axios';
+import teamService from './services/teams';
 import "./coachView.css";
 
 const CoachView = ({ userData }) => {
   const { userId, role } = userData;
-  const backendURL = "/api";
-
   const [teamName, setTeamName] = useState("");
 
   const handleTeamNameChange = (e) => {
@@ -15,11 +13,8 @@ const CoachView = ({ userData }) => {
   const handleSave = async () => {
     try {
       const teamData = { teamName, coachId: userId, role }; // Include team name and coach ID in the data
-      const response = await axios.post(`${backendURL}/team`, teamData, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
-        }
-      });
+      await teamService.createTeam(teamData);
+
       alert("Team created successfully");
     } catch (error) {
       if (error.response) {

@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import "./TrainingView.css";
+import trainingService from "./services/trainings";
 
-const CompletedTrainingsView = ({ userData, completedTrainings }) => {
+const CompletedTrainingsView = ({ userData }) => {
   const [categories, setCategories] = useState([]);
   const [expandedCategories, setExpandedCategories] = useState({});
-  const backendURL = "/api";
+
 
   const categoryNames = {
     1: "Pace",
@@ -17,10 +17,11 @@ const CompletedTrainingsView = ({ userData, completedTrainings }) => {
   };
 
   useEffect(() => {
-    axios
-      .get(`${backendURL}/training/${userData.userId}`)
+    trainingService
+      .getTraining(userData.userId)
       .then((response) => {
-        setCategories(response.data);
+        setCategories(response);
+        console.log("response", response);
       })
       .catch((error) => {
         console.error("Error", error);

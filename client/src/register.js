@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
-import './register.css'; // Ensure the correct CSS file is imported
+import authService from "./services/authService";
+import "./register.css";
 
 function Register({ setAuthView }) {
   const [formData, setFormData] = useState({
@@ -10,7 +10,7 @@ function Register({ setAuthView }) {
     name: "",
     birthYear: "",
     country: "",
-    role: "" ,// Default role
+    role: "", // Default role
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false); // State to handle success message
@@ -27,7 +27,7 @@ function Register({ setAuthView }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/register", {
+      await authService.register({
         username: formData.username,
         email: formData.email,
         password: formData.password,
@@ -41,7 +41,11 @@ function Register({ setAuthView }) {
         setAuthView("login"); // Navigate to login page after 3 seconds
       }, 3000);
     } catch (err) {
-      setError(`Registration failed. Please try again. ${err.response?.data?.message || err.message}`);
+      setError(
+        `Registration failed. Please try again. ${
+          err.response?.data?.message || err.message
+        }`
+      );
     }
   };
 
@@ -54,28 +58,32 @@ function Register({ setAuthView }) {
         <h1>Register</h1>
 
         {error && <p className="error">{error}</p>}
-        {success && <p className="success">Registration successful! Redirecting to login...</p>}
+        {success && (
+          <p className="success">
+            Registration successful! Redirecting to login...
+          </p>
+        )}
         <form onSubmit={handleSubmit}>
           <label>Role:</label>
           <div className="role-buttons">
             <button
               type="button"
-              className={formData.role === 'player' ? 'active' : ''}
-              onClick={() => handleRoleChange('player')}
+              className={formData.role === "player" ? "active" : ""}
+              onClick={() => handleRoleChange("player")}
             >
               Player
             </button>
             <button
               type="button"
-              className={formData.role === 'parent' ? 'active' : ''}
-              onClick={() => handleRoleChange('parent')}
+              className={formData.role === "parent" ? "active" : ""}
+              onClick={() => handleRoleChange("parent")}
             >
               Parent
             </button>
             <button
               type="button"
-              className={formData.role === 'coach' ? 'active' : ''}
-              onClick={() => handleRoleChange('coach')}
+              className={formData.role === "coach" ? "active" : ""}
+              onClick={() => handleRoleChange("coach")}
             >
               Coach
             </button>

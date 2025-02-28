@@ -12,12 +12,11 @@ import JoinTeamView from "./joinTeamView";
 import LinkChildView from "./linkChildView";
 import userService from "./services/user";
 
-function App() {
+const App = () => {
   const [userData, setUserData] = useState(null);
   const [activeView, setActiveView] = useState("profile");
   const [authView, setAuthView] = useState("login");
   const [sidebarOpen, setsidebarOpen] = useState(false);
-  const [completedTrainings, setCompletedTrainings] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
@@ -69,10 +68,6 @@ function App() {
     };
   }, []);
 
-  const handleTrainingDone = (exercise) => {
-    setCompletedTrainings((prev) => [...prev, exercise]);
-  };
-
   const renderView = () => {
     switch (activeView) {
       case "profile":
@@ -83,14 +78,12 @@ function App() {
         return (
           <TrainingView
             userData={userData}
-            onTrainingDone={handleTrainingDone}
           />
         );
       case "completedTrainings":
         return (
           <CompletedTrainingsView
             userData={userData}
-            completedTrainings={completedTrainings}
           />
         );
       case "coach":

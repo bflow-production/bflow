@@ -1,17 +1,16 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import trainingService from "./services/trainings";
 import "./TrainingView.css";
 
-const TrainingView = ({ userData, onTrainingDone }) => {
+const TrainingView = ({ userData }) => {
   const [trainingData, setTrainingData] = useState({});
   const [resultOrRating, setResultOrRating] = useState({});
   const [expandedCategories, setExpandedCategories] = useState({});
-  const backendURL = "/api";
 
   useEffect(() => {
-    axios
-      .get(`${backendURL}/default_exercises/${userData.userId}`)
-      .then((response) => setTrainingData(response.data))
+    trainingService
+      .getDefaultExercises(userData.userId)
+      .then((response) => setTrainingData(response))
       .catch(() => setTrainingData(null));
   }, [userData.userId]);
 
@@ -24,7 +23,7 @@ const TrainingView = ({ userData, onTrainingDone }) => {
     6: "Physical",
   };
 
-  const handleMarkAsDone = async (category, exercise) => {
+  const handleMarkAsDone = async (exercise) => {
     const hours = Number(resultOrRating[exercise.exercise]?.hours) || 0;
     const minutes = Number(resultOrRating[exercise.exercise]?.minutes) || 0;
 
@@ -39,18 +38,17 @@ const TrainingView = ({ userData, onTrainingDone }) => {
     console.log("Exercise done:", updatedExercise);
 
     try {
-      const response = await axios.put(`${backendURL}/training/${userData.userId}`, updatedExercise, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem("jwtToken")}`
-        }
-      });
-      console.log("Exercise added/updated:", response.data.message);
+      const response = await trainingService.updateTraining(
+        userData.userId,
+        updatedExercise
+      );
+      console.log("Exercise added/updated:", response.message);
     } catch (error) {
-      console.error("Error during save operation:", error.response ? error.response.data : error.message);
+      console.error(
+        "Error during save operation:",
+        error.response ? error.response.data : error.message
+      );
     }
-
-    onTrainingDone(updatedExercise);
 
     setResultOrRating((prevState) => ({
       ...prevState,
@@ -99,7 +97,7 @@ const TrainingView = ({ userData, onTrainingDone }) => {
                     className="exercise-form"
                     onSubmit={(e) => {
                       e.preventDefault();
-                      handleMarkAsDone(category, exercise);
+                      handleMarkAsDone(exercise);
                     }}
                   >
                     <strong className="exercise-title">

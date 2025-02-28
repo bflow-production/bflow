@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import axios from 'axios';
+import teamService from "./services/teams";
 import "./joinTeamView.css";
 
 const JoinTeamView = ({ userData }) => {
   const { userId, role } = userData;
-  const backendURL = "/api";
-
   const [teamName, setTeamName] = useState("");
 
   const handleTeamNameChange = (e) => {
@@ -15,11 +13,7 @@ const JoinTeamView = ({ userData }) => {
   const handleJoinTeam = async () => {
     try {
       const teamData = { teamName, playerId: userId, role }; // Include team name and player ID in the data
-      const response = await axios.post(`${backendURL}/join-team`, teamData, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
-        }
-      });
+      await teamService.joinTeam(teamData);
       alert("Joined team successfully");
     } catch (error) {
       if (error.response) {

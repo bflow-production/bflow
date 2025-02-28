@@ -1,6 +1,6 @@
 import axios from 'axios'
-const baseUrl = 'api/user'
 
+const baseUrl = "/api/user"
 
 const getUserByRole = async (userId, role) => {
   const response = await axios.get(`${baseUrl}/${userId}?role=${role}`, {

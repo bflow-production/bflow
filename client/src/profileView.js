@@ -55,8 +55,8 @@ const ProfileView = ({ userData }) => {
             setProfile((prevProfile) => ({
               ...prevProfile,
               team: teamResponse.teamName,
-              coach: teamResponse.coachName,
-              coachEmail: teamResponse.coachEmail
+              coach: response.coach,
+              coachEmail: response.coachEmail
             }));
           }
         }
