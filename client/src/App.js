@@ -10,6 +10,7 @@ import CompletedTrainingsView from "./CompletedTrainingsView";
 import CoachView from "./coachView";
 import JoinTeamView from "./joinTeamView";
 import LinkChildView from "./linkChildView";
+import SettingsView from "./settings";
 import userService from "./services/user";
 
 const App = () => {
@@ -105,7 +106,8 @@ const App = () => {
           <div>Invalid View</div>
         );
       case "settings":
-        return <div>Settings View (coming soon!)</div>;
+        //return <div>Settings View (coming soon!)</div>;
+        return <SettingsView userData={userData} />;
       default:
         return <div>Invalid View</div>;
     }

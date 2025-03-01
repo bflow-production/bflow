@@ -1,0 +1,36 @@
+
+.dropdown-container {
+  padding: 16px;
+}
+
+.dropdown-button {
+  color: white;
+  border: none;
+  border-radius: 7px;
+  background-color: green;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-button:hover {
+  background-color: darkgreen;
+}
+
+.dropdown-content {
+  margin-top: 8px;
+  padding: 16px;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.stats-view {
+  color: black;
+}
+
+.stats-view .trainingTitle {
+  color: green;
+}

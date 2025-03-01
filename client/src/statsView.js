@@ -1,42 +1,60 @@
-
-import React from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Legend } from "recharts";
+import React, {useState} from "react";
+import SimpleBarChart from "./chart";
+import "./statsView.css";
 
 const StatsView = () => {
-
-  const data = [
-    { day: 1, hours: Math.floor(Math.random() * 20) },
-    { day: 2, hours: Math.floor(Math.random() * 20) },
-    { day: 3, hours: Math.floor(Math.random() * 20) },
-    { day: 4, hours: Math.floor(Math.random() * 20) },
-    { day: 5, hours: Math.floor(Math.random() * 20) },
-    { day: 6, hours: Math.floor(Math.random() * 20) },
-  ];
+  const [isDefenceOpen, setIsDefenceOpen] = useState(false);
+  const [isShootingOpen, setIsShootingOpen] = useState(false);
+  const [isSpeedOpen, setIsSpeedOpen] = useState(false);
 
   return (
     <div className="stats-view">
-      <h2>Stats</h2>
-      <p>Workouts: 5</p>
-      <p>Total Time: 30 hours</p>
-
-      <ResponsiveContainer width="100%" height={400}>
-        <BarChart
-          data={data}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
+      <h1>Statistics</h1>
+      <h2 className="trainingTitle">Defence</h2>
+      <div className="dropdown-container">
+        <button
+          onClick={() => setIsDefenceOpen(!isDefenceOpen)}
+          className="dropdown-button"
         >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="day" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="hours" fill="#8884d8" />
-        </BarChart>
-      </ResponsiveContainer>
+          {isDefenceOpen ? 'Close Stats' : 'Open Stats'}
+        </button>
+
+        {isDefenceOpen && (
+          <div className="dropdown-content">
+            <SimpleBarChart></SimpleBarChart>
+          </div>
+        )}
+      </div>
+
+      <h2 className="trainingTitle">Shooting</h2>
+      <div className="dropdown-container">
+        <button
+          onClick={() => setIsShootingOpen(!isShootingOpen)}
+          className="dropdown-button"
+        >
+          {isShootingOpen ? 'Close Stats' : 'Open Stats'}
+        </button>
+        {isShootingOpen && (
+          <div className="dropdown-content">
+            <SimpleBarChart></SimpleBarChart>
+          </div>
+        )}
+      </div>
+
+      <h2 className="trainingTitle">Speed</h2>
+      <div className="dropdown-container">
+        <button
+          onClick={() => setIsSpeedOpen(!isSpeedOpen)}
+          className="dropdown-button"
+        >
+          {isSpeedOpen ? 'Close Stats' : 'Open Stats'}
+        </button>
+        {isSpeedOpen && (
+          <div className="dropdown-content">
+            <SimpleBarChart></SimpleBarChart>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
