@@ -1,17 +1,60 @@
-import React from "react";
+import React, {useState} from "react";
 import SimpleBarChart from "./chart";
-import SimpleLineChart from "./LineChart";
+import "./statsView.css";
 
 const StatsView = () => {
+  const [isDefenceOpen, setIsDefenceOpen] = useState(false);
+  const [isShootingOpen, setIsShootingOpen] = useState(false);
+  const [isSpeedOpen, setIsSpeedOpen] = useState(false);
+
   return (
     <div className="stats-view">
-      <h2>Stats</h2>
-      <p>Workouts: 5</p>
-      <p>Total Time: 20 hours</p>
-      <SimpleBarChart></SimpleBarChart>
-      <p>Test</p>
-      <SimpleLineChart></SimpleLineChart>
-      <p>Test</p>
+      <h1>Statistics</h1>
+      <h2 className="trainingTitle">Defence</h2>
+      <div className="dropdown-container">
+        <button
+          onClick={() => setIsDefenceOpen(!isDefenceOpen)}
+          className="dropdown-button"
+        >
+          {isDefenceOpen ? 'Close Stats' : 'Open Stats'}
+        </button>
+
+        {isDefenceOpen && (
+          <div className="dropdown-content">
+            <SimpleBarChart></SimpleBarChart>
+          </div>
+        )}
+      </div>
+
+      <h2 className="trainingTitle">Shooting</h2>
+      <div className="dropdown-container">
+        <button
+          onClick={() => setIsShootingOpen(!isShootingOpen)}
+          className="dropdown-button"
+        >
+          {isShootingOpen ? 'Close Stats' : 'Open Stats'}
+        </button>
+        {isShootingOpen && (
+          <div className="dropdown-content">
+            <SimpleBarChart></SimpleBarChart>
+          </div>
+        )}
+      </div>
+
+      <h2 className="trainingTitle">Speed</h2>
+      <div className="dropdown-container">
+        <button
+          onClick={() => setIsSpeedOpen(!isSpeedOpen)}
+          className="dropdown-button"
+        >
+          {isSpeedOpen ? 'Close Stats' : 'Open Stats'}
+        </button>
+        {isSpeedOpen && (
+          <div className="dropdown-content">
+            <SimpleBarChart></SimpleBarChart>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
