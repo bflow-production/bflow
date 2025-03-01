@@ -1,7 +1,57 @@
-body {
-    background-color: gray;
+
+.settings-view {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px;
 }
 
-h1 {
-    color: black;
+.settings-username {
+    font-size: 30px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin-bottom: 5px;
+    padding: 10px;
+}
+
+.settings-title {
+    font-size: 30px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin-bottom: 30px;
+}
+
+.settings-box {
+    border: 2px solid rgba(0, 0, 0, 0.349);
+    background-color: rgb(113, 177, 94);
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.select-box {
+    padding: 10px;
+    border: 1px solid  white;
+    width: 100px;
+    border-radius: 4px;
+}
+
+.radiobutton-box {
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.radiobutton-box label {
+    margin: 5px 0;
+    margin-top: 10px;
+}
+
+.password-input {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid black;
+    border-radius: 4px;
+    width: 50%;
 }
