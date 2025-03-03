@@ -16,7 +16,7 @@ const StatsView = () => {
   const [isSprintOpen, setIsSprintOpen] = useState(false);
   const [isAccelerationOpen, setIsAccelerationOpen] = useState(false);
 
-
+  
 
 
   const [isShotSpeedOpen, setIsShotSpeedOpen] = useState(false);
