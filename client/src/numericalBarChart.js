@@ -3,10 +3,10 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Rectangle, Respons
 
 const data = Array.from({ length: 31 }, (_, i) => ({
   day: i + 1,
-  hours: Math.floor(Math.random() * 20)
+  speeds: Math.floor(Math.random() * 141)
 }));
 
-const SimpleBarChart = () => {
+const NumericalBChart = () => {
   return (
       <div className="chart-container">
         <ResponsiveContainer width="100%" height={400}>
@@ -20,19 +20,26 @@ const SimpleBarChart = () => {
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis 
-              dataKey="day" 
-              label={{ value: "Päivät", position: "insideBottom", offset: -10 }} 
+            <XAxis
+                dataKey="day" 
+                label={{ value: "Päivät", position: "insideBottom", offset: -10 }} 
             />
             <YAxis 
-              label={{ value: "Tunnit", angle: -90, position: "insideLeft" }} 
+                label={{ value: "Nopeus km/h", angle: -90, position: "insideLeft" }} 
+                domain={[0, 140]}
             />
-            <Tooltip/>
-            <Bar dataKey="hours" fill="gray" activeBar={<Rectangle fill="green" stroke="black" />} />
+          <Tooltip 
+            formatter={(value) => [`km/h: ${value}`]}
+          />
+          <Bar 
+                dataKey="speeds" 
+                fill="gray" 
+                activeBar={<Rectangle fill="green" stroke="black" />} 
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>
     );
 };
 
-export default SimpleBarChart;
+export default NumericalBChart;
