@@ -14,7 +14,7 @@ const data = Array.from({ length: 31 }, (_, i) => ({
   skillLevel: Math.floor(Math.random() * skillLevels.length)
 }));
 
-const DefenceBarChart = () => {
+const VerbalBarChart = () => {
   return (
       <div className="chart-container">
         <ResponsiveContainer width="100%" height={400}>
@@ -49,4 +49,4 @@ const DefenceBarChart = () => {
     );
 };
 
-export default DefenceBarChart;
+export default VerbalBarChart;

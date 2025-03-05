@@ -6,7 +6,7 @@ const data = Array.from({ length: 31 }, (_, i) => ({
   hours: Math.floor(Math.random() * 20)
 }));
 
-const SimpleBarChart = () => {
+const TotalBarChart = () => {
   return (
       <div className="chart-container">
         <ResponsiveContainer width="100%" height={400}>
@@ -35,4 +35,4 @@ const SimpleBarChart = () => {
     );
 };
 
-export default SimpleBarChart;
+export default TotalBarChart;

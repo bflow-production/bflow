@@ -6,7 +6,7 @@ const data = Array.from({ length: 31 }, (_, i) => ({
   speeds: Math.floor(Math.random() * 141)
 }));
 
-const NumericalBChart = () => {
+const NumericalBarChart = () => {
   return (
       <div className="chart-container">
         <ResponsiveContainer width="100%" height={400}>
@@ -42,4 +42,4 @@ const NumericalBChart = () => {
     );
 };
 
-export default NumericalBChart;
+export default NumericalBarChart;

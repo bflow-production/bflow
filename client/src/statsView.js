@@ -1,8 +1,8 @@
 import React, {use, useState} from "react";
-import SimpleBarChart from "./chart";
+import TotalBarChart from "./totalBarChart";
 import "./statsView.css";
-import DefenceBarChart from "./tacklingBarChart";
-import NumericalBChart from "./numericalBarChart";
+import VerbalBarChart from "./verbalBarChart";
+import NumericalBarChart from "./numericalBarChart";
 
 const StatsView = () => {
   const [isTacklingOpen, setIsTacklingOpen] = useState(false);
@@ -16,18 +16,23 @@ const StatsView = () => {
   const [isSprintOpen, setIsSprintOpen] = useState(false);
   const [isAccelerationOpen, setIsAccelerationOpen] = useState(false);
 
-  
+  const [isShortPassOpen, setIsShortPassOpen] = useState(false);
+  const [isLongPassOpen, setIsLongPassOpen] = useState(false);
+  const [isCrossingOpen, setIsCrossingOpen] = useState(false);
 
+  const [isStrengthOpen, setIsStrengthOpen] = useState(false);
+  const [isStaminaOpen, setIsStaminaOpen] = useState(false);
+  const [isJumpingOpen, setIsJumpingOpen] = useState(false);
 
   const [isShotSpeedOpen, setIsShotSpeedOpen] = useState(false);
   const [isLongShotsOpen, setIsLongShotsOpen] = useState(false);
-  const [isSpeedOpen, setIsSpeedOpen] = useState(false);
-
+  const [isFreeKickOpen, setIsFreeKickOpen] = useState(false);
 
   const [isDefendingOpen, setIsDefendingOpen] = useState(false);
   const [isDribblingOpen, setIsDribblingOpen] = useState(false);
   const [isPaceOpen, setIsPaceOpen] = useState(false);
-
+  const [isPassingOpen, setIsPassingOpen] = useState(false);
+  const [isPhysicalOpen, setIsPhysicalOpen] = useState(false);
   const [isShootingOpen, setIsShootingOpen] = useState(false);
 
 
@@ -54,10 +59,34 @@ const StatsView = () => {
     setIsAccelerationOpen(false);
   }
 
+  const togglePassing = () => {
+    const newState = !isPassingOpen;
+    setIsPassingOpen(newState);
+    setIsShortPassOpen(false);
+    setIsLongPassOpen(false);
+    setIsCrossingOpen(false);
+  }
+
+  const togglePhysical = () => {
+    const newState = !isPhysicalOpen;
+    setIsPhysicalOpen(newState);
+    setIsStrengthOpen(false);
+    setIsStaminaOpen(false);
+    setIsJumpingOpen(false);
+  }
+
+  const toggleShooting = () => {
+    const newState = !isShootingOpen;
+    setIsShootingOpen(newState);
+    setIsShotSpeedOpen(false);
+    setIsLongShotsOpen(false);
+    setIsFreeKickOpen(false);
+  }
+
   return (
     <div className="stats-view">
       <h1>Statistics</h1>
-      <SimpleBarChart/>
+      <TotalBarChart/>
 
       <h2 className="trainingTitle">Defending</h2>
       <button onClick={toggleDefending} className="section-button"> 
@@ -73,7 +102,7 @@ const StatsView = () => {
           >
             {isTacklingOpen ? "Close Stats" : "Open Stats"}
           </button>
-          {isTacklingOpen && <DefenceBarChart/>}
+          {isTacklingOpen && <VerbalBarChart/>}
           <h3>Marking:</h3>
           <button
             onClick={() => setIsMarkinggOpen(!isMarkingOpen)}
@@ -81,7 +110,7 @@ const StatsView = () => {
           >
             {isMarkingOpen  ? "Close Stats" : "Open Stats"}
           </button>
-          {isMarkingOpen && <DefenceBarChart/>}
+          {isMarkingOpen && <VerbalBarChart/>}
           <h3>Interceptions:</h3>
           <button
             onClick={() => setIsInterceptionsOpen(!isInterceptionsOpen)}
@@ -89,7 +118,7 @@ const StatsView = () => {
           >
             {isInterceptionsOpen ? "Close Stats" : "Open Stats"}
           </button>
-          {isInterceptionsOpen && <DefenceBarChart/>}
+          {isInterceptionsOpen && <VerbalBarChart/>}
         </div>
       )}
 
@@ -107,7 +136,7 @@ const StatsView = () => {
           >
             {isZidaneOpen ? "Close Stats" : "Open Stats"}
           </button>
-          {isZidaneOpen && <DefenceBarChart/>}
+          {isZidaneOpen && <VerbalBarChart/>}
           <h3>Stepovers:</h3>
           <button
             onClick={() => setIsStepoversOpen(!isStepoversOpen)}
@@ -115,7 +144,7 @@ const StatsView = () => {
           >
             {isStepoversOpen  ? "Close Stats" : "Open Stats"}
           </button>
-          {isStepoversOpen && <DefenceBarChart/>}
+          {isStepoversOpen && <VerbalBarChart/>}
           <h3>Elastico:</h3>
           <button
             onClick={() => setIsElasticoOpen(!isElasticoOpen)}
@@ -123,7 +152,7 @@ const StatsView = () => {
           >
             {isElasticoOpen ? "Close Stats" : "Open Stats"}
           </button>
-          {isElasticoOpen && <DefenceBarChart/>}
+          {isElasticoOpen && <VerbalBarChart/>}
         </div>
       )}
 
@@ -141,7 +170,7 @@ const StatsView = () => {
           >
             {isSprintOpen ? "Close Stats" : "Open Stats"}
           </button>
-          {isSprintOpen && <NumericalBChart/>}
+          {isSprintOpen && <NumericalBarChart/>}
           <h3>Acceleration:</h3>
           <button
             onClick={() => setIsAccelerationOpen(!isAccelerationOpen)}
@@ -149,50 +178,111 @@ const StatsView = () => {
           >
             {isAccelerationOpen  ? "Close Stats" : "Open Stats"}
           </button>
-          {isAccelerationOpen && <NumericalBChart/>}
+          {isAccelerationOpen && <NumericalBarChart/>}
         </div>
       )}
 
-      
+      <h2 className="trainingTitle">Passing</h2>
+      <button onClick={togglePassing} className="section-button"> 
+          {isPassingOpen ? "Close Defending Stats" : "Open Defending Stats"}
+      </button>
 
+      {isPassingOpen && (
+        <div className="dropdown-container">
+          <h3>Short Passing:</h3>
+          <button
+            onClick={() => setIsShortPassOpen(!isShortPassOpen)}
+            className="sub-section-button"
+          >
+            {isShortPassOpen ? "Close Stats" : "Open Stats"}
+          </button>
+          {isShortPassOpen && <VerbalBarChart/>}
+          <h3>Long Passing:</h3>
+          <button
+            onClick={() => setIsLongPassOpen(!isLongPassOpen)}
+            className="sub-section-button"
+          >
+            {isLongPassOpen  ? "Close Stats" : "Open Stats"}
+          </button>
+          {isLongPassOpen && <VerbalBarChart/>}
+          <h3>Crossing:</h3>
+          <button
+            onClick={() => setIsCrossingOpen(!isCrossingOpen)}
+            className="sub-section-button"
+          >
+            {isCrossingOpen  ? "Close Stats" : "Open Stats"}
+          </button>
+          {isCrossingOpen && <VerbalBarChart/>}
+        </div>
+      )}
 
+      <h2 className="trainingTitle">Physical</h2>
+      <button onClick={togglePhysical} className="section-button"> 
+          {isPhysicalOpen ? "Close Defending Stats" : "Open Defending Stats"}
+      </button>
 
-
-
-
+      {isPhysicalOpen && (
+        <div className="dropdown-container">
+          <h3>Strength:</h3>
+          <button
+            onClick={() => setIsStrengthOpen(!isStrengthOpen)}
+            className="sub-section-button"
+          >
+            {isStrengthOpen ? "Close Stats" : "Open Stats"}
+          </button>
+          {isStrengthOpen && <VerbalBarChart/>}
+          <h3>Stamina:</h3>
+          <button
+            onClick={() => setIsStaminaOpen(!isStaminaOpen)}
+            className="sub-section-button"
+          >
+            {isStaminaOpen  ? "Close Stats" : "Open Stats"}
+          </button>
+          {isStaminaOpen && <VerbalBarChart/>}
+          <h3>Jumping:</h3>
+          <button
+            onClick={() => setIsJumpingOpen(!isJumpingOpen)}
+            className="sub-section-button"
+          >
+            {isJumpingOpen  ? "Close Stats" : "Open Stats"}
+          </button>
+          {isJumpingOpen && <VerbalBarChart/>}
+        </div>
+      )}
 
       <h2 className="trainingTitle">Shooting</h2>
-      <h3>Shot Speed (radar)</h3>
-      <div className="dropdown-container">
-        <button
-          onClick={() => setIsShotSpeedOpen(!isShotSpeedOpen)}
-          className="dropdown-button"
-        >
-          {isShotSpeedOpen ? 'Close Stats' : 'Open Stats'}
-        </button>
-        {isShotSpeedOpen && (
-          <div className="dropdown-content">
-            <NumericalBChart/>
-          </div>
-        )}
-      </div>
+      <button onClick={toggleShooting} className="section-button"> 
+          {isShootingOpen ? "Close Defending Stats" : "Open Defending Stats"}
+      </button>
 
-      <h3>Long Shots</h3>
-      <div className="dropdown-container">
-        <button
-          onClick={() => setIsLongShotsOpen(!isLongShotsOpen)}
-          className="dropdown-button"
-        >
-          {isLongShotsOpen ? 'Close Stats' : 'Open Stats'}
-        </button>
-        {isLongShotsOpen && (
-          <div className="dropdown-content">
-            <SimpleBarChart/>
-          </div>
-        )}
-      </div>
-
-      <h2 className="trainingTitle">TEST</h2>
+      {isShootingOpen && (
+        <div className="dropdown-container">
+          <h3>Shot Speed (radar):</h3>
+          <button
+            onClick={() => setIsShotSpeedOpen(!isShotSpeedOpen)}
+            className="sub-section-button"
+          >
+            {isShotSpeedOpen ? "Close Stats" : "Open Stats"}
+          </button>
+          {isShotSpeedOpen && <NumericalBarChart/>}
+          <h3>Long Shots:</h3>
+          <button
+            onClick={() => setIsLongShotsOpen(!isLongShotsOpen)}
+            className="sub-section-button"
+          >
+            {isLongShotsOpen  ? "Close Stats" : "Open Stats"}
+          </button>
+          {isLongShotsOpen && <VerbalBarChart/>}
+          <h3>Free Kick Accuracy:</h3>
+          <button
+            onClick={() => setIsFreeKickOpen(!isFreeKickOpen)}
+            className="sub-section-button"
+          >
+            {isFreeKickOpen  ? "Close Stats" : "Open Stats"}
+          </button>
+          {isFreeKickOpen && <VerbalBarChart/>}
+        </div>
+      )}
     </div>
   );
 };
