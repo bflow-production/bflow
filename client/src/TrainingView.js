@@ -10,18 +10,12 @@ const TrainingView = ({ userData }) => {
   useEffect(() => {
     trainingService
       .getDefaultExercises(userData.userId)
-      .then((response) => setTrainingData(response))
+      .then((response) => {
+        setTrainingData(response);
+        console.log(response);
+      })
       .catch(() => setTrainingData(null));
   }, [userData.userId]);
-
-  const categoryNames = {
-    1: "Pace",
-    2: "Shooting",
-    3: "Passing",
-    4: "Dribbling",
-    5: "Defending",
-    6: "Physical",
-  };
 
   const handleMarkAsDone = async (exercise) => {
     const hours = Number(resultOrRating[exercise.exercise]?.hours) || 0;
@@ -29,6 +23,7 @@ const TrainingView = ({ userData }) => {
 
     const updatedExercise = {
       exercise: exercise.exercise,
+      result: resultOrRating[exercise.exercise]?.result || "",
       rating: resultOrRating[exercise.exercise]?.rating || "",
       extraInfo: resultOrRating[exercise.exercise]?.extraInfo || "",
       duration: hours * 60 + minutes,
@@ -56,6 +51,7 @@ const TrainingView = ({ userData }) => {
         hours: "",
         minutes: "",
         rating: "",
+        result: "",
         extraInfo: "",
       },
     }));
@@ -87,7 +83,7 @@ const TrainingView = ({ userData }) => {
             className="category-header"
             onClick={() => toggleCategory(category)}
           >
-            {categoryNames[category] || `Category ${category}`}
+            {category}
           </button>
           {expandedCategories[category] && (
             <div className="exercise-grid">
@@ -103,13 +99,16 @@ const TrainingView = ({ userData }) => {
                     <strong className="exercise-title">
                       {exercise.exercise}
                     </strong>
+                    <p className="exercise-description">
+                      {exercise.description}
+                    </p>
                     <div className="input-group">
                       <div className="time-input-group">
-                        <label className="time-label">Time</label>
+                        <p className="time-label">Kestoaika</p>
                         <input
                           type="number"
                           min="0"
-                          placeholder="Hours"
+                          placeholder="Tunnit"
                           value={resultOrRating[exercise.exercise]?.hours || ""}
                           onChange={(e) =>
                             handleInputChange(
@@ -123,7 +122,7 @@ const TrainingView = ({ userData }) => {
                           type="number"
                           min="0"
                           max="59"
-                          placeholder="Minutes"
+                          placeholder="Minuutit"
                           value={
                             resultOrRating[exercise.exercise]?.minutes || ""
                           }
@@ -147,17 +146,34 @@ const TrainingView = ({ userData }) => {
                         }
                       >
                         <option value="" disabled>
-                          Give rating...
+                          Anna itsearvio...
                         </option>
-                        <option value="1">Just started</option>
-                        <option value="2">Can do some</option>
-                        <option value="3">Can do it</option>
-                        <option value="4">Im good at it</option>
-                        <option value="5">Im excellent at it</option>
+                        <option value="1">Aloitin vasta</option>
+                        <option value="2">Osaan jo hieman</option>
+                        <option value="3">Osaan</option>
+                        <option value="4">Osaan jo hyvin</option>
+                        <option value="5">Mestari</option>
                       </select>
+                      {exercise.is_numeric_rating !== 0 && (
+                        <input
+                          type="number"
+                          min="0"
+                          placeholder="Anna tulos..."
+                          value={
+                            resultOrRating[exercise.exercise]?.result || ""
+                          }
+                          onChange={(e) =>
+                            handleInputChange(
+                              exercise.exercise,
+                              "result",
+                              e.target.value
+                            )
+                          }
+                        />
+                      )}
                       <input
                         type="text"
-                        placeholder="Give extra info..."
+                        placeholder="Anna lisätietoa..."
                         value={
                           resultOrRating[exercise.exercise]?.extraInfo || ""
                         }
@@ -170,9 +186,11 @@ const TrainingView = ({ userData }) => {
                         }
                       />
                     </div>
-                    <button className="add-button" type="submit">
-                      Mark as Done
-                    </button>
+                    <div className="add-button-holder">
+                      <button className="add-button" type="submit">
+                        Merkitse tehdyksi
+                      </button>
+                    </div>
                   </form>
                 </div>
               ))}

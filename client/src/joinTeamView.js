@@ -28,7 +28,7 @@ const JoinTeamView = ({ userData }) => {
 
   return (
     <div className="join-team-view">
-      <h2 className="header-join-team">Join Team</h2>
+      <h2 className="header-join-team">Liity joukkueeseen</h2>
       <div className="right-container">
         <div className="hbox">
           <div className="vbox">

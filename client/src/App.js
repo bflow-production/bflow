@@ -161,32 +161,32 @@ const App = () => {
             onClick={() => setActiveView("profile")}
             className={activeView === "profile" ? "active" : ""}
           >
-            Profile
+            Profiili
           </button>
           <button
             onClick={() => setActiveView("stats")}
             className={activeView === "stats" ? "active" : ""}
           >
-            Stats
+            Tilastot
           </button>
           <button
             onClick={() => setActiveView("startTraining")}
             className={activeView === "startTraining" ? "active" : ""}
           >
-            Start Training
+            Tee harjoitus
           </button>
           <button
             onClick={() => setActiveView("completedTrainings")}
             className={activeView === "completedTrainings" ? "active" : ""}
           >
-            Completed Trainings
+            Tehdyt harjoitukset
           </button>
           {userData.role === "coach" && (
             <button
               onClick={() => setActiveView("coach")}
               className={activeView === "coach" ? "active" : ""}
             >
-              Coach
+              Valmentaja
             </button>
           )}
           {userData.role === "player" && (
@@ -194,7 +194,7 @@ const App = () => {
               onClick={() => setActiveView("joinTeam")}
               className={activeView === "joinTeam" ? "active" : ""}
             >
-              Join Team
+              Liity joukkueeseen
             </button>
           )}
           {userData.role === "parent" && (
@@ -202,14 +202,14 @@ const App = () => {
               onClick={() => setActiveView("linkChild")}
               className={activeView === "linkChild" ? "active" : ""}
             >
-              Link Child
+              Linkitä lapsi
             </button>
           )}
           <button className="settings-button" onClick={handleSettings}>
-            Settings
+            Asetukset
           </button>
           <button className="logout-button" onClick={handleLogout}>
-            Log Out
+            Kirjaudu ulos
           </button>
         </nav>
         <main className="main">{renderView()}</main>
