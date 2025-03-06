@@ -88,10 +88,12 @@ const StatsView = () => {
       <h1>Statistics</h1>
       <TotalBarChart/>
 
-      <h2 className="trainingTitle">Defending</h2>
-      <button onClick={toggleDefending} className="section-button"> 
-          {isDefendingOpen ? "Close Defending Stats" : "Open Defending Stats"}
-      </button>
+      <div className="dropdown-box">
+        <h2 className="trainingTitle">Defending</h2>
+        <button onClick={toggleDefending} className="section-button"> 
+            {isDefendingOpen ? "↑" : "↓"}
+        </button>
+      </div>
 
       {isDefendingOpen && (
         <div className="dropdown-container">
@@ -122,44 +124,54 @@ const StatsView = () => {
         </div>
       )}
 
-      <h2 className="trainingTitle">Dribbling</h2>
-      <button onClick={toggleDribbling} className="section-button"> 
-          {isDribblingOpen ? "Close Defending Stats" : "Open Defending Stats"}
-      </button>
+      <div className="dropdown-box">
+        <h2 className="trainingTitle">Dribbling</h2>
+        <button onClick={toggleDribbling} className="section-button"> 
+            {isDribblingOpen ? "CLOSE STATS" : "OPEN STATS"}
+        </button>
+      </div>
 
       {isDribblingOpen && (
         <div className="dropdown-container">
-          <h3>Zidane Fake Pass:</h3>
-          <button
-            onClick={() => setIsZidaneOpen(!isZidaneOpen)}
-            className="sub-section-button"
-          >
-            {isZidaneOpen ? "Close Stats" : "Open Stats"}
-          </button>
+            <div className="row-container">
+              <h3>Zidane Fake Pass:</h3>
+              <button
+                onClick={() => setIsZidaneOpen(!isZidaneOpen)}
+                className="sub-section-button"
+              >
+             {isZidaneOpen ? "↑" : "↓"}
+            </button>
+           </div>
           {isZidaneOpen && <VerbalBarChart/>}
-          <h3>Stepovers:</h3>
-          <button
-            onClick={() => setIsStepoversOpen(!isStepoversOpen)}
-            className="sub-section-button"
-          >
-            {isStepoversOpen  ? "Close Stats" : "Open Stats"}
-          </button>
+          <div className="row-container">
+            <h3>Stepovers:</h3>
+            <button
+              onClick={() => setIsStepoversOpen(!isStepoversOpen)}
+              className="sub-section-button"
+            >
+              {isStepoversOpen  ? "↑" : "↓"}
+            </button>
+          </div>
           {isStepoversOpen && <VerbalBarChart/>}
-          <h3>Elastico:</h3>
-          <button
-            onClick={() => setIsElasticoOpen(!isElasticoOpen)}
-            className="sub-section-button"
-          >
-            {isElasticoOpen ? "Close Stats" : "Open Stats"}
-          </button>
+          <div className="row-container">
+            <h3>Elastico:</h3>
+            <button
+              onClick={() => setIsElasticoOpen(!isElasticoOpen)}
+              className="sub-section-button"
+            >
+              {isElasticoOpen ? "↑" : "↓"}
+            </button>
+            </div>
           {isElasticoOpen && <VerbalBarChart/>}
         </div>
       )}
 
-      <h2 className="trainingTitle">Pace</h2>
-      <button onClick={togglePace} className="section-button"> 
-          {isPaceOpen ? "Close Defending Stats" : "Open Defending Stats"}
-      </button>
+      <div className="dropdown-box">
+        <h2 className="trainingTitle">Pace</h2>
+        <button onClick={togglePace} className="section-button"> 
+            {isDefendingOpen ? "CLOSE STATS" : "OPEN STATS"}
+        </button>
+      </div>
 
       {isPaceOpen && (
         <div className="dropdown-container">
@@ -182,10 +194,12 @@ const StatsView = () => {
         </div>
       )}
 
-      <h2 className="trainingTitle">Passing</h2>
-      <button onClick={togglePassing} className="section-button"> 
-          {isPassingOpen ? "Close Defending Stats" : "Open Defending Stats"}
-      </button>
+      <div className="dropdown-box">
+        <h2 className="trainingTitle">Passing</h2>
+        <button onClick={togglePassing} className="section-button"> 
+            {isDefendingOpen ? "CLOSE STATS" : "OPEN STATS"}
+        </button>
+      </div>
 
       {isPassingOpen && (
         <div className="dropdown-container">
@@ -216,10 +230,13 @@ const StatsView = () => {
         </div>
       )}
 
-      <h2 className="trainingTitle">Physical</h2>
-      <button onClick={togglePhysical} className="section-button"> 
-          {isPhysicalOpen ? "Close Defending Stats" : "Open Defending Stats"}
-      </button>
+      <div className="dropdown-box">
+        <h2 className="trainingTitle">Physical</h2>
+        <button onClick={togglePhysical} className="section-button"> 
+            {isDefendingOpen ? "CLOSE STATS" : "OPEN STATS"}
+        </button>
+      </div>
+
 
       {isPhysicalOpen && (
         <div className="dropdown-container">
@@ -250,10 +267,12 @@ const StatsView = () => {
         </div>
       )}
 
-      <h2 className="trainingTitle">Shooting</h2>
-      <button onClick={toggleShooting} className="section-button"> 
-          {isShootingOpen ? "Close Defending Stats" : "Open Defending Stats"}
-      </button>
+      <div className="dropdown-box">
+        <h2 className="trainingTitle">Shooting</h2>
+        <button onClick={toggleShooting} className="section-button"> 
+            {isDefendingOpen ? "CLOSE STATS" : "OPEN STATS"}
+        </button>
+      </div>
 
       {isShootingOpen && (
         <div className="dropdown-container">
