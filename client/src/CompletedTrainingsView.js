@@ -6,16 +6,14 @@ const CompletedTrainingsView = ({ userData }) => {
   const [categories, setCategories] = useState([]);
   const [expandedCategories, setExpandedCategories] = useState({});
 
-
-  const categoryNames = {
-    1: "Pace",
-    2: "Shooting",
-    3: "Passing",
-    4: "Dribbling",
-    5: "Defending",
-    6: "Physical",
+  const ratingToVerbal = {
+    "1": "Aloitin vasta",
+    "2": "Osaan jo hieman",
+    "3": "Osaan",
+    "4": "Osaan jo hyvin",
+    "5": "Mestari"
   };
-
+  
   useEffect(() => {
     trainingService
       .getTraining(userData.userId)
@@ -48,20 +46,37 @@ const CompletedTrainingsView = ({ userData }) => {
             className="category-header"
             onClick={() => toggleCategory(category)}
           >
-            {categoryNames[category] || category}
+            {category}
           </button>
           {expandedCategories[category] && (
             <div className="exercise-grid">
               {categories[category].map((exercise, index) => (
                 <div key={index} className="exercise-card">
                   <strong className="exercise-title">
-                    {exercise.exercise}
+                    {exercise.exercise} |{" "}
+                    {new Date(exercise.timestamp).toLocaleString("fi-FI", {
+                      weekday: "short",
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                    })}
                   </strong>
                   <div className="exercise-inputs">
-                    <div className="input-group">
-                      <p>{`Exercise Name: ${exercise.exercise}`}</p>
-                      <p>{`Info: ${exercise.result || "No result"}`}</p>
-                      <p>{`Rating: ${exercise.rating || "0"}`}</p>
+                    <div className="exercise-description">
+                      <p>{exercise.description}</p>
+                      <p>
+                        {" "}
+                        Kesto: {Math.floor(exercise.duration / 60)} h{" "}
+                        {exercise.duration % 60} min
+                      </p>
+                      <p>{`Lisätiedot: ${exercise.result || "-"}`}</p>
+                      <p>{`Oma arvio: ${ratingToVerbal[exercise.rating] || "0"}`}</p>
+                      {exercise.result !== null && (
+                        <p>{`Tulos: ${exercise.result || "0"}`}</p>
+                      )}
                     </div>
                   </div>
                 </div>

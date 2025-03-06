@@ -109,6 +109,8 @@ class Database:
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             category_id INTEGER NOT NULL,
             name TEXT NOT NULL,
+            description TEXT,
+            is_numeric_rating BOOLEAN,
             FOREIGN KEY (category_id) REFERENCES CATEGORY(id) ON DELETE CASCADE
             UNIQUE(category_id, name)
         )
@@ -122,6 +124,7 @@ class Database:
             exercise_id INTEGER NOT NULL,
             result TEXT DEFAULT NULL, 
             rating INTEGER DEFAULT NULL CHECK (rating BETWEEN 1 AND 5),
+            extra_info TEXT DEFAULT NULL,
             timestamp TEXT NOT NULL,
             duration INTEGER DEFAULT NULL,
             FOREIGN KEY (player_id) REFERENCES PLAYER(id) ON DELETE CASCADE,
@@ -130,28 +133,51 @@ class Database:
         """)
 
         # Insert categories
-        categories = ['PAC', 'SHO', 'PAS', 'DRI', 'DEF', 'PHY']
+        categories = ['PACE', 'SHOOTING', 'PASSING', 'DRIBBLING', 'DEFENDING', 'PHYSICAL']
         cursor.executemany("""
         INSERT OR IGNORE INTO CATEGORY (name) VALUES (?)
         """, [(category,) for category in categories])
         
         # Insert exercises under each category
         exercises = {
-            'PAC': ['Sprint Speed', 'Acceleration'],
-            'SHO': ['Shot Speed (radar)', 'Long Shots', 'Free Kick Accuracy'],
-            'PAS': ['Short Passing', 'Long Passing', 'Crossing'],
-            'DRI': ['Zidane Fake Pass', 'Stepovers', 'Elastico'],
-            'DEF': ['Tackling', 'Marking', 'Interceptions'],
-            'PHY': ['Strength', 'Stamina', 'Jumping']
+            'PACE': [
+                ('Sprinttinopeus', '60 metrin sprintti', True),
+                ('Kiihtyvyys', '10 metrin lähtökiihdytys', True)
+            ],
+            'SHOOTING': [
+                ('Laukaisuvoima (tutka)', 'Laukaisunopeus tutkaan,', True),
+                ('Kaukolaukaukset', 'Laukaukset maalia kohti 25 metrin etäisyydeltä', True),
+                ('Vapaapotkut', 'Vapaapotkut 16 metrin etäisyydeltä muurin yli', True)
+            ],
+            'PASSING': [
+                ('Lyhyet syötöt', 'Syöttöharjoitus 10 metrin etäisyydellä', False),
+                ('Pitkät syötöt', 'Syöttöharjoitus 30 metrin etäisyydellä', False),
+                ('Keskitykset', 'Keskitykset kulmalipulta maalialueelle', False)
+            ],
+            'DRIBBLING': [
+                ('Zidane Fake Pass', 'Zidane-harhautussyötön harjoittelu', False),
+                ('Stepoverit', 'Stepover-harhautus suunnanmuutoksilla', False),
+                ('Elastico', 'Elastico-harhautusliikkeen harjoittelu', False)
+            ],
+            'DEFENDING': [
+                ('Taklaaminen', 'Taklausharjoitus liuku- ja pystytaklauksilla', False),
+                ('Vartiointi', 'Vastustajan vartiointi 1vs1-tilanteissa', False),
+                ('Katkot', 'Syöttöjen katkaisuharjoitus eri suunnista', False)
+            ],
+            'PHYSICAL': [
+                ('Voima', 'Kuntosaliharjoittelu', False),
+                ('Kestävyys', 'Juoksulenkki (väh. 45 min)', False),
+                ('Hyppy', 'Puskemisharjoitus keskitystilanteista', False)
+            ]
         }
         
         for category, exercise_list in exercises.items():
             cursor.execute("SELECT id FROM CATEGORY WHERE name = ?", (category,))
             category_id = cursor.fetchone()[0]
-            for exercise in exercise_list:
+            for exercise, description, is_numeric_rating in exercise_list:
                 cursor.execute("""
-                INSERT OR IGNORE INTO EXERCISE (category_id, name) VALUES (?, ?)
-                """, (category_id, exercise))
+                INSERT OR IGNORE INTO EXERCISE (category_id, name, description, is_numeric_rating) VALUES (?, ?, ?, ?)
+                """, (category_id, exercise,description, is_numeric_rating))
                 
         
         
@@ -291,34 +317,43 @@ class Database:
             cursor = conn.cursor()
             print(player_id)
 
-            query = """SELECT exercise_id, result, rating FROM PLAYER_EXERCISE WHERE player_Id = ?
+            query = """SELECT exercise_id, result, rating, extra_info, timestamp, duration FROM PLAYER_EXERCISE WHERE player_Id = ?
             """
-            
             cursor.execute(query, (player_id,))
             exercises = cursor.fetchall()
             
-            
-            category_data = {}
+            category_data = {} #PITÄISI SAADA ID SIJASTA NIMI 
             for exercise in exercises:
-
                 exercise_id = exercise[0]
+
                 exercisenameandid = self.get_exercise_name_category_id(exercise_id)
                 exercise_name = exercisenameandid[0]
                 category_id = exercisenameandid[1]
+                exercise_description = exercisenameandid[2]
+
                 result = exercise[1]
                 rating = exercise[2]
+                extra_info = exercise[3]
+                timestamp = exercise[4]
+                duration = exercise[5]
 
-                if category_id not in category_data:
-                    category_data[category_id] = [] 
 
                 category_name = self.get_category_name(category_id)
+                print(f"Category ID: {category_id}, Category Name: {category_name}")
 
-                category_data[category_id].append({
-                    "category": category_name,
+                if category_name not in category_data:
+                    category_data[category_name] = []
+
+
+                category_data[category_name].append({
                     "exercise_id": exercise_id,
                     "exercise": exercise_name,
+                    "description": exercise_description,
                     "result": result,
-                    "rating": rating
+                    "rating": rating,
+                    "extra_info": extra_info,
+                    "timestamp": timestamp,
+                    "duration": duration
                 })
     
         return category_data
@@ -336,17 +371,23 @@ class Database:
             
             category_data = {}
             for exercise in exercises:
-               
                 exercise_id = exercise[0]
                 category_id = exercise[1]
                 exercise_name = exercise[2]
+                description = exercise[3]
+                is_numeric_rating = exercise[4]
 
-                if category_id not in category_data:
-                    category_data[category_id] = []
+                category_name = self.get_category_name(category_id)
+                print(f"Category ID: {category_id}, Category Name: {category_name}")
 
-                category_data[category_id].append({
+                if category_name not in category_data:
+                    category_data[category_name] = []
+
+                category_data[category_name].append({
                     "exercise_id": exercise_id,
-                    "exercise": exercise_name
+                    "exercise": exercise_name,
+                    "description": description,
+                    "is_numeric_rating": is_numeric_rating
                 })
 
         return category_data
@@ -355,11 +396,12 @@ class Database:
     def get_exercise_name_category_id(self, exercise_id):
         with self._get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT name, category_id FROM EXERCISE WHERE id = ?", (exercise_id,))
+            cursor.execute("SELECT name, category_id, description FROM EXERCISE WHERE id = ?", (exercise_id,))
             exercise = cursor.fetchone()
             if exercise:
                 return exercise
             return None
+        
     def get_category_name(self, category_id):
         with self._get_connection() as conn:
             cursor = conn.cursor()
@@ -413,10 +455,11 @@ class Database:
    
     def update_exercise(self, data):
         exercise_name = data.get("exercise")
-        playerId = data.get("playerId")
+        player_id = data.get("playerId")
         duration = data.get("duration")
+        result = data.get("result")
         rating = data.get("rating")
-        extraInfo = data.get("extraInfo")
+        extra_info = data.get("extraInfo")
         timestamp = datetime.now()
     
         if not exercise_name:
@@ -426,18 +469,22 @@ class Database:
             with self._get_connection() as conn:
                 cursor = conn.cursor()
                 
-                cursor.execute("SELECT id FROM EXERCISE WHERE name = ?", (exercise_name,))
-                exercise_id_row = cursor.fetchone()
+                cursor.execute("SELECT id, is_numeric_rating FROM EXERCISE WHERE name = ?", (exercise_name,))
+                exercise_row = cursor.fetchone()
                 
-                if not exercise_id_row:
+                if not exercise_row:
                     raise ValueError(f"Exercise '{exercise_name}' not found")
                 
-                exercise_id = exercise_id_row[0]
+                exercise_id = exercise_row[0]
+                is_numeric_rating = exercise_row[1] 
+
+                if not is_numeric_rating:
+                    result = None
                 
                 cursor.execute("""
-                    INSERT INTO PLAYER_EXERCISE (player_id, exercise_id, result, rating, timestamp, duration)
-                    VALUES (?, ?, ?, ?, ?, ?)
-                """, (playerId, exercise_id, extraInfo, rating, timestamp, duration))
+                    INSERT INTO PLAYER_EXERCISE (player_id, exercise_id, result, rating, extra_info, timestamp, duration)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                """, (player_id, exercise_id, result, rating, extra_info, timestamp, duration))
                 
                 conn.commit()
         except Exception as e:
