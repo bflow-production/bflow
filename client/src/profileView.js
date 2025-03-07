@@ -145,6 +145,7 @@ const ProfileView = ({ userData }) => {
                 <span className="editable-field" onClick={() => setEditMode(true)}>
                   {profile[field]} <span className="edit-icon"><i className="fas fa-pen"></i></span>
                 </span>
+                
               )}
             </p>
           ))}
@@ -181,7 +182,7 @@ const ProfileView = ({ userData }) => {
             {/* Front Side */}
             
             <div className="card-front">
-            <span className="edit-icon" onClick={handleCardClick}><i className="fas fa-sync-alt"></i></span>
+            <span className="flip-icon" onClick={handleCardClick}><i className="fas fa-sync-alt"></i></span>
               <h3>Huoltajan Tiedot</h3>
               {["parent", "parentEmail"].map((field) => (
                 <p key={field}>
@@ -205,7 +206,7 @@ const ProfileView = ({ userData }) => {
 
             {/* Back Side */}
             <div className="card-back">
-            <span className="edit-icon" onClick={handleCardClick}><i className="fas fa-sync-alt"></i></span>
+            <span className="flip-icon" onClick={handleCardClick}><i className="fas fa-sync-alt"></i></span>
               <h3>Huoltajan Tiedot</h3>
               {["parent", "parentEmail"].map((field) => (
                 <p key={field}>
