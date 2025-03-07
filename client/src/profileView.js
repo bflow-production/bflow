@@ -158,7 +158,7 @@ const ProfileView = ({ userData }) => {
           <h3>Valmentajan Tiedot</h3>
           {['coach', 'coachEmail'].map((field) => (
             <p key={field}>
-              <strong>{field === 'coach' ? 'Valmentaja' : 'Valmentajan Sähköposti'}:</strong>
+              <strong>{field === 'coach' ? 'Valmentaja' : 'Sähköposti'}:</strong>
               {editMode ? (
                 <input
                   type="text"
@@ -186,7 +186,7 @@ const ProfileView = ({ userData }) => {
               <h3>Huoltajan Tiedot</h3>
               {["parent", "parentEmail"].map((field) => (
                 <p key={field}>
-                  <strong>{field === 'parent' ? 'Huoltaja' : 'Huoltajan Sähköposti'}:</strong>
+                  <strong>{field === 'parent' ? 'Huoltaja' : 'Sähköposti'}:</strong>
                   {editMode ? (
                     <input
                       type="text"
@@ -210,7 +210,7 @@ const ProfileView = ({ userData }) => {
               <h3>Huoltajan Tiedot</h3>
               {["parent", "parentEmail"].map((field) => (
                 <p key={field}>
-                  <strong>{field === 'parent' ? 'Huoltaja' : 'Huoltajan Sähköposti'}:</strong>
+                  <strong>{field === 'parent' ? 'Huoltaja' : 'Sähköposti'}:</strong>
                   {editMode ? (
                     <input
                       type="text"
