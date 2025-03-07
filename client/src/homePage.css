@@ -1,0 +1,101 @@
+.home-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.home-page h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  text-align: top;
+}
+
+.home-page h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.home-page p {
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.latest-exercises {
+  margin-top: 20px;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.exercise-card {
+  background-color: #4CAF50;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.exercise-card h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.exercise-card p {
+  margin: 5px 0;
+  font-size: 1rem;
+  color: #000000;
+  text-align: left;
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 35%;
+}
+
+.player-image {
+  margin-bottom: 20px;
+}
+
+.player-image img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.placeholder {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-color: #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #666;
+}
+
+.profile-info {
+  text-align: center;
+  width: 100%;
+}
+
+.profile-info p {
+  margin: 5px 0;
+  font-size: 1rem;
+  color: #333;
+}

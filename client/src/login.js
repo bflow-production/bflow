@@ -22,7 +22,7 @@ function Login({setAuthView, setUserData, setActiveView}) {
 
         const { token, user_id, user_name, role } = response.data; 
         localStorage.setItem("jwtToken", token); 
-        setActiveView("profile");
+        setActiveView("home");
 
         setUserData({
           userId: user_id, 

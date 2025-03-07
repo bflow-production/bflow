@@ -11,10 +11,11 @@ import CoachView from "./coachView";
 import JoinTeamView from "./joinTeamView";
 import LinkChildView from "./linkChildView";
 import userService from "./services/user";
+import HomePage from "./homePage";
 
 function App() {
   const [userData, setUserData] = useState(null);
-  const [activeView, setActiveView] = useState("profile");
+  const [activeView, setActiveView] = useState("home");
   const [authView, setAuthView] = useState("login");
   const [sidebarOpen, setsidebarOpen] = useState(false);
   const [completedTrainings, setCompletedTrainings] = useState([]);
@@ -75,6 +76,8 @@ function App() {
 
   const renderView = () => {
     switch (activeView) {
+      case "home":
+        return <HomePage userData={userData} />;
       case "profile":
         return <ProfileView userData={userData} />;
       case "stats":
@@ -162,6 +165,12 @@ function App() {
 
       <div className="app-content">
         <nav className={`nav ${sidebarOpen ? "open" : ""}`}>
+          <button
+            onClick={() => setActiveView("home")}
+            className={activeView === "home" ? "active" : ""}
+          >
+            Home
+          </button>
           <button
             onClick={() => setActiveView("profile")}
             className={activeView === "profile" ? "active" : ""}
