@@ -8,8 +8,8 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   font-family: 'Arial', sans-serif;
   background: linear-gradient(to right, #45a049, #29622c, #0e210f);
-  
 }
+
 .player-info .editable-field
 {
   color: #ffffff; 
@@ -85,6 +85,14 @@
   
 }
 
+.player-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 20px;
+  
+}
+
 .player-info p,
 .coach-info p,
 .parent-card p {
@@ -107,6 +115,7 @@
   margin-right: 10px; 
   white-space: nowrap; 
  }
+
 .profile-input {
   width: 100%; 
   max-width: 400px; 
@@ -222,6 +231,7 @@
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   
 }
 
