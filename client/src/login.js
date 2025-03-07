@@ -18,7 +18,7 @@ const Login = ({setAuthView, setUserData, setActiveView}) => {
       if (response.message === "Login successful") {
         const { token, user_id, user_name, role } = response; 
         localStorage.setItem("jwtToken", token); 
-        setActiveView("profile");
+        setActiveView("home");
 
         setUserData({
           userId: user_id, 

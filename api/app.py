@@ -125,6 +125,16 @@ def get_default_exercises(user_id):
 
     return jsonify(training_data)
 
+@app.route('/api/latestexercises/<int:user_id>', methods=['GET'])
+def get_latest_exercises(user_id):
+
+    latest_exercises = db.get_two_latest_exercises(user_id)
+        
+    if not latest_exercises:
+        return jsonify({"error": "No latest exercises data found for this user"}), 404
+
+    return jsonify(latest_exercises)
+
 @app.route('/api/training/<int:user_id>', methods=['GET'])
 def get_user_training_data(user_id):
    
