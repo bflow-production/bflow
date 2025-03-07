@@ -1,14 +1,43 @@
+
 .profile-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
-  background-color: #f9f9f9;
+  padding: 50px;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   font-family: 'Arial', sans-serif;
- 
- 
+  background: linear-gradient(to right, #45a049, #29622c, #0e210f);
+  
+}
+.player-info .editable-field
+{
+  color: #ffffff; 
+  font-size: 16px; 
+}
+.coach-info .editable-field, 
+.parent-card .editable-field {
+  color: #6d6d6d; 
+  font-size: 16px; 
+}
+
+.top-section {
+  display: flex;
+  align-items: start;
+  padding: 20px;
+  width: 100%;
+  justify-content: center; 
+  align-items: center; 
+  
+  border-radius: 20px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #ddd;
+  backdrop-filter: blur(20px) brightness(1.4);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+
+  /* Glow Effect */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
 }
 
 
@@ -33,7 +62,7 @@
   display: flex;
   flex-direction: column;
   background: white;
-  border-radius: 10px;
+  border-radius: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 15px; 
   box-sizing: border-box; 
@@ -46,29 +75,20 @@
 }
 
 
-.top-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  gap: 20px;
-  padding-bottom: 20px;
-  border-bottom: 2px solid #ddd;
-}
-
 .player-info {
   display: flex;
   flex-direction: column;
   flex: 1;
   padding: 20px;
+  
 }
 
 .player-info p,
 .coach-info p,
 .parent-card p {
   display: flex;
-  align-items: center;
-  width: 100%;
+  align-items: inherit;
+  width: 90%;
   height: 25px; 
   margin: 5px 0;
   gap: 10px; 
@@ -76,17 +96,26 @@
 }
 
 .player-info strong, .coach-info strong, .parent-card strong {
-  margin-right: 5px; 
+  margin-right: 10px; 
+ 
   white-space: nowrap; 
 }
 .profile-input {
-  width: 150px; 
-  height: 20px;
-  padding: 3px 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  flex-grow: 0; 
-  position: inherit;
+  width: 100%; 
+  max-width: 400px; 
+  height: 25px;
+  padding: 10px; 
+  font-size: 16px; 
+  border: 2px solid #000000; 
+  border-radius: 8px; 
+  backdrop-filter: blur(20px) brightness(1.4);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+
+  /* Glow Effect */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+
+  box-sizing: border-box; 
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; 
 }
 
 .edit-icon {
@@ -94,6 +123,7 @@
  
   color: #007bff;
   font-size: 16px;
+  margin-left: 15px;
 }
 
 .edit-icon:hover {
@@ -105,10 +135,16 @@
   height: 150px;
   border-radius: 50%;
   overflow: hidden;
-  background-color: #e0e0e0;
+  background-color: #ebebeb;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.imageVbox{
+  display: flex;
+  justify-content: end;
+  align-items: end;
+
 }
 
 .player-image img {
@@ -126,12 +162,11 @@
 
 .bottom-section {
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   width: 100%;
   margin-top: 20px;
   gap: 20px;
-   
-
+  padding: 15px;
   
 }
 
@@ -140,7 +175,7 @@
   height: 25vh;
   position: relative;
   background-color: #fff;
-  border-radius: 10px;
+  border-radius: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -180,6 +215,18 @@
   font-size: 16px;
 }
 
+.edit-icon i {
+  font-size: 15px;  
+  color: #000000;   
+  margin-left: 10px;
+  transition: color 0.2s ease; 
+  
+}
+.edit-icon:hover i {
+  color: #00a6f2;  
+  transform: scale(1.1); 
+}
+
 .edit-button:hover {
   background-color: #45a049;
 }
@@ -203,6 +250,7 @@ p {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    
   }
 
   .player-info, .coach-info, .parent-card {
@@ -221,7 +269,7 @@ p {
   }
 
   .profile-input {
-    width: 100%;
+    width: 80%;
     max-width: 300px; 
   }
 

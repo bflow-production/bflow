@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import userService from "./services/user";
 import teamService from "./services/teams";
 import "./profileView.css";
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
+
 
 const ProfileView = ({ userData }) => {
   const { userId, role } = userData;
@@ -113,36 +116,38 @@ const ProfileView = ({ userData }) => {
 
   return (
     <div className="profile-container">
-      {/* Top Section: Player Info and Image */}
-      <div className="top-section">
+    {/* Top Section: Player Info and Image */}
+    <div className="top-section">
+      {/* Image wrapper div */}
+      <div className="imageVbox">
         <div className="player-image">
           {profile.picture ? (
-            <img src={profile.picture} alt="Profile" />
+            <img src={profile.picture} alt="Profiilikuva" />
           ) : (
             <div className="placeholder">Ei kuvaa</div>
           )}
         </div>
+      </div>
         <div className="player-info">
           <h2>{profile.name}</h2>
           {['username', 'birthYear', 'position', 'team', 'number'].map((field) => (
             <p key={field}>
-              <strong>{field}:</strong>
+              <strong>{field === 'username' ? 'Käyttäjätunnus' : field === 'birthYear' ? 'Syntymävuosi' : field === 'position' ? 'Pelipaikka' : field === 'team' ? 'Joukkue' : 'Numero'}:</strong>
               {editMode ? (
                 <input
                   type="text"
                   name={field}
                   value={profile[field]}
-                  onChange={handleChange} 
+                  onChange={handleChange}
                   className="profile-input"
                 />
               ) : (
                 <span className="editable-field" onClick={() => setEditMode(true)}>
-                  {profile[field]} <span className="edit-icon">✏️</span>
+                  {profile[field]} <span className="edit-icon"><i className="fas fa-pen"></i></span>
                 </span>
               )}
             </p>
           ))}
-
         </div>
       </div>
 
@@ -152,18 +157,18 @@ const ProfileView = ({ userData }) => {
           <h3>Valmentajan Tiedot</h3>
           {['coach', 'coachEmail'].map((field) => (
             <p key={field}>
-              <strong>{field}:</strong>
+              <strong>{field === 'coach' ? 'Valmentaja' : 'Valmentajan Sähköposti'}:</strong>
               {editMode ? (
                 <input
                   type="text"
                   name={field}
                   defaultValue={profile[field]}
-                  onChange={handleChange} 
+                  onChange={handleChange}
                   className="profile-input"
                 />
               ) : (
                 <span className="editable-field" onClick={() => setEditMode(true)}>
-                  {profile[field]} <span className="edit-icon">✏️</span>
+                  {profile[field]} <span className="edit-icon"><i className="fas fa-pen"></i></span>
                 </span>
               )}
             </p>
@@ -171,25 +176,27 @@ const ProfileView = ({ userData }) => {
         </div>
 
         {/* FLIPPING CARD: Huoltajan Tiedot */}
-        <div className="parent-card" onClick={handleCardClick}>
+        <div className="parent-card">
           <div className={`card-inner ${isFlipped ? "flipped" : ""}`}>
             {/* Front Side */}
+            
             <div className="card-front">
+            <span className="edit-icon" onClick={handleCardClick}><i className="fas fa-sync-alt"></i></span>
               <h3>Huoltajan Tiedot</h3>
               {["parent", "parentEmail"].map((field) => (
                 <p key={field}>
-                  <strong>{field}:</strong>
+                  <strong>{field === 'parent' ? 'Huoltaja' : 'Huoltajan Sähköposti'}:</strong>
                   {editMode ? (
                     <input
                       type="text"
                       name={field}
                       value={profile[field]}
-                      onChange={handleChange} 
+                      onChange={handleChange}
                       className="profile-input"
                     />
                   ) : (
                     <span className="editable-field" onClick={() => setEditMode(true)}>
-                      {profile[field]} <span className="edit-icon">✏️</span>
+                      {profile[field]} <span className="edit-icon"><i className="fas fa-pen"></i></span>
                     </span>
                   )}
                 </p>
@@ -198,12 +205,31 @@ const ProfileView = ({ userData }) => {
 
             {/* Back Side */}
             <div className="card-back">
-              <h3>Lisätiedot</h3>
-              <p>Muu tärkeä tieto tähän...</p>
+            <span className="edit-icon" onClick={handleCardClick}><i className="fas fa-sync-alt"></i></span>
+              <h3>Huoltajan Tiedot</h3>
+              {["parent", "parentEmail"].map((field) => (
+                <p key={field}>
+                  <strong>{field === 'parent' ? 'Huoltaja' : 'Huoltajan Sähköposti'}:</strong>
+                  {editMode ? (
+                    <input
+                      type="text"
+                      name={field}
+                      value={profile[field]}
+                      onChange={handleChange}
+                      className="profile-input"
+                    />
+                  ) : (
+                    <span className="editable-field" onClick={() => setEditMode(true)}>
+                      {profile[field]} <span className="edit-icon"><i className="fas fa-pen"></i></span>
+                    </span>
+                  )}
+                </p>
+              ))}
             </div>
           </div>
         </div>
       </div>
+
       <div className="buttonDiv">
         {/* Edit Button */}
         {!editMode ? (
@@ -222,6 +248,7 @@ const ProfileView = ({ userData }) => {
       </div>
     </div>
   );
-}
+};
+
 
 export default ProfileView;
