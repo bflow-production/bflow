@@ -85,49 +85,50 @@ const StatsView = () => {
 
   return (
     <div className="stats-view">
-      <h1>Statistics</h1>
+      <h1>Tilastot</h1>
       <TotalBarChart/>
 
       <div className="dropdown-box">
-        <h2 className="trainingTitle">Defending</h2>
         <button onClick={toggleDefending} className="section-button"> 
-            {isDefendingOpen ? "↑" : "↓"}
+            {isDefendingOpen ? "Puolustaminen ↑" : "Puolustaminen ↓"}
         </button>
       </div>
 
       {isDefendingOpen && (
         <div className="dropdown-container">
-          <h3>Tackling:</h3>
-          <button
-            onClick={() => setIsTacklingOpen(!isTacklingOpen)}
-            className="sub-section-button"
-          >
-            {isTacklingOpen ? "Close Stats" : "Open Stats"}
+          <div className="row-container">
+            <button
+              onClick={() => setIsTacklingOpen(!isTacklingOpen)}
+              className="sub-section-button"
+            >
+            {isTacklingOpen ? "Tackling ↑" : "Tackling ↓"}
           </button>
+        </div>
           {isTacklingOpen && <VerbalBarChart/>}
-          <h3>Marking:</h3>
-          <button
-            onClick={() => setIsMarkinggOpen(!isMarkingOpen)}
-            className="sub-section-button"
-          >
-            {isMarkingOpen  ? "Close Stats" : "Open Stats"}
-          </button>
+          <div className="row-container">
+            <button
+              onClick={() => setIsMarkinggOpen(!isMarkingOpen)}
+              className="sub-section-button"
+            >
+            {isMarkingOpen  ? "Marking ↑" : "Marking ↓"}
+            </button>
+          </div>
           {isMarkingOpen && <VerbalBarChart/>}
-          <h3>Interceptions:</h3>
-          <button
-            onClick={() => setIsInterceptionsOpen(!isInterceptionsOpen)}
-            className="sub-section-button"
-          >
-            {isInterceptionsOpen ? "Close Stats" : "Open Stats"}
-          </button>
+          <div className="row-container">
+            <button
+              onClick={() => setIsInterceptionsOpen(!isInterceptionsOpen)}
+              className="sub-section-button"
+            >
+            {isInterceptionsOpen ? "Interceptions ↑" : "Interceptions ↓"}
+            </button>
+          </div>
           {isInterceptionsOpen && <VerbalBarChart/>}
         </div>
       )}
 
       <div className="dropdown-box">
-        <h2 className="trainingTitle">Dribbling</h2>
         <button onClick={toggleDribbling} className="section-button"> 
-            {isDribblingOpen ? "CLOSE STATS" : "OPEN STATS"}
+            {isDribblingOpen ? "Pallonkäsittely ↑" : "Pallonkäsittely ↓"}
         </button>
       </div>
 
@@ -167,138 +168,158 @@ const StatsView = () => {
       )}
 
       <div className="dropdown-box">
-        <h2 className="trainingTitle">Pace</h2>
         <button onClick={togglePace} className="section-button"> 
-            {isDefendingOpen ? "CLOSE STATS" : "OPEN STATS"}
+            {isPaceOpen ? "Nopeus ↑" : "Nopeus ↓"}
         </button>
       </div>
 
       {isPaceOpen && (
         <div className="dropdown-container">
-          <h3>Sprint Speed:</h3>
-          <button
-            onClick={() => setIsSprintOpen(!isSprintOpen)}
-            className="sub-section-button"
-          >
-            {isSprintOpen ? "Close Stats" : "Open Stats"}
-          </button>
+          <div className="row-container">
+            <h3>Sprint Speed:</h3>
+            <button
+             onClick={() => setIsSprintOpen(!isSprintOpen)}
+              className="sub-section-button"
+            >
+            {isSprintOpen ? "↑" : "↓"}
+            </button>
+          </div>
           {isSprintOpen && <NumericalBarChart/>}
-          <h3>Acceleration:</h3>
-          <button
-            onClick={() => setIsAccelerationOpen(!isAccelerationOpen)}
-            className="sub-section-button"
-          >
-            {isAccelerationOpen  ? "Close Stats" : "Open Stats"}
-          </button>
+          {isSprintOpen && <VerbalBarChart/>}
+          <div className="row-container">
+            <h3>Acceleration:</h3>
+            <button
+              onClick={() => setIsAccelerationOpen(!isAccelerationOpen)}
+              className="sub-section-button"
+            >
+            {isAccelerationOpen  ? "↑" : "↓"}
+            </button>
+          </div>
           {isAccelerationOpen && <NumericalBarChart/>}
+          {isAccelerationOpen && <VerbalBarChart/>}
         </div>
       )}
 
       <div className="dropdown-box">
-        <h2 className="trainingTitle">Passing</h2>
         <button onClick={togglePassing} className="section-button"> 
-            {isDefendingOpen ? "CLOSE STATS" : "OPEN STATS"}
+            {isPassingOpen ? "Syöttäminen ↑" : "Syöttäminen ↓"}
         </button>
       </div>
 
       {isPassingOpen && (
         <div className="dropdown-container">
-          <h3>Short Passing:</h3>
-          <button
-            onClick={() => setIsShortPassOpen(!isShortPassOpen)}
-            className="sub-section-button"
-          >
-            {isShortPassOpen ? "Close Stats" : "Open Stats"}
-          </button>
+          <div className="row-container">
+            <h3>Short Passing:</h3>
+            <button
+              onClick={() => setIsShortPassOpen(!isShortPassOpen)}
+              className="sub-section-button"
+            >
+            {isShortPassOpen ? "↑" : "↓"}
+            </button>
+          </div>
           {isShortPassOpen && <VerbalBarChart/>}
-          <h3>Long Passing:</h3>
-          <button
-            onClick={() => setIsLongPassOpen(!isLongPassOpen)}
-            className="sub-section-button"
-          >
-            {isLongPassOpen  ? "Close Stats" : "Open Stats"}
-          </button>
+          <div className="row-container">
+            <h3>Long Passing:</h3>
+            <button
+              onClick={() => setIsLongPassOpen(!isLongPassOpen)}
+              className="sub-section-button"
+            >
+            {isLongPassOpen  ? "↑" : "↓"}
+            </button>
+          </div>
           {isLongPassOpen && <VerbalBarChart/>}
-          <h3>Crossing:</h3>
-          <button
-            onClick={() => setIsCrossingOpen(!isCrossingOpen)}
-            className="sub-section-button"
-          >
-            {isCrossingOpen  ? "Close Stats" : "Open Stats"}
-          </button>
+          <div className="row-container">
+            <h3>Crossing:</h3>
+            <button
+              onClick={() => setIsCrossingOpen(!isCrossingOpen)}
+              className="sub-section-button"
+            >
+            {isCrossingOpen  ? "↑" : "↓"}
+            </button>
+          </div>
           {isCrossingOpen && <VerbalBarChart/>}
         </div>
       )}
 
       <div className="dropdown-box">
-        <h2 className="trainingTitle">Physical</h2>
         <button onClick={togglePhysical} className="section-button"> 
-            {isDefendingOpen ? "CLOSE STATS" : "OPEN STATS"}
+            {isPhysicalOpen ? "Fyysisyys ↑" : "Fyysisyys ↓"}
         </button>
       </div>
 
-
       {isPhysicalOpen && (
         <div className="dropdown-container">
-          <h3>Strength:</h3>
-          <button
-            onClick={() => setIsStrengthOpen(!isStrengthOpen)}
-            className="sub-section-button"
-          >
-            {isStrengthOpen ? "Close Stats" : "Open Stats"}
-          </button>
+          <div className="row-container">
+            <h3>Strength:</h3>
+            <button
+              onClick={() => setIsStrengthOpen(!isStrengthOpen)}
+              className="sub-section-button"
+            >
+            {isStrengthOpen ? "↑" : "↓"}
+            </button>
+          </div>
           {isStrengthOpen && <VerbalBarChart/>}
-          <h3>Stamina:</h3>
-          <button
-            onClick={() => setIsStaminaOpen(!isStaminaOpen)}
-            className="sub-section-button"
-          >
-            {isStaminaOpen  ? "Close Stats" : "Open Stats"}
-          </button>
+          <div className="row-container">
+            <h3>Stamina:</h3>
+            <button
+              onClick={() => setIsStaminaOpen(!isStaminaOpen)}
+              className="sub-section-button"
+            >
+            {isStaminaOpen  ? "↑" : "↓"}
+            </button>
+          </div>
           {isStaminaOpen && <VerbalBarChart/>}
-          <h3>Jumping:</h3>
-          <button
-            onClick={() => setIsJumpingOpen(!isJumpingOpen)}
-            className="sub-section-button"
-          >
-            {isJumpingOpen  ? "Close Stats" : "Open Stats"}
-          </button>
+          <div className="row-container">
+            <h3>Jumping:</h3>
+            <button
+              onClick={() => setIsJumpingOpen(!isJumpingOpen)}
+              className="sub-section-button"
+            >
+            {isJumpingOpen  ? "↑" : "↓"}
+            </button>
+          </div>
           {isJumpingOpen && <VerbalBarChart/>}
         </div>
       )}
 
       <div className="dropdown-box">
-        <h2 className="trainingTitle">Shooting</h2>
         <button onClick={toggleShooting} className="section-button"> 
-            {isDefendingOpen ? "CLOSE STATS" : "OPEN STATS"}
+            {isShootingOpen ? "Laukaus ↑" : "Laukaus ↓"}
         </button>
       </div>
 
       {isShootingOpen && (
         <div className="dropdown-container">
-          <h3>Shot Speed (radar):</h3>
-          <button
-            onClick={() => setIsShotSpeedOpen(!isShotSpeedOpen)}
-            className="sub-section-button"
-          >
-            {isShotSpeedOpen ? "Close Stats" : "Open Stats"}
-          </button>
+          <div  className="row-container">
+            <h3>Shot Speed (radar):</h3>
+            <button
+              onClick={() => setIsShotSpeedOpen(!isShotSpeedOpen)}
+              className="sub-section-button"
+            >
+            {isShotSpeedOpen ? "↑" : "↓"}
+            </button>
+          </div>
           {isShotSpeedOpen && <NumericalBarChart/>}
-          <h3>Long Shots:</h3>
-          <button
-            onClick={() => setIsLongShotsOpen(!isLongShotsOpen)}
-            className="sub-section-button"
-          >
-            {isLongShotsOpen  ? "Close Stats" : "Open Stats"}
-          </button>
+          {isShotSpeedOpen && <VerbalBarChart/>}
+          <div className="row-container">
+            <h3>Long Shots:</h3>
+            <button
+              onClick={() => setIsLongShotsOpen(!isLongShotsOpen)}
+              className="sub-section-button"
+            >
+            {isLongShotsOpen  ? "↑" : "↓"}
+            </button>
+          </div>
           {isLongShotsOpen && <VerbalBarChart/>}
-          <h3>Free Kick Accuracy:</h3>
-          <button
-            onClick={() => setIsFreeKickOpen(!isFreeKickOpen)}
-            className="sub-section-button"
-          >
-            {isFreeKickOpen  ? "Close Stats" : "Open Stats"}
-          </button>
+          <div className="row-container">
+            <h3>Free Kick Accuracy:</h3>
+            <button
+              onClick={() => setIsFreeKickOpen(!isFreeKickOpen)}
+              className="sub-section-button"
+            >
+            {isFreeKickOpen  ? "↑" : "↓"}
+            </button>
+          </div>
           {isFreeKickOpen && <VerbalBarChart/>}
         </div>
       )}
