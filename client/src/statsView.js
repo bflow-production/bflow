@@ -90,14 +90,14 @@ const StatsView = () => {
 
       <div className="dropdown-box">
         <button onClick={toggleDefending} className="section-button"> 
-            {isDefendingOpen ? "Puolustaminen ↑" : "Puolustaminen ↓"}
+            {isDefendingOpen ? "Puolustus" : "Puolustus"}
         </button>
       </div>
 
       {isDefendingOpen && (
         <div className="dropdown-container">
           <div className="row-container">
-            <h3>Tackling:</h3>
+            <h3>Taklaus:</h3>
             <button
               onClick={() => setIsTacklingOpen(!isTacklingOpen)}
               className="sub-section-button"
@@ -107,7 +107,7 @@ const StatsView = () => {
         </div>
           {isTacklingOpen && <VerbalBarChart/>}
           <div className="row-container">
-            <h3>Marking:</h3>
+            <h3>Merkkaus:</h3>
             <button
               onClick={() => setIsMarkinggOpen(!isMarkingOpen)}
               className="sub-section-button"
@@ -117,7 +117,7 @@ const StatsView = () => {
           </div>
           {isMarkingOpen && <VerbalBarChart/>}
           <div className="row-container">
-            <h3>Interceptions:</h3>
+            <h3>Sieppaus:</h3>
             <button
               onClick={() => setIsInterceptionsOpen(!isInterceptionsOpen)}
               className="sub-section-button"
@@ -131,14 +131,14 @@ const StatsView = () => {
 
       <div className="dropdown-box">
         <button onClick={toggleDribbling} className="section-button"> 
-            {isDribblingOpen ? "Pallonkäsittely ↑" : "Pallonkäsittely ↓"}
+            {isDribblingOpen ? "Pallonkäsittely" : "Pallonkäsittely"}
         </button>
       </div>
 
       {isDribblingOpen && (
         <div className="dropdown-container">
             <div className="row-container">
-              <h3>Zidane Fake Pass:</h3>
+              <h3>Zidane valetemppu:</h3>
               <button
                 onClick={() => setIsZidaneOpen(!isZidaneOpen)}
                 className="sub-section-button"
@@ -148,7 +148,7 @@ const StatsView = () => {
            </div>
           {isZidaneOpen && <VerbalBarChart/>}
           <div className="row-container">
-            <h3>Stepovers:</h3>
+            <h3>Askelharhautus:</h3>
             <button
               onClick={() => setIsStepoversOpen(!isStepoversOpen)}
               className="sub-section-button"
@@ -158,7 +158,7 @@ const StatsView = () => {
           </div>
           {isStepoversOpen && <VerbalBarChart/>}
           <div className="row-container">
-            <h3>Elastico:</h3>
+            <h3>Elastico-temppu:</h3>
             <button
               onClick={() => setIsElasticoOpen(!isElasticoOpen)}
               className="sub-section-button"
@@ -172,14 +172,14 @@ const StatsView = () => {
 
       <div className="dropdown-box">
         <button onClick={togglePace} className="section-button"> 
-            {isPaceOpen ? "Nopeus ↑" : "Nopeus ↓"}
+            {isPaceOpen ? "Nopeus" : "Nopeus"}
         </button>
       </div>
 
       {isPaceOpen && (
         <div className="dropdown-container">
           <div className="row-container">
-            <h3>Sprint Speed:</h3>
+            <h3>Juoksunopeus:</h3>
             <button
              onClick={() => setIsSprintOpen(!isSprintOpen)}
               className="sub-section-button"
@@ -190,7 +190,7 @@ const StatsView = () => {
           {isSprintOpen && <NumericalBarChart/>}
           {isSprintOpen && <VerbalBarChart/>}
           <div className="row-container">
-            <h3>Acceleration:</h3>
+            <h3>Kiihtyvyys:</h3>
             <button
               onClick={() => setIsAccelerationOpen(!isAccelerationOpen)}
               className="sub-section-button"
@@ -205,14 +205,14 @@ const StatsView = () => {
 
       <div className="dropdown-box">
         <button onClick={togglePassing} className="section-button"> 
-            {isPassingOpen ? "Syöttäminen ↑" : "Syöttäminen ↓"}
+            {isPassingOpen ? "Syöttö" : "Syöttö"}
         </button>
       </div>
 
       {isPassingOpen && (
         <div className="dropdown-container">
           <div className="row-container">
-            <h3>Short Passing:</h3>
+            <h3>Lyhytsyöttö:</h3>
             <button
               onClick={() => setIsShortPassOpen(!isShortPassOpen)}
               className="sub-section-button"
@@ -222,7 +222,7 @@ const StatsView = () => {
           </div>
           {isShortPassOpen && <VerbalBarChart/>}
           <div className="row-container">
-            <h3>Long Passing:</h3>
+            <h3>Pitkäsyöttö:</h3>
             <button
               onClick={() => setIsLongPassOpen(!isLongPassOpen)}
               className="sub-section-button"
@@ -232,7 +232,7 @@ const StatsView = () => {
           </div>
           {isLongPassOpen && <VerbalBarChart/>}
           <div className="row-container">
-            <h3>Crossing:</h3>
+            <h3>Keskitys:</h3>
             <button
               onClick={() => setIsCrossingOpen(!isCrossingOpen)}
               className="sub-section-button"
@@ -246,14 +246,14 @@ const StatsView = () => {
 
       <div className="dropdown-box">
         <button onClick={togglePhysical} className="section-button"> 
-            {isPhysicalOpen ? "Fyysisyys ↑" : "Fyysisyys ↓"}
+            {isPhysicalOpen ? "Fyysisyys" : "Fyysisyys"}
         </button>
       </div>
 
       {isPhysicalOpen && (
         <div className="dropdown-container">
           <div className="row-container">
-            <h3>Strength:</h3>
+            <h3>Voima:</h3>
             <button
               onClick={() => setIsStrengthOpen(!isStrengthOpen)}
               className="sub-section-button"
@@ -263,7 +263,7 @@ const StatsView = () => {
           </div>
           {isStrengthOpen && <VerbalBarChart/>}
           <div className="row-container">
-            <h3>Stamina:</h3>
+            <h3>Kestävyys:</h3>
             <button
               onClick={() => setIsStaminaOpen(!isStaminaOpen)}
               className="sub-section-button"
@@ -273,7 +273,7 @@ const StatsView = () => {
           </div>
           {isStaminaOpen && <VerbalBarChart/>}
           <div className="row-container">
-            <h3>Jumping:</h3>
+            <h3>Ponnistuskyky:</h3>
             <button
               onClick={() => setIsJumpingOpen(!isJumpingOpen)}
               className="sub-section-button"
@@ -287,14 +287,14 @@ const StatsView = () => {
 
       <div className="dropdown-box">
         <button onClick={toggleShooting} className="section-button"> 
-            {isShootingOpen ? "Laukaus ↑" : "Laukaus ↓"}
+            {isShootingOpen ? "Laukaus" : "Laukaus"}
         </button>
       </div>
 
       {isShootingOpen && (
         <div className="dropdown-container">
           <div  className="row-container">
-            <h3>Shot Speed (radar):</h3>
+            <h3>Laukauksen nopeus (tutka):</h3>
             <button
               onClick={() => setIsShotSpeedOpen(!isShotSpeedOpen)}
               className="sub-section-button"
@@ -305,7 +305,7 @@ const StatsView = () => {
           {isShotSpeedOpen && <NumericalBarChart/>}
           {isShotSpeedOpen && <VerbalBarChart/>}
           <div className="row-container">
-            <h3>Long Shots:</h3>
+            <h3>Kaukolaukaus:</h3>
             <button
               onClick={() => setIsLongShotsOpen(!isLongShotsOpen)}
               className="sub-section-button"
@@ -315,7 +315,7 @@ const StatsView = () => {
           </div>
           {isLongShotsOpen && <VerbalBarChart/>}
           <div className="row-container">
-            <h3>Free Kick Accuracy:</h3>
+            <h3>Vapaapotku tarkkuus:</h3>
             <button
               onClick={() => setIsFreeKickOpen(!isFreeKickOpen)}
               className="sub-section-button"
