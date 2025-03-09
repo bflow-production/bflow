@@ -97,29 +97,32 @@ const StatsView = () => {
       {isDefendingOpen && (
         <div className="dropdown-container">
           <div className="row-container">
+            <h3>Tackling:</h3>
             <button
               onClick={() => setIsTacklingOpen(!isTacklingOpen)}
               className="sub-section-button"
             >
-            {isTacklingOpen ? "Tackling ↑" : "Tackling ↓"}
+            {isTacklingOpen ? "↑" : "↓"}
           </button>
         </div>
           {isTacklingOpen && <VerbalBarChart/>}
           <div className="row-container">
+            <h3>Marking:</h3>
             <button
               onClick={() => setIsMarkinggOpen(!isMarkingOpen)}
               className="sub-section-button"
             >
-            {isMarkingOpen  ? "Marking ↑" : "Marking ↓"}
+            {isMarkingOpen  ? "↑" : "↓"}
             </button>
           </div>
           {isMarkingOpen && <VerbalBarChart/>}
           <div className="row-container">
+            <h3>Interceptions:</h3>
             <button
               onClick={() => setIsInterceptionsOpen(!isInterceptionsOpen)}
               className="sub-section-button"
             >
-            {isInterceptionsOpen ? "Interceptions ↑" : "Interceptions ↓"}
+            {isInterceptionsOpen ? "↑" : "↓"}
             </button>
           </div>
           {isInterceptionsOpen && <VerbalBarChart/>}
