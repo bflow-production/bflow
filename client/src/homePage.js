@@ -51,7 +51,7 @@ const HomePage = ({ userData }) => {
   return (
     <div className="home-page">
       <h1>Tervetuloa, {username}!</h1>
-      <SimpleBarChart />
+      <SimpleBarChart userData={userData}/>
       <h2>Viimeisimmät harjoitukset:</h2>
       <div className="content">
         <div className="latest-exercises">

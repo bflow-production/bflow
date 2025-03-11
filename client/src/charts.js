@@ -1,62 +1,95 @@
-import React from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Rectangle, ResponsiveContainer} from "recharts";
+import React, { useState, useEffect } from "react";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Rectangle, ResponsiveContainer } from "recharts";
+import trainingService from "./services/trainings";
 
-const data = [
-  { day: 1, hours: Math.floor(Math.random() * 20) },
-  { day: 2, hours: Math.floor(Math.random() * 20) },
-  { day: 3, hours: Math.floor(Math.random() * 20) },
-  { day: 4, hours: Math.floor(Math.random() * 20) },
-  { day: 5, hours: Math.floor(Math.random() * 20) },
-  { day: 6, hours: Math.floor(Math.random() * 20) },
-  { day: 7, hours: Math.floor(Math.random() * 20) },
-  { day: 8, hours: Math.floor(Math.random() * 20) },
-  { day: 9, hours: Math.floor(Math.random() * 20) },
-  { day: 10, hours: Math.floor(Math.random() * 20) },
-  { day: 11, hours: Math.floor(Math.random() * 20) },
-  { day: 12, hours: Math.floor(Math.random() * 20) },
-  { day: 13, hours: Math.floor(Math.random() * 20) },
-  { day: 14, hours: Math.floor(Math.random() * 20) },
-  { day: 15, hours: Math.floor(Math.random() * 20) },
-  { day: 16, hours: Math.floor(Math.random() * 20) },
-  { day: 17, hours: Math.floor(Math.random() * 20) },
-  { day: 18, hours: Math.floor(Math.random() * 20) },
-  { day: 19, hours: Math.floor(Math.random() * 20) },
-  { day: 20, hours: Math.floor(Math.random() * 20) },
-  { day: 21, hours: Math.floor(Math.random() * 20) },
-  { day: 22, hours: Math.floor(Math.random() * 20) },
-  { day: 23, hours: Math.floor(Math.random() * 20) },
-  { day: 24, hours: Math.floor(Math.random() * 20) },
-  { day: 25, hours: Math.floor(Math.random() * 20) },
-  { day: 26, hours: Math.floor(Math.random() * 20) },
-  { day: 27, hours: Math.floor(Math.random() * 20) },
-  { day: 28, hours: Math.floor(Math.random() * 20) },
-  { day: 29, hours: Math.floor(Math.random() * 20) },
-  { day: 30, hours: Math.floor(Math.random() * 20) },
-  { day: 31, hours: Math.floor(Math.random() * 20) },
-];
+const SimpleBarChart = ({ userData }) => {
+  const [trainingData, setTrainingData] = useState([]);
 
-const SimpleBarChart = () => {
-  return (
-      <div className="chart.js">
-        <ResponsiveContainer width="100%" height={400}>
-          <BarChart
-            data={data}
-            margin={{
-              top: 20,
-              right: 30,
-              left: 30,
-              bottom: 20,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="day" label={{ value: "Päivät", position: "insideBottom", offset: -10 }} />
-            <YAxis label={{ value: "Tunnit", angle: -90, position: "insideLeft" }} />
-            <Tooltip />
-            <Bar dataKey="hours" fill="gray" activeBar={<Rectangle fill="green" stroke="black" />} />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
+  useEffect(() => {
+    trainingService
+      .getTraining(userData.userId)
+      .then((response) => {
+        setTrainingData(response);
+      })
+      .catch((error) => {
+        console.error("Error", error);
+      });
+  }, [userData.userId]);
+
+  const flattenTrainings = (trainings) => {
+    return Object.entries(trainings).flatMap(([category, exercises]) =>
+        exercises.map(exercise => ({
+            ...exercise,   // Spread existing properties
+            category       // Add category name
+        }))
     );
+  };
+
+  const processData = (trainings) => {
+    const today = new Date();
+    const fourteenDaysAgo = new Date();
+    fourteenDaysAgo.setDate(today.getDate() - 14);
+
+    const arrayTrainings = flattenTrainings(trainings);
+
+    const filteredData = arrayTrainings
+      .filter((training) => {
+        const trainingDate = new Date(training.timestamp); 
+        return trainingDate >= fourteenDaysAgo && trainingDate <= today;
+      })
+      .reduce((acc, training) => {
+        const dateKey = training.timestamp.split(" ")[0]; // Extract YYYY-MM-DD
+        const hours = Math.floor(training.duration / 60);  // Full hours
+        const minutes = training.duration % 60;  // Remaining minutes
+
+        if (acc[dateKey]) {
+          acc[dateKey].hours += hours; // Add the hours for each day
+          acc[dateKey].minutes += minutes; // Add the minutes for each day
+        } else {
+          acc[dateKey] = { hours, minutes }; // Initialize the first time for this date
+        }
+
+        return acc;
+      }, {});
+
+    return Object.entries(filteredData).map(([day, { hours, minutes }]) => {
+      // Convert total minutes to hours and minutes
+      const totalHours = hours + Math.floor(minutes / 60);
+      const remainingMinutes = minutes % 60;
+
+      return {
+        day,
+        time: `${totalHours}h ${remainingMinutes}m`, // Display time as hours and minutes
+        hours: totalHours + remainingMinutes / 60, // Total hours for the chart
+        formattedTime: `${totalHours}h ${remainingMinutes}m` // Formatted time string
+      };
+    });
+  };
+  
+  const data = processData(trainingData);
+
+  return (
+    <div className="chart.js">
+      <ResponsiveContainer width="100%" height={400}>
+        <BarChart
+          data={data}
+          margin={{ top: 20, right: 30, left: 30, bottom: 20 }}
+        >
+          <XAxis dataKey="day" label={{ value: "Päivät", position: "insideBottom", offset: -10 }} />
+          <YAxis label={{ value: "Tunnit", angle: -90, position: "insideLeft" }} />
+          <Tooltip formatter={(value, name, props) => [props.payload.formattedTime, "Treenattu aika"]} />
+          <Bar 
+            dataKey="hours" 
+            fill="grey" 
+            label={{ position: 'top', formatter: (value) => `${Math.floor(value)}h ${Math.round((value % 1) * 60)}m` }}
+            activeBar={({ x, y, width, height }) => (
+              <Rectangle fill="green" stroke="black" x={x} y={y} width={width} height={height} />
+            )}
+          />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  );
 };
 
 export default SimpleBarChart;
