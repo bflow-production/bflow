@@ -1,0 +1,30 @@
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.486);
+    max-width: 1000px;
+    margin: auto;
+    margin-bottom: 30px;
+  }
+
+  .recharts-wrapper {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 20px;
+  }
+
+  .recharts-cartesian-axis-tick text {
+    font-size: 17px;
+    fill: #333;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+  }
+
+  .recharts-bar-rectangle {
+    transition: fill 0.3s ease-in-out;
+  }
+
+
+  

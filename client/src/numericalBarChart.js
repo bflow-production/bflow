@@ -19,7 +19,6 @@ const NumericalBarChart = () => {
               bottom: 20,
             }}
           >
-            <CartesianGrid strokeDasharray="3 3" />
             <XAxis
                 dataKey="day" 
                 label={{ value: "Päivät", position: "insideBottom", offset: -10 }} 

@@ -20,6 +20,7 @@
   align-items: center;
   margin-bottom: 8px;
   width: 100%;
+  justify-content: space-between;
 }
 
 .row-container h3 {
@@ -59,22 +60,27 @@
     font-size: 20px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-weight: bold;
+    text-align: left;
+    margin-bottom: 5px;
+    margin-top: 5px;
 }
 
 .sub-section-button {
   color: white;
   border: none;
-  border-radius: 20px;
+  border-radius: 12px;
   background-color: rgb(10, 85, 10);
   padding: 7px 40px;
   cursor: pointer;
-  transition: background-color 0.3s;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s;
   flex-shrink: 0;
   font-size: 18px;
-  width: 50%;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-weight: bold;
+  text-align: center;
+  margin-bottom: 5px;
+  margin-top: 5px;
 }
 
 .section-button:hover {
