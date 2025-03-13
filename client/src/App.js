@@ -18,7 +18,7 @@ const App = () => {
   const [userData, setUserData] = useState(null);
   const [activeView, setActiveView] = useState("home");
   const [authView, setAuthView] = useState("login");
-  const [sidebarOpen, setsidebarOpen] = useState(false);
+  const [sidebarOpen, setsidebarOpen] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
