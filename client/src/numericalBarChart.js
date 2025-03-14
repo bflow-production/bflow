@@ -21,10 +21,10 @@ const NumericalBarChart = () => {
           >
             <XAxis
                 dataKey="day" 
-                label={{ value: "Päivät", position: "insideBottom", offset: -10 }} 
+                label={{ value: "Päivät", position: "insideBottom", offset: -20 }} 
             />
             <YAxis 
-                label={{ value: "Nopeus km/h", angle: -90, position: "insideLeft" }} 
+                label={{ value: "Nopeus km/h", angle: -90, position: "insideLeft", offset: -10, dy: 75}} 
                 domain={[0, 140]}
             />
           <Tooltip 
