@@ -67,7 +67,6 @@ body {
 }
 
 .nav {
-  position: fixed;
   display: flex;
   flex-direction: column;
   align-items: stretch;
