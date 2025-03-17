@@ -1,10 +1,10 @@
-import React, {use, useState} from "react";
+import React, {useState} from "react";
 import TotalBarChart from "./totalBarChart";
 import "./statsView.css";
 import VerbalBarChart from "./verbalBarChart";
 import NumericalBarChart from "./numericalBarChart";
 
-const StatsView = () => {
+const StatsView = ({ userData }) => {
   const [isTacklingOpen, setIsTacklingOpen] = useState(false);
   const [isMarkingOpen, setIsMarkinggOpen] = useState(false);
   const [isInterceptionsOpen, setIsInterceptionsOpen] = useState(false);
@@ -86,7 +86,7 @@ const StatsView = () => {
   return (
     <div className="stats-view">
       <h1>Tilastot</h1>
-      <TotalBarChart/>
+      <TotalBarChart userData={userData}/>
 
       <div className="dropdown-box">
         <button onClick={toggleDefending} className="section-button"> 
