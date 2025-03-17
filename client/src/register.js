@@ -55,7 +55,7 @@ function Register({ setAuthView }) {
         <h1 className="headerTitle">Welcome to B'FLOW</h1>
       </header>
       <div className="register">
-        <h1>Register</h1>
+        <h1>Registeröidy</h1>
 
         {error && <p className="error">{error}</p>}
         {success && (
@@ -64,31 +64,31 @@ function Register({ setAuthView }) {
           </p>
         )}
         <form onSubmit={handleSubmit}>
-          <label>Role:</label>
+          <label>Rooli:</label>
           <div className="role-buttons">
             <button
               type="button"
               className={formData.role === "player" ? "active" : ""}
               onClick={() => handleRoleChange("player")}
             >
-              Player
+              Pelaaja
             </button>
             <button
               type="button"
               className={formData.role === "parent" ? "active" : ""}
               onClick={() => handleRoleChange("parent")}
             >
-              Parent
+              Vanhempi
             </button>
             <button
               type="button"
               className={formData.role === "coach" ? "active" : ""}
               onClick={() => handleRoleChange("coach")}
             >
-              Coach
+              Valmentaja
             </button>
           </div>
-          <label>Username:</label>
+          <label>Käyttäjänimi:</label>
           <input
             type="text"
             name="username"
@@ -96,7 +96,7 @@ function Register({ setAuthView }) {
             onChange={handleChange}
             required
           />
-          <label>Email:</label>
+          <label>Sähköposti:</label>
           <input
             type="email"
             name="email"
@@ -104,7 +104,7 @@ function Register({ setAuthView }) {
             onChange={handleChange}
             required
           />
-          <label>Password:</label>
+          <label>Salasana:</label>
           <input
             type="password"
             name="password"
@@ -112,7 +112,7 @@ function Register({ setAuthView }) {
             onChange={handleChange}
             required
           />
-          <label>Name:</label>
+          <label>Nimi:</label>
           <input
             type="text"
             name="name"
@@ -120,7 +120,7 @@ function Register({ setAuthView }) {
             onChange={handleChange}
             required
           />
-          <label>Birth Year:</label>
+          <label>Syntymävuosi:</label>
           <input
             type="number"
             name="birthYear"
@@ -128,7 +128,7 @@ function Register({ setAuthView }) {
             onChange={handleChange}
             required
           />
-          <label>Country:</label>
+          <label>Maa:</label>
           <input
             type="text"
             name="country"
@@ -136,12 +136,12 @@ function Register({ setAuthView }) {
             onChange={handleChange}
             required
           />
-          <button type="submit">Register</button>
+          <button type="submit">Registeröidy</button>
         </form>
 
         <p className="notRegistered">
-          Already have an account?{" "}
-          <button onClick={() => setAuthView("login")}>Login</button>
+           Onko sinulla jo tili?{" "}
+          <button onClick={() => setAuthView("login")}>Kirjaudu sisään</button>
         </p>
       </div>
     </>

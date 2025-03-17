@@ -32,9 +32,6 @@ const Login = ({setAuthView, setUserData, setActiveView}) => {
       setError("Invalid credentials");
     }
   };
-  
-  
-  
 
 
   return (
@@ -43,28 +40,28 @@ const Login = ({setAuthView, setUserData, setActiveView}) => {
       <h1 className="headerTitle">Welcome to B'FLOW</h1>
     </header>
     <div className="login">
-      <h1>Login</h1>
+      <h1>Kirjaudu sisään</h1>
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleLogin}>
-        <label>Email:</label>
+        <label>Sähköposti:</label>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <label>Password:</label>
+        <label>Salasana:</label>
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Login</button>
+        <button type="submit">Kirjaudu sisään</button>
       </form>
       <p className="notRegistered">
-        Don't have an account?{" "}
-        <button onClick={() => setAuthView("register")}>Register</button>
+      Eikö sinulla ole tiliä?{" "}
+        <button onClick={() => setAuthView("register")}>Registeröidy</button>
       </p>
     </div>
   </>
