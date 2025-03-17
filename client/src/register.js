@@ -39,7 +39,7 @@ function Register({ setAuthView }) {
       setSuccess(true); // Show success message
       setTimeout(() => {
         setAuthView("login"); // Navigate to login page after 3 seconds
-      }, 3000);
+      }, 1000);
     } catch (err) {
       setError(
         `Registration failed. Please try again. ${
