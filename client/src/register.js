@@ -26,6 +26,28 @@ function Register({ setAuthView }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.role) {
+      setError("Valitse rooli ennen jatkamista.");
+      return;
+    }
+    if (!formData.email) {
+      setError("Sähköpostiosoite on pakollinen.");
+      return;
+    }
+    if (!formData.password) {
+      setError("Salasana on pakollinen.");
+      return;
+    }
+    if (!formData.name) {
+      setError("Nimi on pakollinen.");
+      return;
+    }
+    if (!formData.birthYear) {
+      setError("Syntymävuosi on pakollinen.");
+      return;
+    }
+    
     try {
       await authService.register({
         username: formData.username,
