@@ -1,12 +1,57 @@
-import React from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Rectangle, ResponsiveContainer} from "recharts";
+import React, { useState, useEffect } from "react";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Rectangle, ResponsiveContainer } from "recharts";
+import trainingService from "./services/trainings";
 
-const data = Array.from({ length: 31 }, (_, i) => ({
-  day: i + 1,
-  speeds: Math.floor(Math.random() * 141)
-}));
+const NumericalBarChart = ({ userData, exercise }) => {
+  const [trainingData, setTrainingData] = useState([]);
 
-const NumericalBarChart = () => {
+  useEffect(() => {
+    trainingService
+      .getTraining(userData.userId)
+      .then((response) => {
+        setTrainingData(response);
+      })
+      .catch((error) => {
+        console.error("Error", error);
+      });
+  }, [userData.userId]);
+
+  const flattenTrainings = (trainings) => {
+    return Object.entries(trainings).flatMap(([category, exercises]) =>
+        exercises.map(exercise => ({
+            ...exercise,   // Spread existing properties
+            category       // Add category name
+        }))
+    );
+  };
+
+  const processData = (trainings) => {
+    const today = new Date();
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(today.getDate() - 30);
+
+    const arrayTrainings = flattenTrainings(trainings);
+    const filteredData = arrayTrainings
+      .filter((training) => {
+        const trainingDate = new Date(training.timestamp); 
+        console.log(training.exercise, exercise);
+        return (
+          trainingDate >= thirtyDaysAgo &&
+          trainingDate <= today &&
+          training.exercise === exercise // Filter by exercise name
+        );
+      })
+      .map((training) => ({
+        day: training.timestamp.split(" ")[0], // Extract YYYY-MM-DD
+        result: training.result,
+        category: training.category
+      }));
+
+      return filteredData;
+  };
+  
+  const data = processData(trainingData);
+
   return (
       <div className="chart-container">
         <ResponsiveContainer width="100%" height={400}>
@@ -31,9 +76,9 @@ const NumericalBarChart = () => {
             formatter={(value) => [`km/h: ${value}`]}
           />
           <Bar 
-                dataKey="speeds" 
-                fill="gray" 
-                activeBar={<Rectangle fill="green" stroke="black" />} 
+              dataKey="result" 
+              fill="gray" 
+              activeBar={<Rectangle fill="green" stroke="black" />} 
             />
           </BarChart>
         </ResponsiveContainer>

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Rectangle, ResponsiveContainer} from "recharts";
 import "./verbalBarChart.css";
+import trainingService from "./services/trainings";
 
 const skillLevels = [
   "Aloitin vasta",
@@ -10,28 +11,57 @@ const skillLevels = [
   "Mestari",
 ];
 
-const data = Array.from({ length: 31 }, (_, i) => ({
-  day: i + 1,
-  skillLevel: Math.floor(Math.random() * skillLevels.length),
-}));
+const VerbalBarChart = ({ userData, exercise }) => {
+  const [trainingData, setTrainingData] = useState([]);
 
-const calculateMedian = (data) => {
-  const sorted = [...data].map((d) => d.skillLevel).sort((a, b) => a - b);
-  const mid = Math.floor(sorted.length / 2);
-  return sorted.length % 2 !== 0
-    ? sorted[mid]
-    : Math.round((sorted[mid - 1] + sorted[mid]) / 2);
-};
+  useEffect(() => {
+    trainingService
+      .getTraining(userData.userId)
+      .then((response) => {
+        setTrainingData(response);
+      })
+      .catch((error) => {
+        console.error("Error", error);
+      });
+  }, [userData.userId]);
 
-const calculateAverage = (data) => {
-  const sum = data.reduce((acc, d) => acc + d.skillLevel, 0);
-  return Math.round(sum / data.length);
-};
+  const flattenTrainings = (trainings) => {
+    return Object.entries(trainings).flatMap(([category, exercises]) =>
+        exercises.map(exercise => ({
+            ...exercise,   // Spread existing properties
+            category       // Add category name
+        }))
+    );
+  };
 
-const medianSkill = skillLevels[calculateMedian(data)];
-const averageSkill = skillLevels[calculateAverage(data)];
+  const processData = (trainings) => {
+    const today = new Date();
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(today.getDate() - 30);
 
-const VerbalBarChart = () => {
+    const arrayTrainings = flattenTrainings(trainings);
+    const filteredData = arrayTrainings
+      .filter((training) => {
+        const trainingDate = new Date(training.timestamp); 
+        console.log(training.exercise, exercise);
+        console.log('VerbalBarChart');
+        return (
+          trainingDate >= thirtyDaysAgo &&
+          trainingDate <= today &&
+          training.exercise_name === exercise // Filter by exercise name
+        );
+      })
+      .map((training) => ({
+        day: training.timestamp.split(" ")[0], // Extract YYYY-MM-DD
+        rating: training.rating,
+        category: training.category
+      }));
+
+      return filteredData;
+  };
+  
+  const data = processData(trainingData);
+
   return (
       <div className="chart-display">
         <ResponsiveContainer width="100%" height={400}>
@@ -62,12 +92,6 @@ const VerbalBarChart = () => {
             />
           </BarChart>
         </ResponsiveContainer>
-      <div className="stats-box">
-        <h3>Kuukauden keskiarvo:</h3>
-        <h4>{medianSkill}</h4>
-        <h3>Kaikkien keskiarvo:</h3>
-        <h4>{averageSkill}</h4>
-      </div>
     </div>
   );
 };
