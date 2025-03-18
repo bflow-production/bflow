@@ -39,7 +39,7 @@ const CompletedTrainingsView = ({ userData }) => {
 
   return (
     <div className="training-view">
-      <h2 className="header-execise">Training Overview</h2>
+      <h2 className="header-execise">Harjoitukset</h2>
       {Object.keys(categories).map((category) => (
         <div key={category} className="category-card">
           <button

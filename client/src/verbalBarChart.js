@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Rectangle, ResponsiveContainer} from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import "./verbalBarChart.css";
 import trainingService from "./services/trainings";
 
-const skillLevels = [
-  "Aloitin vasta",
-  "Osaan jo hieman",
-  "Osaan",
-  "Osaan jo hyvin",
-  "Mestari",
-];
+const ratingToVerbal = {
+  "1": "Aloitin vasta",
+  "2": "Osaan jo hieman",
+  "3": "Osaan",
+  "4": "Osaan jo hyvin",
+  "5": "Mestari"
+};
 
 const VerbalBarChart = ({ userData, exercise }) => {
   const [trainingData, setTrainingData] = useState([]);
@@ -27,10 +27,10 @@ const VerbalBarChart = ({ userData, exercise }) => {
 
   const flattenTrainings = (trainings) => {
     return Object.entries(trainings).flatMap(([category, exercises]) =>
-        exercises.map(exercise => ({
-            ...exercise,   // Spread existing properties
-            category       // Add category name
-        }))
+      exercises.map((exercise) => ({
+        ...exercise, // Spread existing properties
+        category, // Add category name
+      }))
     );
   };
 
@@ -42,56 +42,54 @@ const VerbalBarChart = ({ userData, exercise }) => {
     const arrayTrainings = flattenTrainings(trainings);
     const filteredData = arrayTrainings
       .filter((training) => {
-        const trainingDate = new Date(training.timestamp); 
-        console.log(training.exercise, exercise);
-        console.log('VerbalBarChart');
+        const trainingDate = new Date(training.timestamp);
         return (
           trainingDate >= thirtyDaysAgo &&
           trainingDate <= today &&
-          training.exercise_name === exercise // Filter by exercise name
+          training.exercise === exercise // Filter by exercise name
         );
       })
       .map((training) => ({
         day: training.timestamp.split(" ")[0], // Extract YYYY-MM-DD
-        rating: training.rating,
+        skillLevel: training.rating,
         category: training.category
       }));
 
-      return filteredData;
+    return filteredData;
   };
-  
+
   const data = processData(trainingData);
 
   return (
-      <div className="chart-display">
-        <ResponsiveContainer width="100%" height={400}>
-          <BarChart
-            data={data}
-            margin={{
-              top: 20,
-              right: 30,
-              left: 30,
-              bottom: 20,
-            }}
-          >
-            <XAxis
-              dataKey="day"
-              tickCount={31}
-              label={{ value: "Päivät", position: "insideBottom", offset: -20 }}
-            />
-            <YAxis
-              type="number"
-              domain={[0, skillLevels.length - 1]}
-              tickFormatter={(index) => skillLevels[index]}
-            />
-            <Tooltip formatter={(value) => [skillLevels[value], "Taitotaso"]} />
-            <Bar
-              dataKey="skillLevel"
-              fill="gray"
-              activeBar={<Rectangle fill="green" stroke="black" />}
-            />
-          </BarChart>
-        </ResponsiveContainer>
+    <div className="chart-display">
+      <ResponsiveContainer width="100%" height={400}>
+        <BarChart
+          data={data}
+          margin={{
+            top: 20,
+            right: 30,
+            left: 30,
+            bottom: 20,
+          }}
+        >
+          <XAxis
+            dataKey="day"
+            tickCount={31}
+            label={{ value: "Päivät", position: "insideBottom", offset: -20 }}
+          />
+          <YAxis
+            type="number"
+            domain={[1, 5]}
+            tickFormatter={(index) => ratingToVerbal[index]}
+          />
+          <Tooltip formatter={(value) => [ratingToVerbal[value], "Taitotaso"]} />
+          <Bar
+            dataKey="skillLevel"
+            fill="gray"
+            label={{ position: 'top', formatter: (value) => ratingToVerbal[value] }}
+          />
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   );
 };

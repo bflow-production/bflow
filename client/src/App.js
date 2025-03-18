@@ -164,7 +164,7 @@ const App = () => {
             onClick={() => setActiveView("home")}
             className={activeView === "home" ? "active" : ""}
           >
-            Home
+            Koti
           </button>
           <button
             onClick={() => setActiveView("profile")}
