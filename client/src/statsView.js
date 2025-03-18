@@ -1,10 +1,10 @@
-import React, {use, useState} from "react";
+import React, {useState} from "react";
 import TotalBarChart from "./totalBarChart";
 import "./statsView.css";
 import VerbalBarChart from "./verbalBarChart";
 import NumericalBarChart from "./numericalBarChart";
 
-const StatsView = () => {
+const StatsView = ({ userData }) => {
   const [isTacklingOpen, setIsTacklingOpen] = useState(false);
   const [isMarkingOpen, setIsMarkinggOpen] = useState(false);
   const [isInterceptionsOpen, setIsInterceptionsOpen] = useState(false);
@@ -86,7 +86,7 @@ const StatsView = () => {
   return (
     <div className="stats-view">
       <h1>Tilastot</h1>
-      <TotalBarChart/>
+      <TotalBarChart userData={userData}/>
 
       <div className="dropdown-box">
         <button onClick={toggleDefending} className="section-button"> 
@@ -97,7 +97,7 @@ const StatsView = () => {
       {isDefendingOpen && (
         <div className="dropdown-container">
           <div className="row-container">
-            <h3>Taklaus:</h3>
+            <h3>Taklaaminen:</h3>
             <button
               onClick={() => setIsTacklingOpen(!isTacklingOpen)}
               className="sub-section-button"
@@ -105,9 +105,9 @@ const StatsView = () => {
             {isTacklingOpen ? "↑" : "↓"}
           </button>
         </div>
-          {isTacklingOpen && <VerbalBarChart/>}
+          {isTacklingOpen && <VerbalBarChart userData={userData} exercise="Taklaaminen"/>}
           <div className="row-container">
-            <h3>Merkkaus:</h3>
+            <h3>Vartiointi:</h3>
             <button
               onClick={() => setIsMarkinggOpen(!isMarkingOpen)}
               className="sub-section-button"
@@ -115,9 +115,9 @@ const StatsView = () => {
             {isMarkingOpen  ? "↑" : "↓"}
             </button>
           </div>
-          {isMarkingOpen && <VerbalBarChart/>}
+          {isMarkingOpen && <VerbalBarChart userData={userData} exercise="Vartiointi"/>}
           <div className="row-container">
-            <h3>Sieppaus:</h3>
+            <h3>Katkot:</h3>
             <button
               onClick={() => setIsInterceptionsOpen(!isInterceptionsOpen)}
               className="sub-section-button"
@@ -125,7 +125,7 @@ const StatsView = () => {
             {isInterceptionsOpen ? "↑" : "↓"}
             </button>
           </div>
-          {isInterceptionsOpen && <VerbalBarChart/>}
+          {isInterceptionsOpen && <VerbalBarChart userData={userData} exercise="Katkot"/>}
         </div>
       )}
 
@@ -138,7 +138,7 @@ const StatsView = () => {
       {isDribblingOpen && (
         <div className="dropdown-container">
             <div className="row-container">
-              <h3>Zidane valetemppu:</h3>
+              <h3>Zidane Fake Pass:</h3>
               <button
                 onClick={() => setIsZidaneOpen(!isZidaneOpen)}
                 className="sub-section-button"
@@ -146,9 +146,9 @@ const StatsView = () => {
              {isZidaneOpen ? "↑" : "↓"}
             </button>
            </div>
-          {isZidaneOpen && <VerbalBarChart/>}
+          {isZidaneOpen && <VerbalBarChart userData={userData} exercise="Zidane Fake Pass"/>}
           <div className="row-container">
-            <h3>Askelharhautus:</h3>
+            <h3>Stepoverit:</h3>
             <button
               onClick={() => setIsStepoversOpen(!isStepoversOpen)}
               className="sub-section-button"
@@ -156,9 +156,9 @@ const StatsView = () => {
               {isStepoversOpen  ? "↑" : "↓"}
             </button>
           </div>
-          {isStepoversOpen && <VerbalBarChart/>}
+          {isStepoversOpen && <VerbalBarChart userData={userData} exercise="Stepoverit"/>}
           <div className="row-container">
-            <h3>Elastico-temppu:</h3>
+            <h3>Elastico:</h3>
             <button
               onClick={() => setIsElasticoOpen(!isElasticoOpen)}
               className="sub-section-button"
@@ -166,7 +166,7 @@ const StatsView = () => {
               {isElasticoOpen ? "↑" : "↓"}
             </button>
             </div>
-          {isElasticoOpen && <VerbalBarChart/>}
+          {isElasticoOpen && <VerbalBarChart userData={userData} exercise="Elastico"/>}
         </div>
       )}
 
@@ -179,7 +179,7 @@ const StatsView = () => {
       {isPaceOpen && (
         <div className="dropdown-container">
           <div className="row-container">
-            <h3>Juoksunopeus:</h3>
+            <h3>Sprinttinopeus:</h3>
             <button
              onClick={() => setIsSprintOpen(!isSprintOpen)}
               className="sub-section-button"
@@ -187,8 +187,8 @@ const StatsView = () => {
             {isSprintOpen ? "↑" : "↓"}
             </button>
           </div>
-          {isSprintOpen && <NumericalBarChart/>}
-          {isSprintOpen && <VerbalBarChart/>}
+          {isSprintOpen && <NumericalBarChart userData={userData} exercise="Sprinttinopeus"/>}
+          {isSprintOpen && <VerbalBarChart userData={userData} exercise="Sprinttinopeus"/>}
           <div className="row-container">
             <h3>Kiihtyvyys:</h3>
             <button
@@ -198,8 +198,8 @@ const StatsView = () => {
             {isAccelerationOpen  ? "↑" : "↓"}
             </button>
           </div>
-          {isAccelerationOpen && <NumericalBarChart/>}
-          {isAccelerationOpen && <VerbalBarChart/>}
+          {isAccelerationOpen && <NumericalBarChart userData={userData} exercise="Kiihtyvyys"/>}
+          {isAccelerationOpen && <VerbalBarChart userData={userData} exercise="Kiihtyvyys"/>}
         </div>
       )}
 
@@ -212,7 +212,7 @@ const StatsView = () => {
       {isPassingOpen && (
         <div className="dropdown-container">
           <div className="row-container">
-            <h3>Lyhytsyöttö:</h3>
+            <h3>Lyhyet syötöt:</h3>
             <button
               onClick={() => setIsShortPassOpen(!isShortPassOpen)}
               className="sub-section-button"
@@ -220,9 +220,9 @@ const StatsView = () => {
             {isShortPassOpen ? "↑" : "↓"}
             </button>
           </div>
-          {isShortPassOpen && <VerbalBarChart/>}
+          {isShortPassOpen && <VerbalBarChart userData={userData} exercise="Lyhyet syötöt"/>}
           <div className="row-container">
-            <h3>Pitkäsyöttö:</h3>
+            <h3>Pitkät syötöt:</h3>
             <button
               onClick={() => setIsLongPassOpen(!isLongPassOpen)}
               className="sub-section-button"
@@ -230,9 +230,9 @@ const StatsView = () => {
             {isLongPassOpen  ? "↑" : "↓"}
             </button>
           </div>
-          {isLongPassOpen && <VerbalBarChart/>}
+          {isLongPassOpen && <VerbalBarChart userData={userData} exercise="Pitkät syötöt"/>}
           <div className="row-container">
-            <h3>Keskitys:</h3>
+            <h3>Keskitykset:</h3>
             <button
               onClick={() => setIsCrossingOpen(!isCrossingOpen)}
               className="sub-section-button"
@@ -240,7 +240,7 @@ const StatsView = () => {
             {isCrossingOpen  ? "↑" : "↓"}
             </button>
           </div>
-          {isCrossingOpen && <VerbalBarChart/>}
+          {isCrossingOpen && <VerbalBarChart userData={userData} exercise="Keskitykset"/>}
         </div>
       )}
 
@@ -261,7 +261,7 @@ const StatsView = () => {
             {isStrengthOpen ? "↑" : "↓"}
             </button>
           </div>
-          {isStrengthOpen && <VerbalBarChart/>}
+          {isStrengthOpen && <VerbalBarChart userData={userData} exercise="Voima"/>}
           <div className="row-container">
             <h3>Kestävyys:</h3>
             <button
@@ -271,9 +271,9 @@ const StatsView = () => {
             {isStaminaOpen  ? "↑" : "↓"}
             </button>
           </div>
-          {isStaminaOpen && <VerbalBarChart/>}
+          {isStaminaOpen && <VerbalBarChart userData={userData} exercise="Kestävyys"/>}
           <div className="row-container">
-            <h3>Ponnistuskyky:</h3>
+            <h3>Hyppy:</h3>
             <button
               onClick={() => setIsJumpingOpen(!isJumpingOpen)}
               className="sub-section-button"
@@ -281,7 +281,7 @@ const StatsView = () => {
             {isJumpingOpen  ? "↑" : "↓"}
             </button>
           </div>
-          {isJumpingOpen && <VerbalBarChart/>}
+          {isJumpingOpen && <VerbalBarChart userData={userData} exercise="Hyppy"/>}
         </div>
       )}
 
@@ -294,7 +294,7 @@ const StatsView = () => {
       {isShootingOpen && (
         <div className="dropdown-container">
           <div  className="row-container">
-            <h3>Laukauksen nopeus (tutka):</h3>
+            <h3>Laukaisuvoima (tutka):</h3>
             <button
               onClick={() => setIsShotSpeedOpen(!isShotSpeedOpen)}
               className="sub-section-button"
@@ -302,10 +302,10 @@ const StatsView = () => {
             {isShotSpeedOpen ? "↑" : "↓"}
             </button>
           </div>
-          {isShotSpeedOpen && <NumericalBarChart/>}
-          {isShotSpeedOpen && <VerbalBarChart/>}
+          {isShotSpeedOpen && <NumericalBarChart userData={userData} exercise="Laukaisuvoima (tutka)"/>}
+          {isShotSpeedOpen && <VerbalBarChart userData={userData} exercise="Laukaisuvoima (tutka)"/>}
           <div className="row-container">
-            <h3>Kaukolaukaus:</h3>
+            <h3>Kaukolaukaukset:</h3>
             <button
               onClick={() => setIsLongShotsOpen(!isLongShotsOpen)}
               className="sub-section-button"
@@ -313,9 +313,9 @@ const StatsView = () => {
             {isLongShotsOpen  ? "↑" : "↓"}
             </button>
           </div>
-          {isLongShotsOpen && <VerbalBarChart/>}
+          {isLongShotsOpen && <VerbalBarChart userData={userData} exercise="Kaukolaukaukset"/>}
           <div className="row-container">
-            <h3>Vapaapotku tarkkuus:</h3>
+            <h3>Vapaapotkut:</h3>
             <button
               onClick={() => setIsFreeKickOpen(!isFreeKickOpen)}
               className="sub-section-button"
@@ -323,7 +323,7 @@ const StatsView = () => {
             {isFreeKickOpen  ? "↑" : "↓"}
             </button>
           </div>
-          {isFreeKickOpen && <VerbalBarChart/>}
+          {isFreeKickOpen && <VerbalBarChart userData={userData} exercise="Vapaapotkut"/>}
         </div>
       )}
     </div>
