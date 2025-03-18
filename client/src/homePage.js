@@ -3,8 +3,6 @@ import axios from "axios";
 import "./homePage.css";
 import SimpleBarChart from "./charts";
 
-
-
 const HomePage = ({ userData }) => {
   const [username, setUsername] = useState("");
   const [latestExercises, setLatestExercises] = useState([]);
@@ -18,6 +16,7 @@ const HomePage = ({ userData }) => {
     "4": "Osaan jo hyvin",
     "5": "Mestari"
   };
+
   useEffect(() => {
     if (userData?.userId) {
       axios
@@ -33,6 +32,7 @@ const HomePage = ({ userData }) => {
         .catch((error) => {
           console.error("Error fetching user data:", error);
         });
+        
       axios
         .get(`${backendURL}/latestexercises/${userData.userId}`, {
         })
