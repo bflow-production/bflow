@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import "./homePage.css";
 import SimpleBarChart from "./charts";
+import trainingService from "./services/trainings";
+import userService from "./services/user";
 
 const HomePage = ({ userData }) => {
-  const [username, setUsername] = useState("");
   const [latestExercises, setLatestExercises] = useState([]);
-  const [profile, setProfile] = useState({});
-  const backendURL = "/api";
+  const [profile, setProfile] = useState([]);
 
   const ratingToVerbal = {
     "1": "Aloitin vasta",
@@ -19,29 +18,21 @@ const HomePage = ({ userData }) => {
 
   useEffect(() => {
     if (userData?.userId) {
-      axios
-        .get(`${backendURL}/user/${userData.userId}?role=${userData.role}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
-        })
+      trainingService
+        .getLatestExercises(userData.userId)
         .then((response) => {
-          setUsername(response.data.name);
-          setProfile(response.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching user data:", error);
-        });
-        
-      axios
-        .get(`${backendURL}/latestexercises/${userData.userId}`, {
-        })
-        .then((response) => {
-          console.log("Latest exercises fetched:", response.data);
-          setLatestExercises(response.data);
+          setLatestExercises(response);
         })
         .catch((error) => {
           console.error("Error fetching latest exercises:", error);
+        });
+      userService
+        .getUserByRole(userData.userId, userData.role)
+        .then((response) => {
+          setProfile(response);
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
         });
     }
   }, [userData]);
@@ -50,7 +41,7 @@ const HomePage = ({ userData }) => {
 
   return (
     <div className="home-page">
-      <h1>Tervetuloa, {username}!</h1>
+      <h1>Tervetuloa, {profile.username}!</h1>
       <SimpleBarChart userData={userData}/>
       <h2>Viimeisimmät harjoitukset:</h2>
       <div className="content">

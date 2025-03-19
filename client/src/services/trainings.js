@@ -26,4 +26,10 @@ const getDefaultExercises = async (id) => {
     return response.data;
   }
 
-export default { getTraining, updateTraining, getDefaultExercises }
+const getLatestExercises = async (id) => {
+  const response = await axios.get(`${baseUrl}/latestexercises/${id}`);
+  axios
+  return response.data;
+};
+
+export default { getTraining, updateTraining, getDefaultExercises, getLatestExercises};
