@@ -47,7 +47,7 @@ const App = () => {
   // Fetch user data from the backend using userId
   //todo: API needs a decorator to check the token(unimplemented)
   useEffect(() => {
-    if (userData?.userId) {
+    if (userData?.userId && userData?.role) {
       userService
         .getUserByRole(userData.userId, userData.role)
         .then((response) => {
@@ -55,10 +55,9 @@ const App = () => {
         })
         .catch((error) => {
           console.error("Error fetching user data:", error);
-          console.log(userData)
         });
     }
-  }, [userData?.userId]);
+  }, [userData?.userId, userData?.role,userData?.team_id]);
 
   useEffect(() => {
     const clearLocalStorage = () => {
@@ -98,7 +97,7 @@ const App = () => {
         );
       case "joinTeam":
         return userData.role === "player" ? (
-          <JoinTeamView userData={userData} />
+          <JoinTeamView userData={userData}/>
         ) : (
           <div>Invalid View</div>
         );

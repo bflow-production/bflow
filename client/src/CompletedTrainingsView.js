@@ -51,7 +51,7 @@ const CompletedTrainingsView = ({ userData }) => {
           {expandedCategories[category] && (
             <div className="exercise-grid">
               {categories[category].map((exercise, index) => (
-                <div key={index} className="exercise-card">
+                <div key={index} className= "exercise-form">
                   <strong className="exercise-title">
                     {exercise.exercise} |{" "}
                     {new Date(exercise.timestamp).toLocaleString("fi-FI", {

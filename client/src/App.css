@@ -10,7 +10,6 @@ body {
   background-color: #f4f4f4;
   color: #333;
   height: 100%;
-
 }
 
 .App {
@@ -31,8 +30,8 @@ body {
   font-size: 10px;
   height: 20px;
   padding: 1rem;
-  
 }
+
 .App-header .app-title {
   font-weight: 800;
   color: #000000;
@@ -118,7 +117,6 @@ body {
 .profile-view h2,
 .stats-view h2,
 .training-view h2 {
-  color: #4CAF50;
   margin-bottom: 1rem;
   border-bottom: 1px solid #ddd;
   padding-bottom: 0.5rem;

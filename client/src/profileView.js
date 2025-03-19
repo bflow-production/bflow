@@ -4,8 +4,6 @@ import teamService from "./services/teams";
 import "./profileView.css";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
-
-
 const ProfileView = ({ userData }) => {
   const { userId, role } = userData;
   const [editMode, setEditMode] = useState(false);
@@ -37,6 +35,7 @@ const ProfileView = ({ userData }) => {
         const response = await userService.getUserByRole(userId, role);
         setProfile(response);
         console.log("Profile data:", response);
+        console.log("Userdata:" , userData);
 
         if (role === 'coach') {
           const teamResponse = await teamService.getTeam(userId);
@@ -145,7 +144,6 @@ const ProfileView = ({ userData }) => {
                 <span className="editable-field" onClick={() => setEditMode(true)}>
                   {profile[field]} <span className="edit-icon"><i className="fas fa-pen"></i></span>
                 </span>
-                
               )}
             </p>
           ))}
@@ -155,7 +153,7 @@ const ProfileView = ({ userData }) => {
       {/* Bottom Section: Coach & Parent Info */}
       <div className="bottom-section">
         <div className="coach-info">
-          <h3>Valmentajan Tiedot</h3>
+          <h3>Valmentajan tiedot</h3>
           {['coach', 'coachEmail'].map((field) => (
             <p key={field}>
               <strong>{field === 'coach' ? 'Valmentaja' : 'Sähköposti'}:</strong>
@@ -183,7 +181,7 @@ const ProfileView = ({ userData }) => {
             
             <div className="card-front">
             <span className="flip-icon" onClick={handleCardClick}><i className="fas fa-sync-alt"></i></span>
-              <h3>Huoltajan Tiedot</h3>
+              <h3>Huoltajan tiedot</h3>
               {["parent", "parentEmail"].map((field) => (
                 <p key={field}>
                   <strong>{field === 'parent' ? 'Huoltaja' : 'Sähköposti'}:</strong>

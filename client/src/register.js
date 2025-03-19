@@ -74,10 +74,10 @@ function Register({ setAuthView }) {
   return (
     <>
       <header className="header">
-        <h1 className="headerTitle">Welcome to B'FLOW</h1>
+        <h1 className="headerTitle">Tervetuloa B'FLOW:hun</h1>
       </header>
       <div className="register">
-        <h1>Registeröidy</h1>
+        <h1>Rekisteröidy</h1>
 
         {error && <p className="error">{error}</p>}
         {success && (

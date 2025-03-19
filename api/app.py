@@ -214,6 +214,8 @@ def update_user(id):
 
     if 'id' in data:
         del data['id']
+    if 'userId' in data:
+        del data['userId']
     if 'role' in data:
         del data['role']
     try:

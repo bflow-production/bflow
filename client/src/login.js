@@ -18,13 +18,14 @@ const Login = ({setAuthView, setUserData, setActiveView}) => {
       if (response.message === "Login successful") {
         const { token, user_id, user_name, role } = response; 
         localStorage.setItem("jwtToken", token); 
-        setActiveView("home");
 
         setUserData({
           userId: user_id, 
           username: user_name, 
           role: role,
         });
+
+        setActiveView("home");
       }
 
     } catch (error) {
@@ -37,7 +38,7 @@ const Login = ({setAuthView, setUserData, setActiveView}) => {
   return (
     <>
     <header className="header">
-      <h1 className="headerTitle">Welcome to B'FLOW</h1>
+      <h1 className="headerTitle">Tervetuloa B'FLOW:hun</h1>
     </header>
     <div className="login">
       <h1>Kirjaudu sisään</h1>
@@ -61,7 +62,7 @@ const Login = ({setAuthView, setUserData, setActiveView}) => {
       </form>
       <p className="notRegistered">
       Eikö sinulla ole tiliä?{" "}
-        <button onClick={() => setAuthView("register")}>Registeröidy</button>
+        <button onClick={() => setAuthView("register")}>Rekisteröidy</button>
       </p>
     </div>
   </>

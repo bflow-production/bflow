@@ -254,6 +254,7 @@ class Database:
             
             cursor.execute(query, (id,))
             return cursor.fetchone()
+        
     def get_user_by_email(self, email):
         """
         Retrieve a user by their email and determine their role.
