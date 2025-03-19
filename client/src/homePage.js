@@ -18,8 +18,6 @@ const HomePage = ({ userData }) => {
     if (userData?.userId) {
       trainingService
         .getLatestExercises(userData.userId)
-      trainingService
-        .getLatestExercises(userData.userId)
         .then((response) => {
           console.log("Latest exercises fetched:", response);
           setLatestExercises(response);
