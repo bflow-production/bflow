@@ -18,12 +18,14 @@ const HomePage = ({ userData }) => {
     if (userData?.userId) {
       trainingService
         .getLatestExercises(userData.userId)
+      trainingService
+        .getLatestExercises(userData.userId)
         .then((response) => {
           console.log("Latest exercises fetched:", response);
           setLatestExercises(response);
         })
         .catch((error) => {
-          console.error("Error fetching latest exercises:", error);
+          console.error("Error fetching user data:", error);
         });
     }
   }, [userData]);
