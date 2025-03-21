@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import "./homePage.css";
 import SimpleBarChart from "./charts";
 import trainingService from "./services/trainings";
+import userService from "./services/user";
 
 const HomePage = ({ userData }) => {
   const [latestExercises, setLatestExercises] = useState([]);
+  const [profile, setProfile] = useState([]);
 
   const ratingToVerbal = {
     1: "Aloitin vasta",
@@ -16,6 +18,15 @@ const HomePage = ({ userData }) => {
 
   useEffect(() => {
     if (userData?.userId) {
+      userService
+        .getUserByRole(userData.userId, userData.role)
+        .then((response) => {
+          setProfile(response);
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
+        });
+
       trainingService
         .getLatestExercises(userData.userId)
         .then((response) => {
@@ -32,7 +43,7 @@ const HomePage = ({ userData }) => {
 
   return (
     <div className="home-page">
-      <h1>Tervetuloa, {userData.username}!</h1>
+      <h1>Tervetuloa, {profile.username}!</h1>
       <SimpleBarChart userData={userData} />
       <h2>Viimeisimmät harjoitukset:</h2>
       <div className="content">
@@ -58,22 +69,22 @@ const HomePage = ({ userData }) => {
         </div>
         <div className="profile">
           <div className="player-image">
-            {userData.picture ? (
-              <img src={userData.picture} alt="Profile" />
+            {profile.picture ? (
+              <img src={profile.picture} alt="Profile" />
             ) : (
               <div className="placeholder">Ei kuvaa</div>
             )}
           </div>
           <div className="profile-info">
             <p>
-              <strong>Joukkue:</strong> {userData.team || "Ei joukkueessa"}
+              <strong>Joukkue:</strong> {profile.team || "Ei joukkueessa"}
             </p>
             <p>
-              <strong>Numero:</strong> {userData.number || "Ei numeroa"}
+              <strong>Numero:</strong> {profile.number || "Ei numeroa"}
             </p>
             <p>
               <strong>Pelipaikka:</strong>{" "}
-              {userData.position || "Ei pelipaikkaa"}
+              {profile.position || "Ei pelipaikkaa"}
             </p>
           </div>
         </div>

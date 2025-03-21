@@ -47,7 +47,7 @@ const App = () => {
   // Fetch user data from the backend using userId
   //todo: API needs a decorator to check the token(unimplemented)
   useEffect(() => {
-    if (userData?.userId && userData?.role) {
+    if (userData?.userId) {
       userService
         .getUserByRole(userData.userId, userData.role)
         .then((response) => {
@@ -57,7 +57,7 @@ const App = () => {
           console.error("Error fetching user data:", error);
         });
     }
-  }, [userData?.userId, userData?.role,userData?.team_id]);
+  }, [userData?.userId]);
 
   useEffect(() => {
     const clearLocalStorage = () => {
