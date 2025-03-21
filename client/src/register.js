@@ -47,7 +47,7 @@ function Register({ setAuthView }) {
       setError("Syntymävuosi on pakollinen.");
       return;
     }
-    
+
     try {
       await authService.register({
         username: formData.username,
@@ -78,7 +78,6 @@ function Register({ setAuthView }) {
       </header>
       <div className="register">
         <h1>Rekisteröidy</h1>
-
         {error && <p className="error">{error}</p>}
         {success && (
           <p className="success">
@@ -86,30 +85,6 @@ function Register({ setAuthView }) {
           </p>
         )}
         <form onSubmit={handleSubmit}>
-          <label>Rooli:</label>
-          <div className="role-buttons">
-            <button
-              type="button"
-              className={formData.role === "player" ? "active" : ""}
-              onClick={() => handleRoleChange("player")}
-            >
-              Pelaaja
-            </button>
-            <button
-              type="button"
-              className={formData.role === "parent" ? "active" : ""}
-              onClick={() => handleRoleChange("parent")}
-            >
-              Vanhempi
-            </button>
-            <button
-              type="button"
-              className={formData.role === "coach" ? "active" : ""}
-              onClick={() => handleRoleChange("coach")}
-            >
-              Valmentaja
-            </button>
-          </div>
           <label>Käyttäjänimi:</label>
           <input
             type="text"
@@ -158,11 +133,34 @@ function Register({ setAuthView }) {
             onChange={handleChange}
             required
           />
-          <button type="submit">Registeröidy</button>
+          <label>Valitse rooli:</label>
+          <div className="role-buttons">
+            <button
+              type="button"
+              className={formData.role === "player" ? "active" : ""}
+              onClick={() => handleRoleChange("player")}
+            >
+              Pelaaja
+            </button>
+            <button
+              type="button"
+              className={formData.role === "parent" ? "active" : ""}
+              onClick={() => handleRoleChange("parent")}
+            >
+              Vanhempi
+            </button>
+            <button
+              type="button"
+              className={formData.role === "coach" ? "active" : ""}
+              onClick={() => handleRoleChange("coach")}
+            >
+              Valmentaja
+            </button>
+          </div>
+          <button type="submit">Rekisteröidy</button>
         </form>
-
         <p className="notRegistered">
-           Onko sinulla jo tili?{" "}
+          Onko sinulla jo tili?{" "}
           <button onClick={() => setAuthView("login")}>Kirjaudu sisään</button>
         </p>
       </div>
