@@ -33,7 +33,7 @@
     font-weight: bold;
     font-family: 'Open Sans', sans-serif;
     padding: 10px 15px;
-    background-color: green;
+    background-color: #4CAF50;
     color: white;
     border-radius: 8px 8px 0 0;
     cursor: pointer;
@@ -44,7 +44,7 @@
   }
   
   .category-header:hover {
-    background-color: rgb(0, 85, 0);
+    background-color: #388e3c;
   }
   
   .exercise-grid {

@@ -1,69 +1,66 @@
-
 .settings-view {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 50px;
   border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  font-family: 'Arial', sans-serif;
-  background: linear-gradient(to right, #45a049, #29622c, #0e210f); 
+  font-family: "Arial", sans-serif;
 }
 
 .settings-username {
-    font-size: 30px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    margin-bottom: 5px;
-    padding: 10px;
-    -webkit-text-fill-color: #ddd;
+  font-size: 30px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  margin-bottom: 5px;
+  padding: 10px;
+  -webkit-text-fill-color: #ddd;
 }
 
 .settings-title {
-    font-size: 30px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    margin-bottom: 30px;
+  font-size: 30px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  margin-bottom: 30px;
 }
 
 .settings-box {
-  
   padding: 20px;
   width: 100%;
-  align-items: center; 
+  align-items: center;
   border-radius: 20px;
   border-bottom: 2px solid #ddd;
   backdrop-filter: blur(20px) brightness(1.4);
   border: 2px solid rgba(255, 255, 255, 0.4);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   box-sizing: border-box;
+  background-color: #4CAF50;
 }
 
 .label {
-    display: block;
-    margin-bottom: 10px;
-    font-size: 20px;
+  display: block;
+  margin-bottom: 10px;
+  font-size: 20px;
 }
 
 .select-box {
-    padding: 10px;
-    border: 1px solid  white;
-    width: 100px;
-    border-radius: 4px;
+  padding: 10px;
+  border: 1px solid white;
+  width: 100px;
+  border-radius: 4px;
 }
 
 .radiobutton-box {
-    margin-top: 15px;
-    margin-bottom: 10px;
+  margin-top: 15px;
+  margin-bottom: 10px;
 }
 
 .radiobutton-box label {
-    margin: 5px 0;
-    margin-top: 10px;
+  margin: 5px 0;
+  margin-top: 10px;
 }
 
 .password-input {
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid black;
-    border-radius: 4px;
-    width: 50%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid black;
+  border-radius: 4px;
+  width: 50%;
 }

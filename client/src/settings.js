@@ -10,9 +10,8 @@ const SettingsView = () => {
 
   return (
     <div className="settings-view">
-      <h1 className="settings-username">Käyttäjänimi</h1>
+      <h1 className="settings-title">Asetukset</h1>
       <div className="settings-box">
-        <h2 className="settings-title">Asetukset</h2>
         <div>
           <label className="label">Kieli:</label>
           <select
