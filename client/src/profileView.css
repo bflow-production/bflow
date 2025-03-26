@@ -1,4 +1,7 @@
-
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
 .profile-container {
   display: flex;
   flex-direction: column;
@@ -7,75 +10,94 @@
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   font-family: 'Arial', sans-serif;
-  background: #fff;
+  background: linear-gradient(to right, #45a049, #29622c, #0e210f);
+  flex-grow: 1;
 }
 
 .player-info .editable-field
 {
   color: #ffffff; 
   font-size: 16px; 
-  min-width: 300px;
-  
+
 }
+
 .coach-info .editable-field, 
 .parent-card .editable-field {
-  color: #ddd;
+  color: #6d6d6d; 
   font-size: 16px; 
+  
 }
 
 .top-section {
   display: flex;
-  align-items: start;
-  padding: 20px;
+  flex-wrap: wrap;
+  
   width: 100%;
   justify-content: center; 
   align-items: center; 
-  background-color: #4CAF50;
   border-radius: 20px;
   padding-bottom: 20px;
   border-bottom: 2px solid #ddd;
   backdrop-filter: blur(20px) brightness(1.4);
   border: 2px solid rgba(255, 255, 255, 0.4);
-
   /* Glow Effect */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   box-sizing: border-box;
+  overflow: hidden
 }
 
-
 .card-inner {
+  position: relative;
   width: 100%;
   height: 100%;
-  position: absolute;
   transform-style: preserve-3d;
   transition: transform 0.6s;
+  
 }
 
 .flipped {
   transform: rotateY(180deg);
 }
 
-.card-front,
-.card-back {
+.card-front {
   width: 100%;
   height: 100%;
-  position: absolute;
   backface-visibility: hidden;
+  flex: 1;
   display: flex;
+  position: absolute;
   flex-direction: column;
   background: white;
   border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 15px; 
-  background-color: #4CAF50;
-
-    /* Glow Effect */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  box-sizing: border-box;
+  box-sizing: border-box; 
+  min-height: 100%;
+  height: max-content;
 }
+.card-back {
+  width: 100%;
+  height: 100%;
+  height: max-content;
+  backface-visibility: hidden;
+  flex: 1;
+  display: flex;
+
+  flex-direction: column;
+  position: absolute;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 15px; 
+  box-sizing: border-box; 
+  min-height: 100%;
+}
+
 
 .card-back {
   transform: rotateY(180deg);
-  background: #4CAF50;
+  background: #f3f3f3;
+  display: flex; flex-direction: column;
   
 }
 
@@ -87,27 +109,33 @@
   
 }
 
+.player-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  
+}
+
 .player-info p,
 .coach-info p,
 .parent-card p {
   display: flex;
-  align-items: inherit;
   width: 90%;
-  height: 25px; 
   margin: 5px 0;
   gap: 10px; 
-  flex-wrap: nowrap; 
+  flex-wrap: wrap; 
 }
 
 .player-info strong {
   margin-right: 10px; 
-  white-space: nowrap; 
-  min-width: 150px;
 }
 
 .coach-info strong, .parent-card strong{
   margin-right: 10px; 
-  white-space: nowrap; 
+
  }
 
 .profile-input {
@@ -120,7 +148,6 @@
   border-radius: 8px; 
   backdrop-filter: blur(20px) brightness(1.4);
   border: 2px solid rgba(255, 255, 255, 0.4);
-
   /* Glow Effect */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 
@@ -141,28 +168,8 @@
 }
 
 .player-image {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  overflow: hidden;
-  background-color: #ebebeb;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-.imageVbox{
-  display: flex;
-  justify-content: end;
-  align-items: end;
-}
-
-.player-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
+  width: 250px;
+  height: 250px;
 }
 
 .placeholder {
@@ -173,36 +180,38 @@
 
 .bottom-section {
   display: flex;
+  flex-wrap: wrap;
+  position:relative;
   justify-content: space-between;
   width: 100%;
   margin-top: 20px;
   gap: 20px;
   padding: 15px;
+
 }
 
 .coach-info {
   width: 48%;  
-  height: 25vh;
   position: relative;
+  min-height: max-content;
+  background-color: #fff;
   border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 15px; 
-  background-color: #4CAF50;
-
-  /* Glow Effect */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  box-sizing: border-box;
-  
+  box-sizing: border-box
 }
 
 .parent-card {
-  width: 48%;  
-  height: 25vh;
-  perspective: 1000px; 
   position: relative;
-  cursor: pointer;
+    min-height: max-content;
+    display: flex;
+    padding-bottom: 100px;
+    width: 48%;
+    perspective: 1000px;
+
 }
 
 .buttonDiv {
@@ -227,7 +236,6 @@
   cursor: pointer;
   font-size: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  
 }
 
 .edit-icon i {
@@ -270,17 +278,14 @@ p {
 }
 
 @media (max-width: 768px) {
-  .profile-container {
-    width: 90%; 
-    padding: 15px;
+  
+  .top-section {
+    flex-direction: column; 
+    padding: 10px;  
+   flex-wrap: wrap;
+   flex-shrink: 1;         
   }
 
-  .top-section {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    
-  }
   .player-info, .coach-info, .parent-card {
     width: 100%; 
     min-width: 50px;
@@ -288,18 +293,13 @@ p {
 
   .player-info strong {
     white-space: nowrap; 
-    min-width: 50px;
+  
   }
 
   .bottom-section {
     flex-direction: column;
     align-items: center;
     gap: 15px;
-  }
-
-  .player-image {
-    width: 100px;
-    height: 100px;
   }
 
   .profile-input {
@@ -316,17 +316,24 @@ p {
   .buttonDiv {
     flex-direction: column;
     align-items: center;
+    margin-top: 150px; 
   }
 }
 
 @media (max-width: 480px) {
   .profile-container {
-    width: 95%;
-    padding: 10px;
+  
+    padding: 1px;
   }
 
   h2, h3 {
     font-size: 4vw;
+  }
+  .top-section {
+    flex-direction: column; 
+    flex-wrap: wrap;
+    padding: 10px;     
+    justify-content: center;      
   }
 
   .player-image {
@@ -342,6 +349,12 @@ p {
   .edit-button {
     font-size: 14px;
     padding: 8px 15px;
+   
+  }
+  .buttonDiv {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 150px; 
   }
 }
 

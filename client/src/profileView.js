@@ -3,6 +3,7 @@ import userService from "./services/user";
 import teamService from "./services/teams";
 import "./profileView.css";
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import PlayerCard from "./components/PlayerCard";
 
 const ProfileView = ({ userData }) => {
   const { userId, role } = userData;
@@ -120,12 +121,19 @@ const ProfileView = ({ userData }) => {
       {/* Image wrapper div */}
       <div className="imageVbox">
         <div className="player-image">
-          {profile.picture ? (
-            <img src={profile.picture} alt="Profiilikuva" />
-          ) : (
-            <div className="placeholder">Ei kuvaa</div>
-          )}
-        </div>
+        <PlayerCard
+        rating={90}
+        name="Cristiano Ronaldo"
+        position="ST"
+        image="/pessi.png" 
+        pace={90}
+        shooting={95}
+        passing={85}
+        dribbling={88}
+        defending={40}
+        physical={80}
+      />
+    </div>
       </div>
         <div className="player-info">
           <h2>{profile.name}</h2>
