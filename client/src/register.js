@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import authService from "./services/authService";
 import "./register.css";
 
-function Register({ setAuthView }) {
+function Register({ setAuthView, showNotification }) {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -12,8 +12,6 @@ function Register({ setAuthView }) {
     country: "",
     role: "", // Default role
   });
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false); // State to handle success message
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,23 +26,7 @@ function Register({ setAuthView }) {
     e.preventDefault();
 
     if (!formData.role) {
-      setError("Valitse rooli ennen jatkamista.");
-      return;
-    }
-    if (!formData.email) {
-      setError("Sähköpostiosoite on pakollinen.");
-      return;
-    }
-    if (!formData.password) {
-      setError("Salasana on pakollinen.");
-      return;
-    }
-    if (!formData.name) {
-      setError("Nimi on pakollinen.");
-      return;
-    }
-    if (!formData.birthYear) {
-      setError("Syntymävuosi on pakollinen.");
+      showNotification("Valitse rooli ennen jatkamista.", true);
       return;
     }
 
@@ -58,16 +40,12 @@ function Register({ setAuthView }) {
         country: formData.country,
         role: formData.role,
       });
-      setSuccess(true); // Show success message
+      showNotification("Rekisteröinti onnistui!", false);
       setTimeout(() => {
         setAuthView("login"); // Navigate to login page after 3 seconds
       }, 1000);
     } catch (err) {
-      setError(
-        `Registration failed. Please try again. ${
-          err.response?.data?.message || err.message
-        }`
-      );
+      showNotification("Rekisteröinti epäonnistui. Yritä uudelleen.", true);
     }
   };
 
@@ -78,12 +56,6 @@ function Register({ setAuthView }) {
       </header>
       <div className="register">
         <h1>Rekisteröidy</h1>
-        {error && <p className="error">{error}</p>}
-        {success && (
-          <p className="success">
-            Registration successful! Redirecting to login...
-          </p>
-        )}
         <form onSubmit={handleSubmit}>
           <label>Käyttäjänimi:</label>
           <input

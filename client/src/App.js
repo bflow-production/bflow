@@ -126,14 +126,19 @@ const App = () => {
   if (!userData) {
     return (
       <div className="auth-container">
+        <Notification notification={notification} />
         {authView === "login" ? (
           <Login
             setAuthView={setAuthView}
             setUserData={setUserData}
             setActiveView={setActiveView}
+            showNotification={showNotification}
           />
         ) : (
-          <Register setAuthView={setAuthView} />
+          <Register
+            setAuthView={setAuthView}
+            showNotification={showNotification}
+          />
         )}
       </div>
     );

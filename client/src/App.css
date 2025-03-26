@@ -137,9 +137,9 @@ body {
 
 .error {
   position: fixed;
-  top: 45px;
-  left: 55%;
-  transform: translateX(-50%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 9999;
   width: fit-content;
 
@@ -154,9 +154,9 @@ body {
 
 .success {
   position: fixed;
-  top: 60px;
-  left: 55%;
-  transform: translateX(-50%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 9999;
   width: fit-content;
 

@@ -72,11 +72,11 @@ const CompletedTrainingsView = ({ userData }) => {
                         Kesto: {Math.floor(exercise.duration / 60)} h{" "}
                         {exercise.duration % 60} min
                       </p>
-                      <p>{`Lisätiedot: ${exercise.result || "-"}`}</p>
                       <p>{`Oma arvio: ${ratingToVerbal[exercise.rating] || "0"}`}</p>
                       {exercise.result !== null && (
                         <p>{`Tulos: ${exercise.result || "0"}`}</p>
                       )}
+                      <p>{`Lisätiedot: ${exercise.result || "-"}`}</p>
                     </div>
                   </div>
                 </div>

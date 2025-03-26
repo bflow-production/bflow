@@ -3,10 +3,9 @@ import './login.css';
 import authService from "./services/authService";
 
 
-const Login = ({setAuthView, setUserData, setActiveView}) => {
+const Login = ({setAuthView, setUserData, setActiveView, showNotification}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -30,7 +29,7 @@ const Login = ({setAuthView, setUserData, setActiveView}) => {
 
     } catch (error) {
       console.error("Login error:", error);
-      setError("Invalid credentials");
+      showNotification("Virhe kirjautumisessa", true);
     }
   };
 
@@ -42,7 +41,6 @@ const Login = ({setAuthView, setUserData, setActiveView}) => {
     </header>
     <div className="login">
       <h1>Kirjaudu sisään</h1>
-      {error && <p className="error">{error}</p>}
       <form onSubmit={handleLogin}>
         <label>Sähköposti:</label>
         <input
