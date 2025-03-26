@@ -134,3 +134,37 @@ body {
   border-radius: 4px;
   background-color: #f9f9f9;
 }
+
+.error {
+  position: fixed;
+  top: 45px;
+  left: 55%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  width: fit-content;
+
+  color: red;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.success {
+  position: fixed;
+  top: 60px;
+  left: 55%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  width: fit-content;
+
+  color: green;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}

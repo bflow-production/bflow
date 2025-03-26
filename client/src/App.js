@@ -13,12 +13,17 @@ import LinkChildView from "./linkChildView";
 import SettingsView from "./settings";
 import userService from "./services/user";
 import HomePage from "./homePage";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [userData, setUserData] = useState(null);
   const [activeView, setActiveView] = useState("home");
   const [authView, setAuthView] = useState("login");
   const [sidebarOpen, setsidebarOpen] = useState(true);
+  const [notification, setNotification] = useState({
+    message: null,
+    type: null,
+  });
 
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
@@ -51,7 +56,7 @@ const App = () => {
       userService
         .getUserByRole(userData.userId, userData.role)
         .then((response) => {
-          setUserData((prevData) => ({ ...prevData, ...response}));
+          setUserData((prevData) => ({ ...prevData, ...response }));
         })
         .catch((error) => {
           console.error("Error fetching user data:", error);
@@ -69,6 +74,13 @@ const App = () => {
     };
   }, []);
 
+  const showNotification = (message, isError = false, duration = 3000) => {
+    setNotification({ message, isError });
+    setTimeout(() => {
+      setNotification({ message: null, isError: null });
+    }, duration);
+  };
+
   const renderView = () => {
     switch (activeView) {
       case "home":
@@ -81,14 +93,11 @@ const App = () => {
         return (
           <TrainingView
             userData={userData}
+            showNotification={showNotification}
           />
         );
       case "completedTrainings":
-        return (
-          <CompletedTrainingsView
-            userData={userData}
-          />
-        );
+        return <CompletedTrainingsView userData={userData} />;
       case "coach":
         return userData.role === "coach" ? (
           <CoachView userData={userData} />
@@ -97,7 +106,7 @@ const App = () => {
         );
       case "joinTeam":
         return userData.role === "player" ? (
-          <JoinTeamView userData={userData}/>
+          <JoinTeamView userData={userData} />
         ) : (
           <div>Invalid View</div>
         );
@@ -108,7 +117,6 @@ const App = () => {
           <div>Invalid View</div>
         );
       case "settings":
-        //return <div>Settings View (coming soon!)</div>;
         return <SettingsView userData={userData} />;
       default:
         return <div>Invalid View</div>;
@@ -156,6 +164,8 @@ const App = () => {
         </h1>
         <h2>{userData?.name}</h2>
       </header>
+
+      <Notification notification={notification} />
 
       <div className="app-content">
         <nav className={`nav ${sidebarOpen ? "open" : ""}`}>
@@ -224,6 +234,6 @@ const App = () => {
       </div>
     </div>
   );
-}
+};
 
 export default App;
