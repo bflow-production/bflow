@@ -17,7 +17,7 @@ const PlayerCard = ({
   const canvasRef = useRef(null);
   const [processedImage, setProcessedImage] = useState(null);  // State to hold the processed image URL
   
-///This is just an example how t use the imageservice. The player image should be only drawn once in to the card
+///This is just an example how to use the imageservice. The player image should be only drawn once in to the card
 ///and then stored this component should only get that card and draw the numbers and name to it.
   useEffect(() => {
     const loadProcessedImage = async () => {
@@ -99,9 +99,23 @@ const PlayerCard = ({
     }
   }, [processedImage, rating, name, position, pace, shooting, passing, dribbling, defending, physical]);
 
+  const downloadCard = () => {
+    const canvas = canvasRef.current;
+    const link = document.createElement("a");
+    link.href = canvas.toDataURL("image/png"); 
+    link.download = `${name}_Card.png`; 
+    link.click();
+  };
+
   return (
     <div className="card">
       <canvas ref={canvasRef} width={300} height={450}></canvas>
+      <a
+        onClick={downloadCard}
+        className="download-icon"
+      >
+        <i className="fa fa-download"></i> 
+      </a>
     </div>
   );
 };

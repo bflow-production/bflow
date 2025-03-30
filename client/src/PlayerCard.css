@@ -59,4 +59,18 @@
     font-weight: bold;
     margin-top: 16px; 
   }
+  .download-icon {
+    position: absolute;
+    bottom: 15px;
+    left: 65px;
+    cursor: pointer;
+    font-size: 17px;
+    color: #000000; 
+    transition: color 0.3s ease; 
+  }
+  
+  .download-icon:hover {
+    color: #00a6f2;  
+    transform: scale(1.1); 
+  }
   
