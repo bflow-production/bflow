@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",
+    "@tensorflow-models/body-pix": "^2.2.1",
+    "@tensorflow/tfjs": "^4.22.0",
     "axios": "^1.7.9",
     "bflow": "file:",
     "cra-template": "1.2.0",

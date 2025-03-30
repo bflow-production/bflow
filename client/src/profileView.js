@@ -125,7 +125,7 @@ const ProfileView = ({ userData }) => {
         rating={90}
         name="Cristiano Ronaldo"
         position="ST"
-        image="/pessi.png" 
+        image="/penaldo6.jpg" 
         pace={90}
         shooting={95}
         passing={85}
