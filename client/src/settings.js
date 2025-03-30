@@ -8,6 +8,13 @@ const SettingsView = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
+  const handleSave = async () => {
+    if(newPassword != confirmNewPassword) {
+      alert("Uusi salasana ja vahvistus eivät täsmää.");
+      return;
+    }
+  }
+
   return (
     <div className="settings-view">
       <h1 className="settings-title">Asetukset</h1>
@@ -68,6 +75,7 @@ const SettingsView = () => {
             className="password-input"
           />
         </div>
+        <button className="save-button" onClick={handleSave}>Tallenna</button>
       </div>
     </div>
   );
