@@ -75,14 +75,14 @@ const NumericalBarChart = ({ userData, exercise }) => {
             />
           <Tooltip formatter={(value) => [`km/h: ${value}`]}/>
           <defs>
-            <linearGradient id="barColor" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#4CAF50" stopOpacity={0.9} />
               <stop offset="100%" stopColor="#2E7D32" stopOpacity={0.8} /> 
             </linearGradient>
           </defs>      
           <Bar 
               dataKey="result" 
-              fill="url(#barColor)"
+              fill="url(#barGradient)"
               radius={[5, 5, 0, 0]}
               barSize={50}
               label={{ position: "top", formatter: (value) => `${value} km/h` }}
