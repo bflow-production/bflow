@@ -433,6 +433,13 @@ class Database:
             if exercise:
                 return exercise
             return None
+    
+    def get_categories(self):
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM CATEGORY")
+            categories = cursor.fetchall()
+            return [{"id": category[0], "name": category[1]} for category in categories]
         
     def get_category_name(self, category_id):
         with self._get_connection() as conn:

@@ -1,0 +1,79 @@
+.create-exercise-form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+    
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.create-exercise-form h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  padding: 10px;
+  margin-bottom: 15px;
+  
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.form-group input[type="text"],
+.form-group select {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.exercise-isNumeric {
+  margin-top: 10px;
+}
+
+.radio-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.radio-group label {
+  margin: 0;
+}
+
+#exercise-category{
+    background-color: #ffffff; /* Valitse haluamasi vaalea väri */
+  }
+
+.form-group div {
+  margin-top: 10px;
+  padding: 10px;
+}
+
+button[type="submit"] {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #4caf50;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #45a049;
+}

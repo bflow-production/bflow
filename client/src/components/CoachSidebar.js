@@ -2,7 +2,7 @@ const CoachSidebar = ({ setActiveView, sidebarOpen, handleLogout }) => {
   return (
     <nav className={`nav ${sidebarOpen ? "open" : ""}`}>
       <button onClick={() => setActiveView("coachProfile")}>Profiili</button>
-      <button onClick={() => console.log("Luo harjoitus kesken")}>
+      <button onClick={() => setActiveView("createExercise")}>
         Luo harjoitus
       </button>
       <button onClick={() => setActiveView("createTeam")}>Luo joukkue</button>
