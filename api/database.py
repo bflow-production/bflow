@@ -323,7 +323,7 @@ class Database:
             cursor.execute(query, (player_id,))
             exercises = cursor.fetchall()
             
-            category_data = {} #PITÄISI SAADA ID SIJASTA NIMI 
+            category_data = {}
             for exercise in exercises:
                 exercise_id = exercise[0]
 
@@ -359,7 +359,7 @@ class Database:
     
         return category_data
     
-    def get_categories_and_exercises_for_training_view(self, player_id):
+    def get_categories_and_exercises_for_training_view(self):
 
         with self._get_connection() as conn:
             cursor = conn.cursor()
@@ -485,9 +485,8 @@ class Database:
             """, (team_name, coach_id))
             conn.commit()
    
-    def update_exercise(self, data):
+    def update_exercise(self, player_id, data):
         exercise_name = data.get("exercise")
-        player_id = data.get("playerId")
         duration = data.get("duration")
         result = data.get("result")
         rating = data.get("rating")

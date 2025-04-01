@@ -14,6 +14,9 @@ import SettingsView from "./settings";
 import userService from "./services/user";
 import HomePage from "./homePage";
 import Notification from "./components/Notification";
+import PlayerSidebar from "./components/PlayerSidebar";
+import CoachSidebar from "./components/CoachSidebar";
+import CoachProfile from "./components/CoachProfile";
 
 const App = () => {
   const [userData, setUserData] = useState(null);
@@ -65,6 +68,12 @@ const App = () => {
   }, [userData?.userId]);
 
   useEffect(() => {
+    if (userData?.role === "coach") {
+      setActiveView("coachProfile");
+    }
+  }, [userData?.role]);
+
+  useEffect(() => {
     const clearLocalStorage = () => {
       localStorage.clear();
     };
@@ -87,6 +96,8 @@ const App = () => {
         return <HomePage userData={userData} />;
       case "profile":
         return <ProfileView userData={userData} />;
+      case "coachProfile":
+        return <CoachProfile userData={userData} />;
       case "stats":
         return <StatsView userData={userData} />;
       case "startTraining":
@@ -99,17 +110,9 @@ const App = () => {
       case "completedTrainings":
         return <CompletedTrainingsView userData={userData} />;
       case "coach":
-        return userData.role === "coach" ? (
-          <CoachView userData={userData} />
-        ) : (
-          <div>Invalid View</div>
-        );
+        return <CoachView userData={userData} />;
       case "joinTeam":
-        return userData.role === "player" ? (
-          <JoinTeamView userData={userData} />
-        ) : (
-          <div>Invalid View</div>
-        );
+        return <JoinTeamView userData={userData} />;
       case "linkChild":
         return userData.role === "parent" ? (
           <LinkChildView userData={userData} />
@@ -150,10 +153,6 @@ const App = () => {
     setActiveView("login");
   };
 
-  const handleSettings = () => {
-    setActiveView("settings");
-  };
-
   const togglesidebar = () => {
     setsidebarOpen(!sidebarOpen);
   };
@@ -173,7 +172,23 @@ const App = () => {
       <Notification notification={notification} />
 
       <div className="app-content">
-        <nav className={`nav ${sidebarOpen ? "open" : ""}`}>
+        {userData.role === "player" && (
+          <PlayerSidebar
+            setActiveView={setActiveView}
+            sidebarOpen={sidebarOpen}
+            handleLogout={handleLogout}
+          />
+        )}
+
+        {userData.role === "coach" && (
+          <CoachSidebar
+            setActiveView={setActiveView}
+            sidebarOpen={sidebarOpen}
+            handleLogout={handleLogout}
+          />
+        )}
+
+        {/* <nav className={`nav ${sidebarOpen ? "open" : ""}`}>
           <button
             onClick={() => setActiveView("home")}
             className={activeView === "home" ? "active" : ""}
@@ -228,13 +243,13 @@ const App = () => {
               Linkitä lapsi
             </button>
           )}
-          <button className="settings-button" onClick={handleSettings}>
+          <button className="settings-button" onClick={() => setActiveView("settings")}>
             Asetukset
           </button>
           <button className="logout-button" onClick={handleLogout}>
             Kirjaudu ulos
           </button>
-        </nav>
+        </nav> */}
         <main className="main">{renderView()}</main>
       </div>
     </div>

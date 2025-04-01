@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "./TrainingView.css";
 import trainingService from "./services/trainings";
+import user from "./services/user";
 
 const CompletedTrainingsView = ({ userData }) => {
   const [categories, setCategories] = useState([]);
@@ -16,7 +17,7 @@ const CompletedTrainingsView = ({ userData }) => {
   
   useEffect(() => {
     trainingService
-      .getTraining(userData.userId)
+      .getTraining(userData.userId, userData.role)
       .then((response) => {
         setCategories(response);
         console.log("response", response);

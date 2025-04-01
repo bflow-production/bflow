@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import trainingService from "./services/trainings";
 import "./TrainingView.css";
+import user from "./services/user";
 
 const TrainingView = ({ userData, showNotification }) => {
   const [trainingData, setTrainingData] = useState({});
@@ -9,7 +10,7 @@ const TrainingView = ({ userData, showNotification }) => {
 
   useEffect(() => {
     trainingService
-      .getDefaultExercises(userData.userId)
+      .getDefaultExercises()
       .then((response) => {
         setTrainingData(response);
         console.log(response);
@@ -35,6 +36,7 @@ const TrainingView = ({ userData, showNotification }) => {
     try {
       const response = await trainingService.updateTraining(
         userData.userId,
+        userData.role,
         updatedExercise
       );
       console.log("Exercise added/updated:", response.message);
