@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import trainingService from "./services/trainings";
 import "./TrainingView.css";
-import user from "./services/user";
 
 const TrainingView = ({ userData, showNotification }) => {
   const [trainingData, setTrainingData] = useState({});

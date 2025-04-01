@@ -115,6 +115,13 @@ def get_user_data(user_id):
     print(f"Fetched user data for {role}: {user_data}")
     return jsonify(user_data)
 
+@app.route('/api/categories', methods=['GET'])
+def get_categories():
+    categories = db.get_categories()
+    if not categories:
+        return jsonify({"error": "No categories found"}), 404
+    return jsonify(categories)
+
 @app.route('/api/default_exercises', methods=['GET'])
 def get_default_exercises():
     

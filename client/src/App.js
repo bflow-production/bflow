@@ -19,6 +19,7 @@ import CoachSidebar from "./components/CoachSidebar";
 import ParentSidebar from "./components/ParentSidebar";
 import CoachProfile from "./components/CoachProfile";
 import ParentProfile from "./components/ParentProfile";
+import CreateExerciseForm from "./components/CreateExerciseForm"; 
 
 const App = () => {
   const [userData, setUserData] = useState(null);
@@ -133,6 +134,13 @@ const App = () => {
       case "createTeam":
         return (
           <CreateTeam userData={userData} showNotification={showNotification} />
+        );
+      case "createExercise":
+        return (
+          <CreateExerciseForm
+            userData={userData}
+            showNotification={showNotification}
+          />
         );
       case "joinTeam":
         return (
