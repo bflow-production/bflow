@@ -9,7 +9,7 @@ const SettingsView = () => {
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
   const handleSave = async () => {
-    if(newPassword != confirmNewPassword) {
+    if(newPassword !== confirmNewPassword) {
       alert("Uusi salasana ja vahvistus eivät täsmää.");
       return;
     }
