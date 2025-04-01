@@ -5,7 +5,7 @@ const CoachSidebar = ({ setActiveView, sidebarOpen, handleLogout }) => {
       <button onClick={() => console.log("Luo harjoitus kesken")}>
         Luo harjoitus
       </button>
-      <button onClick={() => setActiveView("coach")}>Luo joukkue</button>
+      <button onClick={() => setActiveView("createTeam")}>Luo joukkue</button>
       <button
         className="settings-button"
         onClick={() => setActiveView("settings")}

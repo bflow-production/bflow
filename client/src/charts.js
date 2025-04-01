@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Rectangle, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Rectangle, ResponsiveContainer } from "recharts";
 import trainingService from "./services/trainings";
 
 const SimpleBarChart = ({ userData }) => {
@@ -7,7 +7,7 @@ const SimpleBarChart = ({ userData }) => {
 
   useEffect(() => {
     trainingService
-      .getTraining(userData.userId)
+      .getTraining(userData.userId, userData.role)
       .then((response) => {
         setTrainingData(response);
       })

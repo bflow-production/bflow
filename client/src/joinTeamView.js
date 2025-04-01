@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import teamService from "./services/teams";
 import "./joinTeamView.css";
 
-const JoinTeamView = ({ userData }) => {
+const JoinTeamView = ({ userData, showNotification }) => {
   const { userId, role } = userData;
   const [teamName, setTeamName] = useState("");
 
@@ -14,14 +14,17 @@ const JoinTeamView = ({ userData }) => {
     try {
       const teamData = { teamName, playerId: userId, role }; // Include team name and player ID in the data
       await teamService.joinTeam(teamData);
-      alert("Joined team successfully");
+      showNotification("Joined team successfully");
     } catch (error) {
       if (error.response) {
-        alert(`Error joining team: ${JSON.stringify(error.response.data)}`);
+        showNotification("Error joining team", true);
+        console.error("Error joining team:", error.response.data);
       } else if (error.request) {
-        alert("Error joining team: No response from server");
+        showNotification("Error joining team: No response from server", true);
+        console.error("Error joining team: No response from server");
       } else {
-        alert(`Error joining team: ${error.message}`);
+        showNotification("Error joining team", true);
+        console.error("Error joining team:", error.message);
       }
     }
   };
