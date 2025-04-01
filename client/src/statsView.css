@@ -69,7 +69,7 @@
   color: white;
   border: none;
   border-radius: 12px;
-  background-color: rgb(10, 85, 10);
+  background-color: rgb(44, 173, 44);
   padding: 7px 40px;
   cursor: pointer;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -84,9 +84,9 @@
 }
 
 .section-button:hover {
-  background-color: darkgreen;
+  background-color: rgb(49, 180, 49);
 }
 
 .sub-section-button:hover {
-  background-color: darkgreen;
+  background-color: rgb(52, 138, 52);
 }
