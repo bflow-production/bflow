@@ -28,7 +28,7 @@ const HomePage = ({ userData }) => {
         });
 
       trainingService
-        .getLatestExercises(userData.userId)
+        .getLatestExercises(userData.userId, userData.role)
         .then((response) => {
           console.log("Latest exercises fetched:", response);
           setLatestExercises(response);

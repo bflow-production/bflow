@@ -2,8 +2,8 @@ import axios from "axios";
 
 const baseUrl = "/api";
 
-const getTraining = async (id) => {
-  const response = await axios.get(`${baseUrl}/training/${id}`, {
+const getTraining = async (id, role) => {
+  const response = await axios.get(`${baseUrl}/training/${id}?role=${role}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     },
@@ -11,8 +11,8 @@ const getTraining = async (id) => {
   return response.data;
 };
 
-const updateTraining = async (id, updatedExercise) => {
-  const response = await axios.put(`${baseUrl}/training/${id}`, updatedExercise, {
+const updateTraining = async (id, role, updatedExercise) => {
+  const response = await axios.put(`${baseUrl}/training/${id}?role=${role}`, updatedExercise, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
@@ -21,13 +21,13 @@ const updateTraining = async (id, updatedExercise) => {
   return response.data
 };
 
-const getDefaultExercises = async (id) => {
-    const response = await axios.get(`${baseUrl}/default_exercises/${id}`);
+const getDefaultExercises = async () => {
+    const response = await axios.get(`${baseUrl}/default_exercises`);
     return response.data;
   }
 
-const getLatestExercises = async (id) => {
-  const response = await axios.get(`${baseUrl}/latestexercises/${id}`);
+const getLatestExercises = async (id, role) => {
+  const response = await axios.get(`${baseUrl}/latestexercises/${id}?role=${role}`);
   return response.data;
 }
 

@@ -115,10 +115,10 @@ def get_user_data(user_id):
     print(f"Fetched user data for {role}: {user_data}")
     return jsonify(user_data)
 
-@app.route('/api/default_exercises/<int:user_id>', methods=['GET'])
-def get_default_exercises(user_id):
+@app.route('/api/default_exercises', methods=['GET'])
+def get_default_exercises():
     
-    training_data = db.get_categories_and_exercises_for_training_view(user_id)
+    training_data = db.get_categories_and_exercises_for_training_view()
 
     if not training_data:
         return jsonify({"error": "No training data found for this user"}), 404
@@ -127,7 +127,11 @@ def get_default_exercises(user_id):
 
 @app.route('/api/latestexercises/<int:user_id>', methods=['GET'])
 def get_latest_exercises(user_id):
-
+    role = request.args.get('role')
+    print(f"Role: {role}")
+    if role != 'player':
+        return jsonify({"error": "Role should be player"}), 400
+    
     latest_exercises = db.get_two_latest_exercises(user_id)
         
     if not latest_exercises:
@@ -137,7 +141,11 @@ def get_latest_exercises(user_id):
 
 @app.route('/api/training/<int:user_id>', methods=['GET'])
 def get_user_training_data(user_id):
-   
+    role = request.args.get('role')
+    print(f"Role: {role}")
+    if role != 'player':
+        return jsonify({"error": "Role should be player"}), 400
+    
     training_data = db.get_categories_and_exercises_with_ratings(user_id)
 
     if not training_data:
@@ -147,15 +155,19 @@ def get_user_training_data(user_id):
 
 @app.route('/api/training/<int:user_id>', methods=['PUT'])
 def update_training_data(user_id):
+    role = request.args.get('role')
+    print(f"Role: {role}")
+    if role != 'player':
+        return jsonify({"error": "Role should be player"}), 400
+    
     data = request.json
     try:
-        db.update_exercise(data)
+        db.update_exercise(user_id, data)
         return jsonify({"message": "Training data updated successfully"})
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
 
-#Todo This needs to store password as a hash
 @app.route('/api/register', methods=['POST'])
 def add_user():
     data = request.json
