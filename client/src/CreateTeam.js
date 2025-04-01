@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import teamService from './services/teams';
-import "./coachView.css";
+import "./CreateTeam.css";
 
-const CoachView = ({ userData }) => {
+const CreateTeam = ({ userData, showNotification }) => {
   const { userId, role } = userData;
   const [teamName, setTeamName] = useState("");
 
@@ -14,15 +14,17 @@ const CoachView = ({ userData }) => {
     try {
       const teamData = { teamName, coachId: userId, role }; // Include team name and coach ID in the data
       await teamService.createTeam(teamData);
-
-      alert("Team created successfully");
+      showNotification("Team created successfully");
     } catch (error) {
       if (error.response) {
-        alert(`Error creating team: ${JSON.stringify(error.response.data)}`);
+        showNotification(`Error creating team: ${error.response.data.error || ""}`, true);
+        console.error("Error creating team:", error.response.data);
       } else if (error.request) {
-        alert("Error creating team: No response from server");
+        showNotification("Error creating team: No response from server", true);
+        console.error("Error creating team: No response from server");
       } else {
-        alert(`Error creating team: ${error.message}`);
+        showNotification("Error creating team", true);
+        console.error("Error creating team:", error.message);
       }
     }
   };
@@ -52,4 +54,4 @@ const CoachView = ({ userData }) => {
   );
 };
 
-export default CoachView;
+export default CreateTeam;

@@ -18,6 +18,7 @@ const HomePage = ({ userData }) => {
 
   useEffect(() => {
     if (userData?.userId) {
+
       userService
         .getUserByRole(userData.userId, userData.role)
         .then((response) => {
@@ -38,8 +39,6 @@ const HomePage = ({ userData }) => {
         });
     }
   }, [userData]);
-
-  console.log(latestExercises.length);
 
   return (
     <div className="home-page">

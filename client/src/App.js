@@ -7,7 +7,7 @@ import ProfileView from "./profileView";
 import StatsView from "./statsView";
 import TrainingView from "./TrainingView";
 import CompletedTrainingsView from "./CompletedTrainingsView";
-import CoachView from "./coachView";
+import CreateTeam from "./CreateTeam";
 import JoinTeamView from "./joinTeamView";
 import LinkChildView from "./linkChildView";
 import SettingsView from "./settings";
@@ -16,7 +16,9 @@ import HomePage from "./homePage";
 import Notification from "./components/Notification";
 import PlayerSidebar from "./components/PlayerSidebar";
 import CoachSidebar from "./components/CoachSidebar";
+import ParentSidebar from "./components/ParentSidebar";
 import CoachProfile from "./components/CoachProfile";
+import ParentProfile from "./components/ParentProfile";
 
 const App = () => {
   const [userData, setUserData] = useState(null);
@@ -70,6 +72,8 @@ const App = () => {
   useEffect(() => {
     if (userData?.role === "coach") {
       setActiveView("coachProfile");
+    } else if (userData?.role === "parent") {
+      setActiveView("parentProfile");
     }
   }, [userData?.role]);
 
@@ -95,9 +99,26 @@ const App = () => {
       case "home":
         return <HomePage userData={userData} />;
       case "profile":
-        return <ProfileView userData={userData} />;
+        return (
+          <ProfileView
+            userData={userData}
+            showNotification={showNotification}
+          />
+        );
       case "coachProfile":
-        return <CoachProfile userData={userData} />;
+        return (
+          <CoachProfile
+            userData={userData}
+            showNotification={showNotification}
+          />
+        );
+      case "parentProfile":
+        return (
+          <ParentProfile
+            userData={userData}
+            showNotification={showNotification}
+          />
+        );
       case "stats":
         return <StatsView userData={userData} />;
       case "startTraining":
@@ -109,15 +130,23 @@ const App = () => {
         );
       case "completedTrainings":
         return <CompletedTrainingsView userData={userData} />;
-      case "coach":
-        return <CoachView userData={userData} />;
+      case "createTeam":
+        return (
+          <CreateTeam userData={userData} showNotification={showNotification} />
+        );
       case "joinTeam":
-        return <JoinTeamView userData={userData} />;
+        return (
+          <JoinTeamView
+            userData={userData}
+            showNotification={showNotification}
+          />
+        );
       case "linkChild":
-        return userData.role === "parent" ? (
-          <LinkChildView userData={userData} />
-        ) : (
-          <div>Invalid View</div>
+        return (
+          <LinkChildView
+            userData={userData}
+            showNotification={showNotification}
+          />
         );
       case "settings":
         return <SettingsView userData={userData} />;
@@ -188,68 +217,13 @@ const App = () => {
           />
         )}
 
-        {/* <nav className={`nav ${sidebarOpen ? "open" : ""}`}>
-          <button
-            onClick={() => setActiveView("home")}
-            className={activeView === "home" ? "active" : ""}
-          >
-            Koti
-          </button>
-          <button
-            onClick={() => setActiveView("profile")}
-            className={activeView === "profile" ? "active" : ""}
-          >
-            Profiili
-          </button>
-          <button
-            onClick={() => setActiveView("stats")}
-            className={activeView === "stats" ? "active" : ""}
-          >
-            Tilastot
-          </button>
-          <button
-            onClick={() => setActiveView("startTraining")}
-            className={activeView === "startTraining" ? "active" : ""}
-          >
-            Tee harjoitus
-          </button>
-          <button
-            onClick={() => setActiveView("completedTrainings")}
-            className={activeView === "completedTrainings" ? "active" : ""}
-          >
-            Tehdyt harjoitukset
-          </button>
-          {userData.role === "coach" && (
-            <button
-              onClick={() => setActiveView("coach")}
-              className={activeView === "coach" ? "active" : ""}
-            >
-              Valmentaja
-            </button>
-          )}
-          {userData.role === "player" && (
-            <button
-              onClick={() => setActiveView("joinTeam")}
-              className={activeView === "joinTeam" ? "active" : ""}
-            >
-              Liity joukkueeseen
-            </button>
-          )}
-          {userData.role === "parent" && (
-            <button
-              onClick={() => setActiveView("linkChild")}
-              className={activeView === "linkChild" ? "active" : ""}
-            >
-              Linkitä lapsi
-            </button>
-          )}
-          <button className="settings-button" onClick={() => setActiveView("settings")}>
-            Asetukset
-          </button>
-          <button className="logout-button" onClick={handleLogout}>
-            Kirjaudu ulos
-          </button>
-        </nav> */}
+        {userData.role === "parent" && (
+          <ParentSidebar
+            setActiveView={setActiveView}
+            sidebarOpen={sidebarOpen}
+            handleLogout={handleLogout}
+          />
+        )}
         <main className="main">{renderView()}</main>
       </div>
     </div>

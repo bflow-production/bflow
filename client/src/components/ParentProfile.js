@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import userService from "../services/user";
-import teamService from "../services/teams";
 import "../profileView.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
-const CoachProfile = ({ userData, showNotification }) => {
+//Tulisiko valmentajalla ja huoltajalla olla toistensa tiedot, jos lapsi on linkitetty?
+
+const ParentProfile = ({ userData, showNotification }) => {
   const { userId, role } = userData;
   const [editMode, setEditMode] = useState(false);
-
   const [profile, setProfile] = useState({
     username: "",
     password: "",
@@ -16,7 +16,8 @@ const CoachProfile = ({ userData, showNotification }) => {
     picture: "",
     birthYear: "",
     country: "",
-    team: "",
+    childName: "",
+    childEmail: "",
     role: role,
   });
 
@@ -25,16 +26,17 @@ const CoachProfile = ({ userData, showNotification }) => {
       try {
         const response = await userService.getUserByRole(userId, role);
         setProfile(response);
+
         console.log("Profile data:", response);
         console.log("Userdata:", userData);
 
-        const teamResponse = await teamService.getTeam(userId);
-        console.log("Coach team data:", teamResponse);
+        if (response.child_name) {
+          console.log("Parent profile data:", response);
 
-        if (teamResponse.teamName) {
           setProfile((prevProfile) => ({
             ...prevProfile,
-            team: teamResponse.teamName,
+            childName: response.child_name,
+            childEmail: response.child_email,
           }));
         }
       } catch (error) {
@@ -73,50 +75,57 @@ const CoachProfile = ({ userData, showNotification }) => {
       <div className="top-section">
         <div className="player-info">
           <h2>{profile.name}</h2>
-          {["username", "email", "birthYear", "country", "team"].map(
-            (field) => {
-              const getFieldLabel = (field) => {
-                switch (field) {
-                  case "username":
-                    return "Käyttäjätunnus";
-                  case "email":
-                    return "Sähköposti";
-                  case "birthYear":
-                    return "Syntymävuosi";
-                  case "country":
-                    return "Maa";
-                  case "team":
-                    return "Joukkue";
-                  default:
-                    return "Tuntematon kenttä";
-                }
-              };
-              return (
-                <p key={field}>
-                  <strong>{getFieldLabel(field)}</strong>
-                  {editMode ? (
-                    <input
-                      type="text"
-                      name={field}
-                      value={profile[field]}
-                      onChange={handleChange}
-                      className="profile-input"
-                    />
-                  ) : (
-                    <span
-                      className="editable-field"
-                      onClick={() => setEditMode(true)}
-                    >
-                      {profile[field]}{" "}
-                      <span className="edit-icon">
-                        <i className="fas fa-pen"></i>
-                      </span>
+          {[
+            "username",
+            "email",
+            "birthYear",
+            "country",
+            "childName",
+            "childEmail",
+          ].map((field) => {
+            const getFieldLabel = (field) => {
+              switch (field) {
+                case "username":
+                  return "Käyttäjätunnus";
+                case "email":
+                  return "Sähköposti";
+                case "birthYear":
+                  return "Syntymävuosi";
+                case "country":
+                  return "Maa";
+                case "childName":
+                  return "Lapsen nimi";
+                case "childEmail":
+                  return "Lapsen sähköposti";
+                default:
+                  return "Tuntematon kenttä";
+              }
+            };
+            return (
+              <p key={field}>
+                <strong>{getFieldLabel(field)}</strong>
+                {editMode ? (
+                  <input
+                    type="text"
+                    name={field}
+                    value={profile[field]}
+                    onChange={handleChange}
+                    className="profile-input"
+                  />
+                ) : (
+                  <span
+                    className="editable-field"
+                    onClick={() => setEditMode(true)}
+                  >
+                    {profile[field]}{" "}
+                    <span className="edit-icon">
+                      <i className="fas fa-pen"></i>
                     </span>
-                  )}
-                </p>
-              );
-            }
-          )}
+                  </span>
+                )}
+              </p>
+            );
+          })}
         </div>
       </div>
 
@@ -138,4 +147,4 @@ const CoachProfile = ({ userData, showNotification }) => {
   );
 };
 
-export default CoachProfile;
+export default ParentProfile;

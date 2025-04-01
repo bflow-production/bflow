@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import linkChildService from "./services/linkChild";
 import "./linkChildView.css";
 
-const LinkChildView = ({ userData }) => {
+const LinkChildView = ({ userData, showNotification}) => {
   const { userId, role } = userData;
   const [childUsername, setChildUsername] = useState("");
 
@@ -14,14 +14,17 @@ const LinkChildView = ({ userData }) => {
     try {
       const linkData = { childUsername, parentId: userId, role }; // Include child username and parent ID in the data
       await linkChildService.createLink(linkData);
-      alert("Child linked successfully");
+      showNotification("Child linked successfully");
     } catch (error) {
       if (error.response) {
-        alert(`Error linking child: ${JSON.stringify(error.response.data)}`);
+        showNotification("Error linking child", true);
+        console.error("Error linking child:", error.response.data);
       } else if (error.request) {
-        alert("Error linking child: No response from server");
+        showNotification("Error linking child: No response from server", true);
+        console.error("Error linking child: No response from server");
       } else {
-        alert(`Error linking child: ${error.message}`);
+        showNotification("Error linking child", true);
+        console.error("Error linking child:", error.message);
       }
     }
   };
