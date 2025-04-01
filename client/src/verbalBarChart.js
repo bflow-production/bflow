@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer} from "recharts";
 import "./verbalBarChart.css";
 import trainingService from "./services/trainings";
 
@@ -83,10 +83,18 @@ const VerbalBarChart = ({ userData, exercise }) => {
             tickFormatter={(index) => ratingToVerbal[index]}
           />
           <Tooltip formatter={(value) => [ratingToVerbal[value], "Taitotaso"]} />
+          <defs>
+            <linearGradient id="barColor" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#8f46e5" stopOpacity={0.9} />
+              <stop offset="100%" stopColor="#6366f1" stopOpacity={0.8} />
+            </linearGradient>
+          </defs>
           <Bar
             dataKey="skillLevel"
-            fill="gray"
-            label={{ position: 'top', formatter: (value) => ratingToVerbal[value] }}
+            fill="url(#barColor)"
+            radius={[5, 5, 0, 0]}
+            barSize={50}
+            label={{ position: "top", formatter: (value) => ratingToVerbal[value] }}
           />
         </BarChart>
       </ResponsiveContainer>

@@ -79,14 +79,19 @@ const TotalBarChart = ({ userData }) => {
           <XAxis dataKey="day" label={{ value: "Päivät", position: "insideBottom", offset: -20 }} />
           <YAxis label={{ value: "Tunnit", angle: -90, position: "insideLeft" }} />
           <Tooltip formatter={(value, name, props) => [props.payload.formattedTime, "Treenattu aika"]} />
+          <defs>
+            <linearGradient id="barColor" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#8f46e5" stopOpacity={0.9} />
+              <stop offset="100%" stopColor="#6366f1" stopOpacity={0.8} />
+            </linearGradient>
+          </defs>         
           <Bar 
             dataKey="hours" 
-            fill="grey" 
+            fill="url(#barColor)"
+            radius={[5, 5, 0, 0]}
+            barSize={50}
             label={{ position: 'top', formatter: (value) => `${Math.floor(value)}h ${Math.round((value % 1) * 60)}m` }}
-            activeBar={({ x, y, width, height }) => (
-              <Rectangle fill="green" stroke="black" x={x} y={y} width={width} height={height} />
-            )}
-          />
+          />  
         </BarChart>
       </ResponsiveContainer>
     </div>

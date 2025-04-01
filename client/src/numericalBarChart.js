@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Rectangle, ResponsiveContainer } from "recharts";
 import trainingService from "./services/trainings";
+import "./numericalBarChart.css";
 
 const NumericalBarChart = ({ userData, exercise }) => {
   const [trainingData, setTrainingData] = useState([]);
@@ -53,7 +54,7 @@ const NumericalBarChart = ({ userData, exercise }) => {
   const data = processData(trainingData);
 
   return (
-      <div className="chart-container">
+      <div className="chart-display">
         <ResponsiveContainer width="100%" height={400}>
           <BarChart
             data={data}
@@ -72,13 +73,19 @@ const NumericalBarChart = ({ userData, exercise }) => {
                 label={{ value: "Nopeus km/h", angle: -90, position: "insideLeft", offset: -10, dy: 75}} 
                 domain={[0, 140]}
             />
-          <Tooltip 
-            formatter={(value) => [`km/h: ${value}`]}
-          />
+          <Tooltip formatter={(value) => [`km/h: ${value}`]}/>
+          <defs>
+            <linearGradient id="barColor" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#4CAF50" stopOpacity={0.9} />
+              <stop offset="100%" stopColor="#2E7D32" stopOpacity={0.8} /> 
+            </linearGradient>
+          </defs>      
           <Bar 
               dataKey="result" 
-              fill="gray" 
-              activeBar={<Rectangle fill="green" stroke="black" />} 
+              fill="url(#barColor)"
+              radius={[5, 5, 0, 0]}
+              barSize={50}
+              label={{ position: "top", formatter: (value) => `${value} km/h` }}
             />
           </BarChart>
         </ResponsiveContainer>
