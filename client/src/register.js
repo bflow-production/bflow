@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import authService from "./services/authService";
 import "./register.css";
 
-function Register({ setAuthView }) {
+function Register({ setAuthView, showNotification }) {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -12,8 +12,6 @@ function Register({ setAuthView }) {
     country: "",
     role: "", // Default role
   });
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false); // State to handle success message
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,6 +24,12 @@ function Register({ setAuthView }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.role) {
+      showNotification("Valitse rooli ennen jatkamista.", true);
+      return;
+    }
+
     try {
       await authService.register({
         username: formData.username,
@@ -36,59 +40,24 @@ function Register({ setAuthView }) {
         country: formData.country,
         role: formData.role,
       });
-      setSuccess(true); // Show success message
+      showNotification("Rekisteröinti onnistui!", false);
       setTimeout(() => {
         setAuthView("login"); // Navigate to login page after 3 seconds
-      }, 3000);
+      }, 1000);
     } catch (err) {
-      setError(
-        `Registration failed. Please try again. ${
-          err.response?.data?.message || err.message
-        }`
-      );
+      showNotification("Rekisteröinti epäonnistui. Yritä uudelleen.", true);
     }
   };
 
   return (
     <>
       <header className="header">
-        <h1 className="headerTitle">Welcome to B'FLOW</h1>
+        <h1 className="headerTitle">Tervetuloa B'FLOW:hun</h1>
       </header>
       <div className="register">
-        <h1>Register</h1>
-
-        {error && <p className="error">{error}</p>}
-        {success && (
-          <p className="success">
-            Registration successful! Redirecting to login...
-          </p>
-        )}
+        <h1>Rekisteröidy</h1>
         <form onSubmit={handleSubmit}>
-          <label>Role:</label>
-          <div className="role-buttons">
-            <button
-              type="button"
-              className={formData.role === "player" ? "active" : ""}
-              onClick={() => handleRoleChange("player")}
-            >
-              Player
-            </button>
-            <button
-              type="button"
-              className={formData.role === "parent" ? "active" : ""}
-              onClick={() => handleRoleChange("parent")}
-            >
-              Parent
-            </button>
-            <button
-              type="button"
-              className={formData.role === "coach" ? "active" : ""}
-              onClick={() => handleRoleChange("coach")}
-            >
-              Coach
-            </button>
-          </div>
-          <label>Username:</label>
+          <label>Käyttäjänimi:</label>
           <input
             type="text"
             name="username"
@@ -96,7 +65,7 @@ function Register({ setAuthView }) {
             onChange={handleChange}
             required
           />
-          <label>Email:</label>
+          <label>Sähköposti:</label>
           <input
             type="email"
             name="email"
@@ -104,7 +73,7 @@ function Register({ setAuthView }) {
             onChange={handleChange}
             required
           />
-          <label>Password:</label>
+          <label>Salasana:</label>
           <input
             type="password"
             name="password"
@@ -112,7 +81,7 @@ function Register({ setAuthView }) {
             onChange={handleChange}
             required
           />
-          <label>Name:</label>
+          <label>Nimi:</label>
           <input
             type="text"
             name="name"
@@ -120,7 +89,7 @@ function Register({ setAuthView }) {
             onChange={handleChange}
             required
           />
-          <label>Birth Year:</label>
+          <label>Syntymävuosi:</label>
           <input
             type="number"
             name="birthYear"
@@ -128,7 +97,7 @@ function Register({ setAuthView }) {
             onChange={handleChange}
             required
           />
-          <label>Country:</label>
+          <label>Maa:</label>
           <input
             type="text"
             name="country"
@@ -136,12 +105,35 @@ function Register({ setAuthView }) {
             onChange={handleChange}
             required
           />
-          <button type="submit">Register</button>
+          <label>Valitse rooli:</label>
+          <div className="role-buttons">
+            <button
+              type="button"
+              className={formData.role === "player" ? "active" : ""}
+              onClick={() => handleRoleChange("player")}
+            >
+              Pelaaja
+            </button>
+            <button
+              type="button"
+              className={formData.role === "parent" ? "active" : ""}
+              onClick={() => handleRoleChange("parent")}
+            >
+              Vanhempi
+            </button>
+            <button
+              type="button"
+              className={formData.role === "coach" ? "active" : ""}
+              onClick={() => handleRoleChange("coach")}
+            >
+              Valmentaja
+            </button>
+          </div>
+          <button type="submit">Rekisteröidy</button>
         </form>
-
         <p className="notRegistered">
-          Already have an account?{" "}
-          <button onClick={() => setAuthView("login")}>Login</button>
+          Onko sinulla jo tili?{" "}
+          <button onClick={() => setAuthView("login")}>Kirjaudu sisään</button>
         </p>
       </div>
     </>

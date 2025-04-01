@@ -39,7 +39,7 @@ const CompletedTrainingsView = ({ userData }) => {
 
   return (
     <div className="training-view">
-      <h2 className="header-execise">Training Overview</h2>
+      <h2 className="header-execise">Harjoitukset</h2>
       {Object.keys(categories).map((category) => (
         <div key={category} className="category-card">
           <button
@@ -51,7 +51,7 @@ const CompletedTrainingsView = ({ userData }) => {
           {expandedCategories[category] && (
             <div className="exercise-grid">
               {categories[category].map((exercise, index) => (
-                <div key={index} className="exercise-card">
+                <div key={index} className= "exercise-form">
                   <strong className="exercise-title">
                     {exercise.exercise} |{" "}
                     {new Date(exercise.timestamp).toLocaleString("fi-FI", {
@@ -72,11 +72,11 @@ const CompletedTrainingsView = ({ userData }) => {
                         Kesto: {Math.floor(exercise.duration / 60)} h{" "}
                         {exercise.duration % 60} min
                       </p>
-                      <p>{`Lisätiedot: ${exercise.result || "-"}`}</p>
                       <p>{`Oma arvio: ${ratingToVerbal[exercise.rating] || "0"}`}</p>
                       {exercise.result !== null && (
                         <p>{`Tulos: ${exercise.result || "0"}`}</p>
                       )}
+                      <p>{`Lisätiedot: ${exercise.result || "-"}`}</p>
                     </div>
                   </div>
                 </div>

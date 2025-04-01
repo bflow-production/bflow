@@ -12,7 +12,7 @@ const getTeam = async (id) => {
 }
 
 const createTeam = async (teamData) => {
-  const response = await axios.post(`${baseUrl}/team/`, teamData, {
+  const response = await axios.post(`${baseUrl}/team`, teamData, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     },

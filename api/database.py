@@ -254,6 +254,7 @@ class Database:
             
             cursor.execute(query, (id,))
             return cursor.fetchone()
+        
     def get_user_by_email(self, email):
         """
         Retrieve a user by their email and determine their role.
@@ -392,7 +393,38 @@ class Database:
 
         return category_data
 
-    
+    def get_two_latest_exercises(self, player_id):
+
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            
+            query = """
+                SELECT pe.exercise_id, e.name, pe.rating, pe.duration
+                FROM PLAYER_EXERCISE pe
+                JOIN EXERCISE e ON pe.exercise_id = e.id
+                WHERE pe.player_id = ?
+                ORDER BY pe.id DESC
+                LIMIT 2;
+            """
+            cursor.execute(query, (player_id,))
+            exercises = cursor.fetchall()
+            
+            exercises_list = {}
+            i = 0
+            for exercise in exercises:
+                exercise_name = exercise[1]
+                duration = exercise[3]
+                rating = exercise[2]
+
+                exercises_list[i] = {
+                    "duration": duration,
+                    "exercise": exercise_name,
+                    "rating": rating
+                }
+                i += 1
+        print(exercises_list)
+        return exercises_list
+
     def get_exercise_name_category_id(self, exercise_id):
         with self._get_connection() as conn:
             cursor = conn.cursor()

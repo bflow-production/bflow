@@ -28,7 +28,7 @@ const LinkChildView = ({ userData }) => {
 
   return (
     <div className="link-child-view">
-      <h2 className="header-link-child">Link Child</h2>
+      <h2 className="header-link-child">Linkintä lapsi</h2>
       <div className="right-container">
         <div className="hbox">
           <div className="vbox">

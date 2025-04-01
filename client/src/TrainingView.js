@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import trainingService from "./services/trainings";
 import "./TrainingView.css";
 
-const TrainingView = ({ userData }) => {
+const TrainingView = ({ userData, showNotification }) => {
   const [trainingData, setTrainingData] = useState({});
   const [resultOrRating, setResultOrRating] = useState({});
   const [expandedCategories, setExpandedCategories] = useState({});
@@ -38,11 +38,13 @@ const TrainingView = ({ userData }) => {
         updatedExercise
       );
       console.log("Exercise added/updated:", response.message);
+      showNotification("Harjoitus merkitty tehdyksi", false);
     } catch (error) {
       console.error(
         "Error during save operation:",
         error.response ? error.response.data : error.message
       );
+      showNotification("Virhe tallennettaessa", true);
     }
 
     setResultOrRating((prevState) => ({
@@ -76,7 +78,7 @@ const TrainingView = ({ userData }) => {
 
   return (
     <div className="training-view">
-      <h2 className="header-execise">Training Overview</h2>
+      <h2 className="header-execise" >Harjoitukset</h2>
       {Object.keys(trainingData).map((category) => (
         <div key={category} className="category-card">
           <button

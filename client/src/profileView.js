@@ -3,8 +3,7 @@ import userService from "./services/user";
 import teamService from "./services/teams";
 import "./profileView.css";
 import '@fortawesome/fontawesome-free/css/all.min.css';
-
-
+import PlayerCard from "./components/PlayerCard";
 
 const ProfileView = ({ userData }) => {
   const { userId, role } = userData;
@@ -37,6 +36,7 @@ const ProfileView = ({ userData }) => {
         const response = await userService.getUserByRole(userId, role);
         setProfile(response);
         console.log("Profile data:", response);
+        console.log("Userdata:" , userData);
 
         if (role === 'coach') {
           const teamResponse = await teamService.getTeam(userId);
@@ -121,12 +121,19 @@ const ProfileView = ({ userData }) => {
       {/* Image wrapper div */}
       <div className="imageVbox">
         <div className="player-image">
-          {profile.picture ? (
-            <img src={profile.picture} alt="Profiilikuva" />
-          ) : (
-            <div className="placeholder">Ei kuvaa</div>
-          )}
-        </div>
+        <PlayerCard
+        rating={90}
+        name="Cristiano Ronaldo"
+        position="ST"
+        image="/penaldo6.jpg" 
+        pace={90}
+        shooting={95}
+        passing={85}
+        dribbling={88}
+        defending={40}
+        physical={80}
+      />
+    </div>
       </div>
         <div className="player-info">
           <h2>{profile.name}</h2>
@@ -154,10 +161,10 @@ const ProfileView = ({ userData }) => {
       {/* Bottom Section: Coach & Parent Info */}
       <div className="bottom-section">
         <div className="coach-info">
-          <h3>Valmentajan Tiedot</h3>
+          <h3>Valmentajan tiedot</h3>
           {['coach', 'coachEmail'].map((field) => (
             <p key={field}>
-              <strong>{field === 'coach' ? 'Valmentaja' : 'Valmentajan Sähköposti'}:</strong>
+              <strong>{field === 'coach' ? 'Valmentaja' : 'Sähköposti'}:</strong>
               {editMode ? (
                 <input
                   type="text"
@@ -181,11 +188,11 @@ const ProfileView = ({ userData }) => {
             {/* Front Side */}
             
             <div className="card-front">
-            <span className="edit-icon" onClick={handleCardClick}><i className="fas fa-sync-alt"></i></span>
-              <h3>Huoltajan Tiedot</h3>
+            <span className="flip-icon" onClick={handleCardClick}><i className="fas fa-sync-alt"></i></span>
+              <h3>Huoltajan tiedot</h3>
               {["parent", "parentEmail"].map((field) => (
                 <p key={field}>
-                  <strong>{field === 'parent' ? 'Huoltaja' : 'Huoltajan Sähköposti'}:</strong>
+                  <strong>{field === 'parent' ? 'Huoltaja' : 'Sähköposti'}:</strong>
                   {editMode ? (
                     <input
                       type="text"
@@ -205,11 +212,11 @@ const ProfileView = ({ userData }) => {
 
             {/* Back Side */}
             <div className="card-back">
-            <span className="edit-icon" onClick={handleCardClick}><i className="fas fa-sync-alt"></i></span>
+            <span className="flip-icon" onClick={handleCardClick}><i className="fas fa-sync-alt"></i></span>
               <h3>Huoltajan Tiedot</h3>
               {["parent", "parentEmail"].map((field) => (
                 <p key={field}>
-                  <strong>{field === 'parent' ? 'Huoltaja' : 'Huoltajan Sähköposti'}:</strong>
+                  <strong>{field === 'parent' ? 'Huoltaja' : 'Sähköposti'}:</strong>
                   {editMode ? (
                     <input
                       type="text"

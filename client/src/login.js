@@ -3,10 +3,9 @@ import './login.css';
 import authService from "./services/authService";
 
 
-const Login = ({setAuthView, setUserData, setActiveView}) => {
+const Login = ({setAuthView, setUserData, setActiveView, showNotification}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -18,53 +17,50 @@ const Login = ({setAuthView, setUserData, setActiveView}) => {
       if (response.message === "Login successful") {
         const { token, user_id, user_name, role } = response; 
         localStorage.setItem("jwtToken", token); 
-        setActiveView("profile");
 
         setUserData({
           userId: user_id, 
           username: user_name, 
           role: role,
         });
+
+        setActiveView("home");
       }
 
     } catch (error) {
       console.error("Login error:", error);
-      setError("Invalid credentials");
+      showNotification("Virhe kirjautumisessa", true);
     }
   };
-  
-  
-  
 
 
   return (
     <>
     <header className="header">
-      <h1 className="headerTitle">Welcome to B'FLOW</h1>
+      <h1 className="headerTitle">Tervetuloa B'FLOW:hun</h1>
     </header>
     <div className="login">
-      <h1>Login</h1>
-      {error && <p className="error">{error}</p>}
+      <h1>Kirjaudu sisään</h1>
       <form onSubmit={handleLogin}>
-        <label>Email:</label>
+        <label>Sähköposti:</label>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <label>Password:</label>
+        <label>Salasana:</label>
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Login</button>
+        <button type="submit">Kirjaudu sisään</button>
       </form>
       <p className="notRegistered">
-        Don't have an account?{" "}
-        <button onClick={() => setAuthView("register")}>Register</button>
+      Eikö sinulla ole tiliä?{" "}
+        <button onClick={() => setAuthView("register")}>Rekisteröidy</button>
       </p>
     </div>
   </>

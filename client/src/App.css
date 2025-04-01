@@ -10,7 +10,6 @@ body {
   background-color: #f4f4f4;
   color: #333;
   height: 100%;
-
 }
 
 .App {
@@ -31,8 +30,8 @@ body {
   font-size: 10px;
   height: 20px;
   padding: 1rem;
-  
 }
+
 .App-header .app-title {
   font-weight: 800;
   color: #000000;
@@ -53,9 +52,9 @@ body {
   flex-direction: row; 
   flex: 1; 
   overflow: hidden;
+  z-index: 1000;
   
 }
-
 .sidebar-toggle {
   background-color: #4CAF50;
   color: white;
@@ -63,6 +62,7 @@ body {
   border: none;
   cursor: pointer;
   padding-right: 20px;
+ 
 }
 
 .nav {
@@ -74,11 +74,15 @@ body {
   background-color: #f9f9f9;
   overflow: hidden;
   transition: width 0.3s ease;
+  z-index: 2000; 
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  height: 100vh;
+  position: relative;
 }
 
 .nav.open {
+  width: 250px; 
   padding: 15px;
-  width: 250px; /* Adjust this value to control the width of the sidebar */
 }
 
 .nav button {
@@ -107,14 +111,13 @@ body {
 
 .main {
   flex: 1;
-  padding: 2rem;
+  padding: 0.5rem; /*This is the white space arounf the main content*/
   overflow-y: auto;
 }
 
 .profile-view h2,
 .stats-view h2,
 .training-view h2 {
-  color: #4CAF50;
   margin-bottom: 1rem;
   border-bottom: 1px solid #ddd;
   padding-bottom: 0.5rem;
@@ -131,4 +134,44 @@ body {
   border: 1px solid #ddd;
   border-radius: 4px;
   background-color: #f9f9f9;
+}
+
+.error {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  width: fit-content;
+
+  color: red;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.success {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  width: fit-content;
+
+  color: green;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .nav {
+    position: absolute;
+  }
 }

@@ -29,7 +29,7 @@ const CoachView = ({ userData }) => {
 
   return (
     <div className="coach-view">
-      <h2 className="header-coach">Create Team</h2>
+      <h2 className="header-coach">Luo joukkue</h2>
       <div className="right-container">
         <div className="hbox">
           <div className="vbox">

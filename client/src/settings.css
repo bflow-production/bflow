@@ -1,57 +1,154 @@
-
 .settings-view {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #a3e6ac9d, #93d49da6);
+  font-family: "Poppins", sans-serif;
 }
 
 .settings-username {
-    font-size: 30px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    margin-bottom: 5px;
-    padding: 10px;
+  font-size: 30px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  margin-bottom: 5px;
+  padding: 10px;
+  -webkit-text-fill-color: #ddd;
 }
 
 .settings-title {
-    font-size: 30px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    margin-bottom: 30px;
+  font-size: 36px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.329);
 }
 
 .settings-box {
-    border: 2px solid rgba(0, 0, 0, 0.349);
-    background-color: rgb(113, 177, 94);
-    border-radius: 8px;
-    padding: 10px;
+  padding: 30px;
+  width: 50%;
+  max-width: 700px;
+  align-items: center;
+  border-radius: 20px;
+  backdrop-filter: blur(15px) brightness(1.4);
+  background: rgba(58, 202, 39, 0.521);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  color: #333;
 }
 
 .label {
-    display: block;
-    margin-bottom: 10px;
-    font-size: 20px;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 9px;
+  color: #333;
 }
 
 .select-box {
-    padding: 10px;
-    border: 1px solid  white;
-    width: 100px;
-    border-radius: 4px;
-}
-
-.radiobutton-box {
-    margin-top: 15px;
-    margin-bottom: 10px;
-}
-
-.radiobutton-box label {
-    margin: 5px 0;
-    margin-top: 10px;
+  width: 100%;
+  max-width: 350px;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid white;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .password-input {
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid black;
-    border-radius: 4px;
-    width: 50%;
+  width: 100%;
+  max-width: 350px;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid white;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.select-box:focus, .password-input:focus {
+  background: white;
+  outline: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.radiobutton-box {
+  display: flex;
+  gap: 15px;
+  margin: 15px 0;
+  align-self: flex-start;
+}
+
+.radiobutton-box label {
+  display: flex;
+  align-items: center;
+  font-size: 17px;
+  color: #555;
+}
+
+input[type="radio"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #000000;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  background-color: white;
+  transition: all 0.3s ease-in-out;
+}
+
+input[type="radio"]:checked {
+  border-color: #2f5f33; 
+  background-color: white;
+}
+
+input[type="radio"]::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background-color: #16b831; 
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.2s ease-in-out;
+}
+
+input[type="radio"]:checked::before {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.save-button {
+  margin-top: 20px;
+  padding: 12px 25px;
+  font-size: 18px;
+  font-weight: bold;
+  background: linear-gradient(135deg, #00b32d, #00803ab2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.363);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.save-button:hover {
+  background: linear-gradient(135deg, #33b300, #008055);
+  transform: scale(1.02);
+}
+
+.save-button:active {
+  transform: scale(0.98);
 }

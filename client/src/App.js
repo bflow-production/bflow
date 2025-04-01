@@ -12,12 +12,18 @@ import JoinTeamView from "./joinTeamView";
 import LinkChildView from "./linkChildView";
 import SettingsView from "./settings";
 import userService from "./services/user";
+import HomePage from "./homePage";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [userData, setUserData] = useState(null);
-  const [activeView, setActiveView] = useState("profile");
+  const [activeView, setActiveView] = useState("home");
   const [authView, setAuthView] = useState("login");
-  const [sidebarOpen, setsidebarOpen] = useState(false);
+  const [sidebarOpen, setsidebarOpen] = useState(true);
+  const [notification, setNotification] = useState({
+    message: null,
+    type: null,
+  });
 
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
@@ -50,11 +56,10 @@ const App = () => {
       userService
         .getUserByRole(userData.userId, userData.role)
         .then((response) => {
-          setUserData((prevData) => ({ ...prevData, ...response}));
+          setUserData((prevData) => ({ ...prevData, ...response }));
         })
         .catch((error) => {
           console.error("Error fetching user data:", error);
-          console.log(userData)
         });
     }
   }, [userData?.userId]);
@@ -69,8 +74,17 @@ const App = () => {
     };
   }, []);
 
+  const showNotification = (message, isError = false, duration = 3000) => {
+    setNotification({ message, isError });
+    setTimeout(() => {
+      setNotification({ message: null, isError: null });
+    }, duration);
+  };
+
   const renderView = () => {
     switch (activeView) {
+      case "home":
+        return <HomePage userData={userData} />;
       case "profile":
         return <ProfileView userData={userData} />;
       case "stats":
@@ -79,14 +93,11 @@ const App = () => {
         return (
           <TrainingView
             userData={userData}
+            showNotification={showNotification}
           />
         );
       case "completedTrainings":
-        return (
-          <CompletedTrainingsView
-            userData={userData}
-          />
-        );
+        return <CompletedTrainingsView userData={userData} />;
       case "coach":
         return userData.role === "coach" ? (
           <CoachView userData={userData} />
@@ -106,7 +117,6 @@ const App = () => {
           <div>Invalid View</div>
         );
       case "settings":
-        //return <div>Settings View (coming soon!)</div>;
         return <SettingsView userData={userData} />;
       default:
         return <div>Invalid View</div>;
@@ -116,14 +126,19 @@ const App = () => {
   if (!userData) {
     return (
       <div className="auth-container">
+        <Notification notification={notification} />
         {authView === "login" ? (
           <Login
             setAuthView={setAuthView}
             setUserData={setUserData}
             setActiveView={setActiveView}
+            showNotification={showNotification}
           />
         ) : (
-          <Register setAuthView={setAuthView} />
+          <Register
+            setAuthView={setAuthView}
+            showNotification={showNotification}
+          />
         )}
       </div>
     );
@@ -155,8 +170,16 @@ const App = () => {
         <h2>{userData?.name}</h2>
       </header>
 
+      <Notification notification={notification} />
+
       <div className="app-content">
         <nav className={`nav ${sidebarOpen ? "open" : ""}`}>
+          <button
+            onClick={() => setActiveView("home")}
+            className={activeView === "home" ? "active" : ""}
+          >
+            Koti
+          </button>
           <button
             onClick={() => setActiveView("profile")}
             className={activeView === "profile" ? "active" : ""}
@@ -216,6 +239,6 @@ const App = () => {
       </div>
     </div>
   );
-}
+};
 
 export default App;
