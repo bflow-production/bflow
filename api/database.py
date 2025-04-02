@@ -392,6 +392,26 @@ class Database:
                 })
 
         return category_data
+    
+    def create_new_exercise(self, data):
+        """
+        Create a new exercise in the database.
+        """
+        category_id = data.get("categoryId")
+        name = data.get("exerciseName")
+        description = data.get("exerciseDescription")
+        is_numeric_rating = data.get("isNumericRating")
+
+        if not category_id or not name:
+            raise ValueError("Category ID and exercise name are required")
+
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+            INSERT INTO EXERCISE (category_id, name, description, is_numeric_rating)
+            VALUES (?, ?, ?, ?)
+            """, (category_id, name, description, is_numeric_rating))
+            conn.commit()
 
     def get_two_latest_exercises(self, player_id):
 

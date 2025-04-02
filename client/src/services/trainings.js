@@ -26,10 +26,20 @@ const getDefaultExercises = async () => {
     return response.data;
   }
 
+const createNewExercise = async (exercise) => {
+  const response = await axios.post(`${baseUrl}/default_exercises`, exercise, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    },
+  });
+  return response.data;
+};
+
 const getLatestExercises = async (id, role) => {
   const response = await axios.get(`${baseUrl}/latestexercises/${id}?role=${role}`);
   return response.data;
 }
 
 
-export default { getTraining, updateTraining, getDefaultExercises, getLatestExercises }
+export default { getTraining, updateTraining, getDefaultExercises, createNewExercise, getLatestExercises }

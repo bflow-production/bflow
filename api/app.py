@@ -1,3 +1,4 @@
+from functools import wraps
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from database import Database 
@@ -14,10 +15,11 @@ db = Database("BFLOW.db")
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'secret_key')
 
-def generate_token(user_id):
+def generate_token(user_id, role):
     expiration_time = timedelta(hours=1)
     payload = {
         'user_id': user_id,
+        'role': role,
         'exp': datetime.now(timezone.utc) + expiration_time 
     }
     token = jwt.encode(payload, app.config['SECRET_KEY'], algorithm='HS256')
@@ -27,6 +29,26 @@ def generate_token(user_id):
 @app.route('/')
 def serve():
     return send_from_directory(app.static_folder, 'index.html')
+
+def token_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        token = request.headers.get("Authorization")
+        if not token:
+            return jsonify({"error": "Authentication required"}), 401
+
+        if token.startswith("Bearer "):
+            token = token.split(" ")[1]
+
+        try:
+            decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+            return f(decoded_token, *args, **kwargs)
+        except jwt.ExpiredSignatureError:
+            return jsonify({"error": "Token expired"}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({"error": "Invalid token"}), 401
+
+    return decorated_function
 
 @app.route('/api/login', methods=['POST'])
 def login():
@@ -39,7 +61,7 @@ def login():
     if not user or not check_password_hash(user[2], password): 
         return jsonify({"error": "Invalid username or password"}), 401
     
-    token = generate_token(user[0])
+    token = generate_token(user[0], role)
     
     return jsonify({
         "message": "Login successful",
@@ -131,6 +153,22 @@ def get_default_exercises():
         return jsonify({"error": "No training data found for this user"}), 404
 
     return jsonify(training_data)
+
+@app.route('/api/default_exercises', methods=['POST'])
+@token_required
+def create_new_default_exercise(decoded_token):
+    role = decoded_token.get("role")
+    print(f"Role: {role}")
+    
+    if role != 'coach':
+        return jsonify({"error": "Access denied. Only coaches can add exercises."}), 403
+
+    data = request.json
+    try:
+        db.create_new_exercise(data)
+        return jsonify({"message": "Default exercises updated successfully"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
 @app.route('/api/latestexercises/<int:user_id>', methods=['GET'])
 def get_latest_exercises(user_id):

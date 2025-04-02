@@ -33,7 +33,7 @@ const App = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
-
+    console.log("Token from localStorage:", token);
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
@@ -41,6 +41,8 @@ const App = () => {
         if (decodedToken.exp * 1000 < Date.now()) {
           throw new Error("Token expired");
         }
+        
+        console.log(decodedToken)
         setUserData({
           userId: decodedToken.user_id,
           username: decodedToken.username,
@@ -56,7 +58,6 @@ const App = () => {
   }, []);
 
   // Fetch user data from the backend using userId
-  //todo: API needs a decorator to check the token(unimplemented)
   useEffect(() => {
     if (userData?.userId) {
       userService
