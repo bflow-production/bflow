@@ -10,7 +10,7 @@ const SettingsView = ({ showNotification }) => {
 
   const handleSave = async () => {
     if(newPassword !== confirmNewPassword) {
-      showNotification("Uusi salasana ja vahvistus eivät täsmää.");
+      showNotification("Uusi salasana ja vahvistus eivät täsmää");
       return;
     }
   }

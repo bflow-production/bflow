@@ -63,9 +63,9 @@ const ParentProfile = ({ userData, showNotification }) => {
       console.log("Profile update response:", response);
 
       setEditMode(false);
-      showNotification("Profile updated successfully");
+      showNotification("Profiili päivitetty onnistuneesti");
     } catch (error) {
-      showNotification("Error during save operation", true);
+      showNotification("Virhe profiilia päivitettäessä", true);
       console.error("Error during save operation:", error);
     }
   };

@@ -14,18 +14,11 @@ const LinkChildView = ({ userData, showNotification}) => {
     try {
       const linkData = { childUsername, parentId: userId, role }; // Include child username and parent ID in the data
       await linkChildService.createLink(linkData);
-      showNotification("Child linked successfully");
+      showNotification("Lapsi linkitetty onnistuneesti");
     } catch (error) {
-      if (error.response) {
-        showNotification("Error linking child", true);
-        console.error("Error linking child:", error.response.data);
-      } else if (error.request) {
-        showNotification("Error linking child: No response from server", true);
-        console.error("Error linking child: No response from server");
-      } else {
-        showNotification("Error linking child", true);
-        console.error("Error linking child:", error.message);
-      }
+      const errorMessage = error.response?.data?.error || "No response from server";
+      showNotification("Virhe linkityksessä", true);
+      console.error("Error while linking child:", errorMessage);
     }
   };
 

@@ -14,18 +14,11 @@ const JoinTeamView = ({ userData, showNotification }) => {
     try {
       const teamData = { teamName, playerId: userId, role }; // Include team name and player ID in the data
       await teamService.joinTeam(teamData);
-      showNotification("Joined team successfully");
+      showNotification("Joukkueeseen liittyminen onnistui");
     } catch (error) {
-      if (error.response) {
-        showNotification("Error joining team", true);
-        console.error("Error joining team:", error.response.data);
-      } else if (error.request) {
-        showNotification("Error joining team: No response from server", true);
-        console.error("Error joining team: No response from server");
-      } else {
-        showNotification("Error joining team", true);
-        console.error("Error joining team:", error.message);
-      }
+      const errorMessage = error.response?.data?.error || "No response from server";
+      showNotification("Virhe joukkueeseen liittyessä", true);
+      console.error("Error joining team:", errorMessage);
     }
   };
 
