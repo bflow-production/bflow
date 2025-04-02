@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import './login.css'; 
 import authService from "./services/authService";
+import { jwtDecode } from "jwt-decode";
 
 
 const Login = ({setAuthView, setUserData, setActiveView, showNotification}) => {
@@ -17,6 +18,9 @@ const Login = ({setAuthView, setUserData, setActiveView, showNotification}) => {
       if (response.message === "Login successful") {
         const { token, user_id, user_name, role } = response; 
         localStorage.setItem("jwtToken", token); 
+        
+        const decodedToken = jwtDecode(token);
+        console.log("Decoded token:", decodedToken);
 
         setUserData({
           userId: user_id, 

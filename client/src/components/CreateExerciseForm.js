@@ -1,17 +1,15 @@
-//KESKEN VIELÄ!!!
-
 import { useEffect, useState } from "react";
 import categoriesService from "../services/categories";
+import trainingService from "../services/trainings";
 import "./createExerciseForm.css";
 
-const CreateExerciseForm = (userData, showNotification) => {
+const CreateExerciseForm = ({ showNotification }) => {
   const [categories, setCategories] = useState([]);
   const [exerciseName, setExerciseName] = useState("");
   const [exerciseDescription, setExerciseDescription] = useState("");
   const [isNumericRating, setIsNumericRating] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
-
 
   useEffect(() => {
     categoriesService
@@ -25,18 +23,37 @@ const CreateExerciseForm = (userData, showNotification) => {
       });
   }, []);
 
-  const handleSave = (event) => {
-    event.preventDefault()
+  const handleSave = async (event) => {
+    event.preventDefault();
 
     const newExercise = {
       exerciseName,
       exerciseDescription,
       isNumericRating,
       categoryId: selectedCategoryId,
-      categoryName: selectedCategory
+      categoryName: selectedCategory,
     };
 
     console.log("New exercise data:", newExercise);
+
+    try {
+      const response = await trainingService.createNewExercise(newExercise);
+      showNotification("Uuden harjoituksen luonti onnistui");
+      console.log("Response from server:", response);
+
+      // Reset the form fields after successful creation
+      setExerciseName("");
+      setExerciseDescription("");
+      setIsNumericRating(false);
+      setSelectedCategory("");
+      setSelectedCategoryId(null);
+    } catch (error) {
+      console.error(
+        "Error creating new exercise:",
+        error.response ? error.response.data : error.message
+      );
+      showNotification("Virhe uuden harjoituksen luonnissa", true);
+    }
   };
 
   const handleCategoryChange = (event) => {
@@ -62,6 +79,7 @@ const CreateExerciseForm = (userData, showNotification) => {
             type="text"
             id="exercise-name"
             name="exercise-name"
+            value={exerciseName}
             onChange={(event) => setExerciseName(event.target.value)}
             required
           />
@@ -70,6 +88,7 @@ const CreateExerciseForm = (userData, showNotification) => {
             type="text"
             id="exercise-description"
             name="exercise-description"
+            value={exerciseDescription}
             onChange={(event) => setExerciseDescription(event.target.value)}
             required
           />
@@ -82,9 +101,8 @@ const CreateExerciseForm = (userData, showNotification) => {
               type="radio"
               id="numeric-yes"
               name="exercise-is-numeric-rating"
-              value="yes"
-              onChange={(event) => setIsNumericRating(event.target.value)}
-              checked={isNumericRating === "yes"}
+              onChange={() => setIsNumericRating(true)}
+              checked={isNumericRating === true}
             />
 
             <label htmlFor="numeric-no">Ei</label>
@@ -92,9 +110,8 @@ const CreateExerciseForm = (userData, showNotification) => {
               type="radio"
               id="numeric-no"
               name="exercise-is-numeric-rating"
-              value="no"
-              onChange={(event) => setIsNumericRating(event.target.value)}
-              checked={isNumericRating === "no"}
+              onChange={() => setIsNumericRating(false)}
+              checked={isNumericRating === false}
             />
           </div>
           <label htmlFor="exercise-category">Valitse kategoria:</label>
