@@ -73,9 +73,12 @@ def login():
 
 
 @app.route('/api/user/<int:user_id>', methods=['GET'])
-def get_user_data(user_id):
-    role = request.args.get('role')
+@token_required
+def get_user_data(decoded_token, user_id):
+    # Extract the role from the decoded token
+    role = decoded_token.get("role")
     print(f"Role: {role}")  # Print the role for debugging
+
     if not role:
         return jsonify({"error": "Role is required"}), 400
 
@@ -138,14 +141,16 @@ def get_user_data(user_id):
     return jsonify(user_data)
 
 @app.route('/api/categories', methods=['GET'])
-def get_categories():
+@token_required
+def get_categories(decoded_token): # decorator must be here otherwise it won't work
     categories = db.get_categories()
     if not categories:
         return jsonify({"error": "No categories found"}), 404
     return jsonify(categories)
 
 @app.route('/api/default_exercises', methods=['GET'])
-def get_default_exercises():
+@token_required
+def get_default_exercises(decoded_token):
     
     training_data = db.get_categories_and_exercises_for_training_view()
 
@@ -171,9 +176,11 @@ def create_new_default_exercise(decoded_token):
         return jsonify({"error": str(e)}), 400
 
 @app.route('/api/latestexercises/<int:user_id>', methods=['GET'])
-def get_latest_exercises(user_id):
-    role = request.args.get('role')
+@token_required
+def get_latest_exercises(decoded_token, user_id):
+    role = decoded_token.get("role")
     print(f"Role: {role}")
+
     if role != 'player':
         return jsonify({"error": "Role should be player"}), 400
     
@@ -185,9 +192,11 @@ def get_latest_exercises(user_id):
     return jsonify(latest_exercises)
 
 @app.route('/api/training/<int:user_id>', methods=['GET'])
-def get_user_training_data(user_id):
-    role = request.args.get('role')
+@token_required
+def get_user_training_data(decoded_token, user_id):
+    role = decoded_token.get("role")
     print(f"Role: {role}")
+
     if role != 'player':
         return jsonify({"error": "Role should be player"}), 400
     
@@ -199,8 +208,9 @@ def get_user_training_data(user_id):
     return jsonify(training_data)
 
 @app.route('/api/training/<int:user_id>', methods=['PUT'])
-def update_training_data(user_id):
-    role = request.args.get('role')
+@token_required
+def update_training_data(decoded_token, user_id):
+    role = decoded_token.get("role")
     print(f"Role: {role}")
     if role != 'player':
         return jsonify({"error": "Role should be player"}), 400
@@ -237,35 +247,12 @@ def add_user():
     except Exception as e:
         app.logger.error(f"Error: {str(e)}")
         return jsonify({"error": str(e)}), 400
-    
-@app.route('/api/verify-session', methods=['GET'])
-def verify_session():
-    token = request.headers.get('Authorization')
-    if not token:
-        return jsonify({"error": "Token is missing"}), 401
-
-    try:
-        token = token.split(" ")[1]
-        payload = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
-        user_id = payload['user_id']
-
-   
-        user = db.get_user(user_id)
-        if user:
-            return jsonify({"valid": True, "userId": user_id}), 200
-        else:
-            return jsonify({"valid": False}), 401
-
-    except jwt.ExpiredSignatureError:
-        return jsonify({"error": "Token has expired"}), 401
-    except jwt.InvalidTokenError:
-        return jsonify({"error": "Invalid token"}), 401
-
 
 @app.route('/api/user/<int:id>', methods=['PUT'])
-def update_user(id):
+@token_required
+def update_user(decoded_token, id):
     data = request.json
-    role = data.get('role')
+    role = decoded_token.get('role')
     if not role:
         return jsonify({"error": "Role is required"}), 400
 
@@ -282,7 +269,8 @@ def update_user(id):
         return jsonify({"error": str(e)}), 400
     
 @app.route('/api/user/<int:user_id>', methods=['DELETE'])
-def delete_user(user_id):
+@token_required
+def delete_user(decoded_token, user_id):
     try:
         db.delete_user(user_id)
         return jsonify({"message": "User deleted successfully"})
@@ -290,7 +278,8 @@ def delete_user(user_id):
         return jsonify({"error": str(e)}), 400
 
 @app.route('/api/team', methods=['POST'])
-def create_team():
+@token_required
+def create_team(decoded_token):
     data = request.json
     team_name = data.get('teamName')
     coach_id = data.get('coachId')
@@ -307,7 +296,8 @@ def create_team():
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/team/<int:coach_id>', methods=['GET'])
-def get_team_by_coach(coach_id):
+@token_required
+def get_team_by_coach(decoded_token, coach_id):
     try:
         team = db.get_team_by_coach(coach_id)
         if team:
@@ -318,7 +308,8 @@ def get_team_by_coach(coach_id):
         return jsonify({"error": str(e)}), 400
     
 @app.route('/api/join-team', methods=['POST'])
-def join_team():
+@token_required
+def join_team(decoded_token):
     data = request.json
     team_name = data.get('teamName')
     player_id = data.get('playerId')
@@ -335,7 +326,8 @@ def join_team():
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/link-child', methods=['POST'])
-def link_child():
+@token_required
+def link_child(decoded_token):
     data = request.json
     child_username = data.get('childUsername')
     parent_id = data.get('parentId')

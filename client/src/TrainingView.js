@@ -35,7 +35,6 @@ const TrainingView = ({ userData, showNotification }) => {
     try {
       const response = await trainingService.updateTraining(
         userData.userId,
-        userData.role,
         updatedExercise
       );
       console.log("Exercise added/updated:", response.message);
@@ -79,7 +78,7 @@ const TrainingView = ({ userData, showNotification }) => {
 
   return (
     <div className="training-view">
-      <h2 className="header-execise" >Harjoitukset</h2>
+      <h2 className="header-execise">Harjoitukset</h2>
       {Object.keys(trainingData).map((category) => (
         <div key={category} className="category-card">
           <button
