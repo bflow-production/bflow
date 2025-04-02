@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Rectangle, ResponsiveContainer } from "recharts";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Rectangle,
+  ResponsiveContainer,
+} from "recharts";
 import trainingService from "./services/trainings";
 import "./totalBarChart.css";
 
@@ -19,10 +27,10 @@ const TotalBarChart = ({ userData }) => {
 
   const flattenTrainings = (trainings) => {
     return Object.entries(trainings).flatMap(([category, exercises]) =>
-        exercises.map(exercise => ({
-            ...exercise,   // Spread existing properties
-            category       // Add category name
-        }))
+      exercises.map((exercise) => ({
+        ...exercise, // Spread existing properties
+        category, // Add category name
+      }))
     );
   };
 
@@ -35,13 +43,13 @@ const TotalBarChart = ({ userData }) => {
 
     const filteredData = arrayTrainings
       .filter((training) => {
-        const trainingDate = new Date(training.timestamp); 
+        const trainingDate = new Date(training.timestamp);
         return trainingDate >= fourteenDaysAgo && trainingDate <= today;
       })
       .reduce((acc, training) => {
         const dateKey = training.timestamp.split(" ")[0]; // Extract YYYY-MM-DD
-        const hours = Math.floor(training.duration / 60);  // Full hours
-        const minutes = training.duration % 60;  // Remaining minutes
+        const hours = Math.floor(training.duration / 60); // Full hours
+        const minutes = training.duration % 60; // Remaining minutes
 
         if (acc[dateKey]) {
           acc[dateKey].hours += hours; // Add the hours for each day
@@ -62,11 +70,11 @@ const TotalBarChart = ({ userData }) => {
         day,
         time: `${totalHours}h ${remainingMinutes}m`, // Display time as hours and minutes
         hours: totalHours + remainingMinutes / 60, // Total hours for the chart
-        formattedTime: `${totalHours}h ${remainingMinutes}m` // Formatted time string
+        formattedTime: `${totalHours}h ${remainingMinutes}m`, // Formatted time string
       };
     });
   };
-  
+
   const data = processData(trainingData);
 
   return (
@@ -76,22 +84,36 @@ const TotalBarChart = ({ userData }) => {
           data={data}
           margin={{ top: 20, right: 30, left: 30, bottom: 20 }}
         >
-          <XAxis dataKey="day" label={{ value: "Päivät", position: "insideBottom", offset: -20 }} />
-          <YAxis label={{ value: "Tunnit", angle: -90, position: "insideLeft" }} />
-          <Tooltip formatter={(value, name, props) => [props.payload.formattedTime, "Treenattu aika"]} />
+          <XAxis
+            dataKey="day"
+            label={{ value: "Päivät", position: "insideBottom", offset: -20 }}
+          />
+          <YAxis
+            label={{ value: "Tunnit", angle: -90, position: "insideLeft" }}
+          />
+          <Tooltip
+            formatter={(value, name, props) => [
+              props.payload.formattedTime,
+              "Treenattu aika",
+            ]}
+          />
           <defs>
             <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#4CAF50" stopOpacity={0.9} />
-              <stop offset="100%" stopColor="#2E7D32" stopOpacity={0.8} /> 
+              <stop offset="100%" stopColor="#2E7D32" stopOpacity={0.8} />
             </linearGradient>
-          </defs>      
-          <Bar 
-            dataKey="hours" 
+          </defs>
+          <Bar
+            dataKey="hours"
             fill="url(#barGradient)"
             radius={[5, 5, 0, 0]}
             barSize={50}
-            label={{ position: 'top', formatter: (value) => `${Math.floor(value)}h ${Math.round((value % 1) * 60)}m` }}
-          />  
+            label={{
+              position: "top",
+              formatter: (value) =>
+                `${Math.floor(value)}h ${Math.round((value % 1) * 60)}m`,
+            }}
+          />
         </BarChart>
       </ResponsiveContainer>
     </div>

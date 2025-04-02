@@ -14,18 +14,11 @@ const CreateTeam = ({ userData, showNotification }) => {
     try {
       const teamData = { teamName, coachId: userId, role }; // Include team name and coach ID in the data
       await teamService.createTeam(teamData);
-      showNotification("Team created successfully");
+      showNotification("Joukkue luotu onnistuneesti");
     } catch (error) {
-      if (error.response) {
-        showNotification(`Error creating team: ${error.response.data.error || ""}`, true);
-        console.error("Error creating team:", error.response.data);
-      } else if (error.request) {
-        showNotification("Error creating team: No response from server", true);
-        console.error("Error creating team: No response from server");
-      } else {
-        showNotification("Error creating team", true);
-        console.error("Error creating team:", error.message);
-      }
+      const errorMessage = error.response?.data?.error || "No response from server";
+      showNotification(`Virhe luodessa joukkuetta`, true);
+      console.error("Error creating team:", errorMessage);
     }
   };
 

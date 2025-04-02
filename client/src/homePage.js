@@ -18,7 +18,6 @@ const HomePage = ({ userData }) => {
 
   useEffect(() => {
     if (userData?.userId) {
-
       userService
         .getUserByRole(userData.userId)
         .then((response) => {

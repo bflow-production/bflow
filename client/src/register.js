@@ -26,7 +26,7 @@ function Register({ setAuthView, showNotification }) {
     e.preventDefault();
 
     if (!formData.role) {
-      showNotification("Valitse rooli ennen jatkamista.", true);
+      showNotification("Valitse rooli ennen jatkamista", true);
       return;
     }
 
@@ -40,7 +40,7 @@ function Register({ setAuthView, showNotification }) {
         country: formData.country,
         role: formData.role,
       });
-      showNotification("Rekisteröinti onnistui!", false);
+      showNotification("Rekisteröinti onnistui", false);
       setTimeout(() => {
         setAuthView("login"); // Navigate to login page after 3 seconds
       }, 1000);
