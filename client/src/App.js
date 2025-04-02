@@ -18,7 +18,7 @@ import CoachSidebar from "./components/CoachSidebar";
 import ParentSidebar from "./components/ParentSidebar";
 import CoachProfile from "./components/CoachProfile";
 import ParentProfile from "./components/ParentProfile";
-import CreateExerciseForm from "./components/CreateExerciseForm"; 
+import CreateExerciseForm from "./components/CreateExerciseForm";
 
 const App = () => {
   const [userData, setUserData] = useState(null);
@@ -30,7 +30,6 @@ const App = () => {
     type: null,
   });
 
-
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
     console.log("Token from localStorage:", token);
@@ -41,8 +40,8 @@ const App = () => {
         if (decodedToken.exp * 1000 < Date.now()) {
           throw new Error("Token expired");
         }
-        
-        console.log(decodedToken)
+
+        console.log(decodedToken);
         setUserData({
           userId: decodedToken.user_id,
           username: decodedToken.username,
@@ -146,7 +145,12 @@ const App = () => {
           />
         );
       case "settings":
-        return <SettingsView userData={userData} />;
+        return (
+          <SettingsView
+            userData={userData}
+            showNotification={showNotification}
+          />
+        );
       default:
         return <div>Invalid View</div>;
     }

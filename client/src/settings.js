@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./settings.css";
 
-const SettingsView = () => {
+const SettingsView = ({ showNotification }) => {
   const [language, setLanguage] = useState("fi");
   const [shareWith, setShareWith] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
@@ -10,7 +10,7 @@ const SettingsView = () => {
 
   const handleSave = async () => {
     if(newPassword !== confirmNewPassword) {
-      alert("Uusi salasana ja vahvistus eivät täsmää.");
+      showNotification("Uusi salasana ja vahvistus eivät täsmää.");
       return;
     }
   }
