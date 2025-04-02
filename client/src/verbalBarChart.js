@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer} from "recharts";
 import "./verbalBarChart.css";
 import trainingService from "./services/trainings";
-import user from "./services/user";
 
 const ratingToVerbal = {
   "1": "Aloitin vasta",
@@ -17,7 +16,7 @@ const VerbalBarChart = ({ userData, exercise }) => {
 
   useEffect(() => {
     trainingService
-      .getTraining(userData.userId, userData.role)
+      .getTraining(userData.userId)
       .then((response) => {
         setTrainingData(response);
       })

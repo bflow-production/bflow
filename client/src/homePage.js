@@ -20,7 +20,7 @@ const HomePage = ({ userData }) => {
     if (userData?.userId) {
 
       userService
-        .getUserByRole(userData.userId, userData.role)
+        .getUserByRole(userData.userId)
         .then((response) => {
           setProfile(response);
         })
@@ -29,7 +29,7 @@ const HomePage = ({ userData }) => {
         });
 
       trainingService
-        .getLatestExercises(userData.userId, userData.role)
+        .getLatestExercises(userData.userId)
         .then((response) => {
           console.log("Latest exercises fetched:", response);
           setLatestExercises(response);

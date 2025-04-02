@@ -8,7 +8,7 @@ const TotalBarChart = ({ userData }) => {
 
   useEffect(() => {
     trainingService
-      .getTraining(userData.userId, userData.role)
+      .getTraining(userData.userId)
       .then((response) => {
         setTrainingData(response);
       })

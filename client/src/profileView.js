@@ -33,7 +33,7 @@ const ProfileView = ({ userData, showNotification }) => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await userService.getUserByRole(userId, role);
+        const response = await userService.getUserByRole(userId);
         setProfile(response);
         console.log("Profile data:", response);
         console.log("Userdata:", userData);

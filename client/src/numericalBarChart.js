@@ -8,7 +8,7 @@ const NumericalBarChart = ({ userData, exercise }) => {
 
   useEffect(() => {
     trainingService
-      .getTraining(userData.userId, userData.role)
+      .getTraining(userData.userId)
       .then((response) => {
         setTrainingData(response);
       })

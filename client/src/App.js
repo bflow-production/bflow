@@ -11,7 +11,6 @@ import CreateTeam from "./CreateTeam";
 import JoinTeamView from "./joinTeamView";
 import LinkChildView from "./linkChildView";
 import SettingsView from "./settings";
-import userService from "./services/user";
 import HomePage from "./homePage";
 import Notification from "./components/Notification";
 import PlayerSidebar from "./components/PlayerSidebar";
@@ -30,6 +29,7 @@ const App = () => {
     message: null,
     type: null,
   });
+
 
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
@@ -57,37 +57,25 @@ const App = () => {
     }
   }, []);
 
-  // Fetch user data from the backend using userId
-  useEffect(() => {
-    if (userData?.userId) {
-      userService
-        .getUserByRole(userData.userId, userData.role)
-        .then((response) => {
-          setUserData((prevData) => ({ ...prevData, ...response }));
-        })
-        .catch((error) => {
-          console.error("Error fetching user data:", error);
-        });
-    }
-  }, [userData?.userId]);
-
   useEffect(() => {
     if (userData?.role === "coach") {
       setActiveView("coachProfile");
     } else if (userData?.role === "parent") {
       setActiveView("parentProfile");
+    } else {
+      setActiveView("home");
     }
   }, [userData?.role]);
 
-  useEffect(() => {
-    const clearLocalStorage = () => {
-      localStorage.clear();
-    };
-    window.onbeforeunload = clearLocalStorage;
-    return () => {
-      window.onbeforeunload = null;
-    };
-  }, []);
+  // useEffect(() => {
+  //   const clearLocalStorage = () => {
+  //     localStorage.clear();
+  //   };
+  //   window.onbeforeunload = clearLocalStorage;
+  //   return () => {
+  //     window.onbeforeunload = null;
+  //   };
+  // }, []);
 
   const showNotification = (message, isError = false, duration = 3000) => {
     setNotification({ message, isError });
