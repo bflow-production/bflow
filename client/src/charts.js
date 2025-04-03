@@ -18,10 +18,10 @@ const SimpleBarChart = ({ userData }) => {
 
   const flattenTrainings = (trainings) => {
     return Object.entries(trainings).flatMap(([category, exercises]) =>
-        exercises.map(exercise => ({
-            ...exercise,   // Spread existing properties
-            category       // Add category name
-        }))
+      exercises.map((exercise) => ({
+        ...exercise, // Spread existing properties
+        category, // Add category name
+      }))
     );
   };
 
@@ -34,13 +34,13 @@ const SimpleBarChart = ({ userData }) => {
 
     const filteredData = arrayTrainings
       .filter((training) => {
-        const trainingDate = new Date(training.timestamp); 
+        const trainingDate = new Date(training.timestamp);
         return trainingDate >= fourteenDaysAgo && trainingDate <= today;
       })
       .reduce((acc, training) => {
         const dateKey = training.timestamp.split(" ")[0]; // Extract YYYY-MM-DD
-        const hours = Math.floor(training.duration / 60);  // Full hours
-        const minutes = training.duration % 60;  // Remaining minutes
+        const hours = Math.floor(training.duration / 60); // Full hours
+        const minutes = training.duration % 60; // Remaining minutes
 
         if (acc[dateKey]) {
           acc[dateKey].hours += hours; // Add the hours for each day
@@ -61,11 +61,11 @@ const SimpleBarChart = ({ userData }) => {
         day,
         time: `${totalHours}h ${remainingMinutes}m`, // Display time as hours and minutes
         hours: totalHours + remainingMinutes / 60, // Total hours for the chart
-        formattedTime: `${totalHours}h ${remainingMinutes}m` // Formatted time string
+        formattedTime: `${totalHours}h ${remainingMinutes}m`, // Formatted time string
       };
     });
   };
-  
+
   const data = processData(trainingData);
 
   return (
@@ -78,10 +78,14 @@ const SimpleBarChart = ({ userData }) => {
           <XAxis dataKey="day" label={{ value: "Päivät", position: "insideBottom", offset: -10 }} />
           <YAxis label={{ value: "Tunnit", angle: -90, position: "insideLeft" }} />
           <Tooltip formatter={(value, name, props) => [props.payload.formattedTime, "Treenattu aika"]} />
-          <Bar 
-            dataKey="hours" 
-            fill="grey" 
-            label={{ position: 'top', formatter: (value) => `${Math.floor(value)}h ${Math.round((value % 1) * 60)}m` }}
+          <Bar
+            dataKey="hours"
+            fill="grey"
+            barSize={50} // Set the maximum width of the bars
+            label={{
+              position: "top",
+              formatter: (value) => `${Math.floor(value)}h ${Math.round((value % 1) * 60)}m`,
+            }}
             activeBar={({ x, y, width, height }) => (
               <Rectangle fill="green" stroke="black" x={x} y={y} width={width} height={height} />
             )}
