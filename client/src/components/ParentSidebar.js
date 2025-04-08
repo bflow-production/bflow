@@ -1,11 +1,11 @@
-const ParentSidebar = ({ setActiveView, sidebarOpen, handleLogout }) => {
+const ParentSidebar = ({ onViewChange, sidebarOpen, handleLogout }) => {
     return (
       <nav className={`nav ${sidebarOpen ? "open" : ""}`}>
-        <button onClick={() => setActiveView("parentProfile")}>Profiili</button>
-        <button onClick={() => setActiveView("linkChild")}>Linkitä lapsi</button>
+        <button onClick={() => onViewChange("parentProfile")}>Profiili</button>
+        <button onClick={() => onViewChange("linkChild")}>Linkitä lapsi</button>
         <button
           className="settings-button"
-          onClick={() => setActiveView("settings")}
+          onClick={() => onViewChange("settings")}
         >
           Asetukset
         </button>

@@ -40,12 +40,12 @@ function Register({ setAuthView, showNotification }) {
         country: formData.country,
         role: formData.role,
       });
-      showNotification("Rekisteröinti onnistui", false);
+      showNotification("Käyttäjätunnuksen luonti onnistui", false);
       setTimeout(() => {
         setAuthView("login"); // Navigate to login page after 3 seconds
       }, 1000);
     } catch (err) {
-      showNotification("Rekisteröinti epäonnistui. Yritä uudelleen.", true);
+      showNotification("Käyttäjätunnuksen luonti epäonnistui. Yritä uudelleen.", true);
     }
   };
 
