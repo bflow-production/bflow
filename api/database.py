@@ -133,38 +133,38 @@ class Database:
         """)
 
         # Insert categories
-        categories = ['PACE', 'SHOOTING', 'PASSING', 'DRIBBLING', 'DEFENDING', 'PHYSICAL']
+        categories = ['NOPEUS', 'LAUKOMINEN', 'SYÖTTÄMINEN', 'HARHAUTTAMINEN', 'PUOLUSTAMINEN', 'FYYSISYYS']
         cursor.executemany("""
         INSERT OR IGNORE INTO CATEGORY (name) VALUES (?)
         """, [(category,) for category in categories])
         
         # Insert exercises under each category
         exercises = {
-            'PACE': [
+            'NOPEUS': [
                 ('Sprinttinopeus', '60 metrin sprintti', True),
                 ('Kiihtyvyys', '10 metrin lähtökiihdytys', True)
             ],
-            'SHOOTING': [
+            'LAUKOMINEN': [
                 ('Laukaisuvoima (tutka)', 'Laukaisunopeus tutkaan,', True),
                 ('Kaukolaukaukset', 'Laukaukset maalia kohti 25 metrin etäisyydeltä', True),
                 ('Vapaapotkut', 'Vapaapotkut 16 metrin etäisyydeltä muurin yli', True)
             ],
-            'PASSING': [
+            'SYÖTTÄMINEN': [
                 ('Lyhyet syötöt', 'Syöttöharjoitus 10 metrin etäisyydellä', False),
                 ('Pitkät syötöt', 'Syöttöharjoitus 30 metrin etäisyydellä', False),
                 ('Keskitykset', 'Keskitykset kulmalipulta maalialueelle', False)
             ],
-            'DRIBBLING': [
+            'HARHAUTTAMINEN': [
                 ('Zidane Fake Pass', 'Zidane-harhautussyötön harjoittelu', False),
                 ('Stepoverit', 'Stepover-harhautus suunnanmuutoksilla', False),
                 ('Elastico', 'Elastico-harhautusliikkeen harjoittelu', False)
             ],
-            'DEFENDING': [
+            'PUOLUSTAMINEN': [
                 ('Taklaaminen', 'Taklausharjoitus liuku- ja pystytaklauksilla', False),
                 ('Vartiointi', 'Vastustajan vartiointi 1vs1-tilanteissa', False),
                 ('Katkot', 'Syöttöjen katkaisuharjoitus eri suunnista', False)
             ],
-            'PHYSICAL': [
+            'FYYSISYYS': [
                 ('Voima', 'Kuntosaliharjoittelu', False),
                 ('Kestävyys', 'Juoksulenkki (väh. 45 min)', False),
                 ('Hyppy', 'Puskemisharjoitus keskitystilanteista', False)

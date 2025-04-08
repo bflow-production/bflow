@@ -57,7 +57,7 @@ const Login = ({setAuthView, setUserData, showNotification}) => {
       </form>
       <p className="notRegistered">
       Eikö sinulla ole tiliä?{" "}
-        <button onClick={() => setAuthView("register")}>Rekisteröidy</button>
+        <button onClick={() => setAuthView("register")}>Luo käyttäjätunnus</button>
       </p>
     </div>
   </>
