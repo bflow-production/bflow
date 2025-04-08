@@ -187,6 +187,13 @@ const App = () => {
     setsidebarOpen(!sidebarOpen);
   };
 
+  const handleViewChange = (view) => {
+    setActiveView(view);
+    if (window.innerWidth <= 768) {
+      setsidebarOpen(false);
+    }
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -204,7 +211,7 @@ const App = () => {
       <div className="app-content">
         {userData.role === "player" && (
           <PlayerSidebar
-            setActiveView={setActiveView}
+            onViewChange={handleViewChange}
             sidebarOpen={sidebarOpen}
             handleLogout={handleLogout}
           />
@@ -212,7 +219,7 @@ const App = () => {
 
         {userData.role === "coach" && (
           <CoachSidebar
-            setActiveView={setActiveView}
+            onViewChange={handleViewChange}
             sidebarOpen={sidebarOpen}
             handleLogout={handleLogout}
           />
@@ -220,7 +227,7 @@ const App = () => {
 
         {userData.role === "parent" && (
           <ParentSidebar
-            setActiveView={setActiveView}
+            onViewChange={handleViewChange}
             sidebarOpen={sidebarOpen}
             handleLogout={handleLogout}
           />

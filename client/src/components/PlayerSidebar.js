@@ -1,21 +1,21 @@
-const PlayerSidebar = ({ setActiveView, sidebarOpen, handleLogout }) => {
+const PlayerSidebar = ({ onViewChange, sidebarOpen, handleLogout }) => {
   return (
     <nav className={`nav ${sidebarOpen ? "open" : ""}`}>
-      <button onClick={() => setActiveView("home")}>Koti</button>
-      <button onClick={() => setActiveView("profile")}>Profiili</button>
-      <button onClick={() => setActiveView("stats")}>Tilastot</button>
-      <button onClick={() => setActiveView("startTraining")}>
+      <button onClick={() => onViewChange("home")}>Koti</button>
+      <button onClick={() => onViewChange("profile")}>Profiili</button>
+      <button onClick={() => onViewChange("stats")}>Tilastot</button>
+      <button onClick={() => onViewChange("startTraining")}>
         Tee harjoitus
       </button>
-      <button onClick={() => setActiveView("completedTrainings")}>
+      <button onClick={() => onViewChange("completedTrainings")}>
         Tehdyt harjoitukset
       </button>
 
-      <button onClick={() => setActiveView("joinTeam")}>
+      <button onClick={() => onViewChange("joinTeam")}>
         Liity joukkueeseen
       </button>
 
-      <button className="settings-button" onClick={() => setActiveView("settings")}>
+      <button className="settings-button" onClick={() => onViewChange("settings")}>
         Asetukset
       </button>
       <button className="logout-button" onClick={handleLogout}>
