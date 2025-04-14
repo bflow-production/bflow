@@ -109,7 +109,8 @@ def get_user_data(decoded_token, user_id):
             "team": user[15],
             "shirtNumber": user[16],
             "team_id": user[17],
-            "position": user[18]
+            "position": user[18],
+            "firstTime": user[19]
         }
     elif role == 'coach':
         user_data = {
