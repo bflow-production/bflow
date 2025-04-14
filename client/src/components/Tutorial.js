@@ -7,11 +7,13 @@ const TutorialPopup = ({ onClose }) => {
   const tutorialSteps = [
     {
       title: "Tervetuloa käyttämään B'Flow:ta!",
-      content: "Tämä on lyhyt opastus sovelluksen käyttöön. B'Flown avulla voit seurata omaa edistymistäsi eri harjoituksissa.",
+      content:
+        "Tämä on lyhyt opastus sovelluksen käyttöön. B'Flown avulla voit seurata omaa edistymistäsi eri harjoituksissa.",
     },
     {
       title: "Valikko",
-      content: "Sivun vasemmasta reunasta löydät navigointivalikon, jonka takaa löydät eri osiot.",
+      content:
+        "Sivun vasemmasta reunasta löydät navigointivalikon, jonka takaa löydät eri osiot.",
     },
     {
       title: "Profiili",
@@ -19,27 +21,33 @@ const TutorialPopup = ({ onClose }) => {
     },
     {
       title: "Tilastot",
-      content: "Tilastot näkymästä löydät kaikki harjoituksesi ja niiden tilastot.",
+      content:
+        "Tilastot näkymästä löydät kaikki harjoituksesi ja niiden tilastot.",
     },
     {
       title: "Tee harjoitus",
-      content: "Tee harjoitus näkymässä voit lisätä uusia harjoituksia, jotka tilastoituu sen jälkeen tilastot näkymään.",
+      content:
+        "Tee harjoitus näkymässä voit lisätä uusia harjoituksia, jotka tilastoituu sen jälkeen tilastot näkymään.",
     },
     {
       title: "Tehdyt harjoitukset",
-      content: "Tehdyt harjoitukset näkymästä löydät kaikki tekemäsi harjoitukset.",
+      content:
+        "Tehdyt harjoitukset näkymästä löydät kaikki tekemäsi harjoitukset.",
     },
     {
       title: "Liity joukkueeseen",
-      content: "Kun valmentaja ja sinä olette luoneet yhteyden toisiinne profiilissa, voit liittyä joukkueeseen.",
+      content:
+        "Kun valmentaja ja sinä olette luoneet yhteyden toisiinne profiilissa, voit liittyä joukkueeseen.",
     },
     {
       title: "Asetukset",
-      content:"Asetuksista löydät mahdollisuuden muuttaa salasanaasi, jakaa harjoituksia sekä vaihtaa kielen.",
+      content:
+        "Asetuksista löydät mahdollisuuden muuttaa salasanaasi, jakaa harjoituksia sekä vaihtaa kielen.",
     },
     {
-        title: "Kirjaudu ulos",
-        content: "Kun olet lopettamassa B'flow käyttöä, voit kirjautua ulos valikon alareunasta.",
+      title: "Kirjaudu ulos",
+      content:
+        "Kun olet lopettamassa B'flow käyttöä, voit kirjautua ulos valikon alareunasta.",
     },
     {
       title: "Valmista!",
@@ -64,7 +72,6 @@ const TutorialPopup = ({ onClose }) => {
     onClose();
   };
 
-
   return (
     <div className="tutorial-overlay">
       <div className="tutorial-popup">
@@ -78,12 +85,10 @@ const TutorialPopup = ({ onClose }) => {
         </div>
 
         <div className="tutorial-buttons">
-          {currentStep > 0 && (
             <button className="tutorial-btn skip" onClick={skipTutorial}>
               Ohita
             </button>
-          )}
-
+          
           <button className="tutorial-btn next" onClick={nextStep}>
             {currentStep === tutorialSteps.length - 1 ? "Valmis" : "Seuraava"}
           </button>
