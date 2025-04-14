@@ -8,9 +8,9 @@ const SettingsView = ({ showNotification }) => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
-  const handleSave = async () => {
-    if(newPassword !== confirmNewPassword) {
-      showNotification("Uusi salasana ja vahvistus eivät täsmää");
+  const handleSave = () => {
+    if (newPassword !== confirmNewPassword) {
+      showNotification("Uusi salasana ja vahvistus eivät täsmää.", "error");
       return;
     }
   }
