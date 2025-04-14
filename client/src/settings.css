@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background: linear-gradient(135deg, #a3e6ac9d, #93d49da6);
+  background: linear-gradient(135deg, #3a994562, #55a8616b);
   font-family: "Poppins", sans-serif;
 }
 
@@ -31,7 +31,7 @@
   align-items: center;
   border-radius: 20px;
   backdrop-filter: blur(15px) brightness(1.4);
-  background: rgba(58, 202, 39, 0.521);
+  background: rgba(58, 197, 40, 0.637);
   border: 2px solid rgba(255, 255, 255, 0.4);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
   display: flex;
@@ -46,6 +46,14 @@
   font-weight: 600;
   margin-bottom: 9px;
   color: #333;
+}
+
+.label-language {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 9px;
+  color: #333;
+  text-align: center;
 }
 
 .select-box {

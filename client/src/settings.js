@@ -20,7 +20,7 @@ const SettingsView = ({ showNotification }) => {
       <h1 className="settings-title">Asetukset</h1>
       <div className="settings-box">
         <div>
-          <label className="label">Kieli:</label>
+          <label className="label-language">Kieli:</label>
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
