@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { processPlayerImage } from "../services/imageProcessing";
 import "../PlayerCard.css";
 
+
+
 const PlayerCard = ({
   rating,
   name,
@@ -16,9 +18,9 @@ const PlayerCard = ({
 }) => {
   const canvasRef = useRef(null);
   const [processedImage, setProcessedImage] = useState(null);  // State to hold the processed image URL
-  
-///This is just an example how to use the imageservice. The player image should be only drawn once in to the card
-///and then stored this component should only get that card and draw the numbers and name to it.
+
+  ///This is just an example how to use the imageservice. The player image should be only drawn once in to the card
+  ///and then stored this component should only get that card and draw the numbers and name to it.
   useEffect(() => {
     const loadProcessedImage = async () => {
       // Use the service to process the player image and get the base64 image URL
@@ -27,7 +29,7 @@ const PlayerCard = ({
     };
 
     loadProcessedImage();  // Call the function to load and process the image
-  }, [image]);  
+  }, [image]);
 
   useEffect(() => {
     if (processedImage) {
@@ -47,10 +49,10 @@ const PlayerCard = ({
         const playerImg = new Image();
         playerImg.src = processedImage;
         playerImg.onload = () => {
-        
+
           const targetWidth = 250; // Target space width
           const targetHeight = 250; // Target space height
-          
+
           const originalWidth = playerImg.width;
           const originalHeight = playerImg.height;
 
@@ -102,21 +104,42 @@ const PlayerCard = ({
   const downloadCard = () => {
     const canvas = canvasRef.current;
     const link = document.createElement("a");
-    link.href = canvas.toDataURL("image/png"); 
-    link.download = `${name}_Card.png`; 
+    link.href = canvas.toDataURL("image/png");
+    link.download = `${name}_Card.png`;
     link.click();
   };
 
   return (
     <div className="card">
       <canvas ref={canvasRef} width={300} height={450}></canvas>
-      <a
-        onClick={downloadCard}
-        className="download-icon"
-      >
-        <i className="fa fa-download"></i> 
+
+      {/* Hidden file input */}
+      <input
+        type="file"
+        id="imageUpload"
+        accept="image/*"
+        style={{ display: "none" }}
+        onChange={(e) => {
+          const file = e.target.files[0];
+          if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            setProcessedImage(null); 
+            processPlayerImage(imageUrl).then((url) => setProcessedImage(url));
+          }
+        }}
+      />
+
+      {/* Camera Icon Label triggers the hidden input */}
+      <label htmlFor="imageUpload" className="camera-icon" title="Upload New Image">
+        <i className="fa fa-camera"></i>
+      </label>
+
+      {/* Download Button */}
+      <a onClick={downloadCard} className="download-icon" title="Download Card">
+        <i className="fa fa-download"></i>
       </a>
     </div>
+
   );
 };
 

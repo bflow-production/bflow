@@ -42,6 +42,7 @@ class Database:
                 shirtNumber INTEGER DEFAULT NULL,
                 team_id INTEGER DEFAULT NULL,
                 position TEXT DEFAULT NULL,
+                firstTime BOOLEAN DEFAULT 1,
                 FOREIGN KEY (team_id) REFERENCES TEAM(id) ON DELETE SET NULL
             )
             """)

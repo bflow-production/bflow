@@ -3,10 +3,12 @@ import "./homePage.css";
 import SimpleBarChart from "./charts";
 import trainingService from "./services/trainings";
 import userService from "./services/user";
+import TutorialPopup from "./components/Tutorial";
 
 const HomePage = ({ userData }) => {
   const [latestExercises, setLatestExercises] = useState([]);
   const [profile, setProfile] = useState([]);
+  const [showTutorial, setShowTutorial] = useState(false);
 
   const ratingToVerbal = {
     1: "Aloitin vasta",
@@ -22,6 +24,19 @@ const HomePage = ({ userData }) => {
         .getUserByRole(userData.userId)
         .then((response) => {
           setProfile(response);
+          
+          if (response.firstTime === 1) {
+            setShowTutorial(true);
+
+            userService
+              .updateUser(userData.userId, { ...response, firstTime: 0 })
+              .then(() => {
+                console.log("FirstTime flag updated successfully");
+              })
+              .catch((error) => {
+                console.error("Error updating firstTime flag:", error);
+              });
+          }
         })
         .catch((error) => {
           console.error("Error fetching user data:", error);
@@ -36,11 +51,18 @@ const HomePage = ({ userData }) => {
         .catch((error) => {
           console.error("Error fetching user data:", error);
         });
+
+     // console.log("Userdata:", userData);
     }
   }, [userData]);
 
+  const handleCloseTutorial = () => {
+    setShowTutorial(false);
+  }
+
   return (
     <div className="home-page">
+      {showTutorial && <TutorialPopup onClose={handleCloseTutorial} /> }
       <h1>Tervetuloa, {profile.username}!</h1>
       <SimpleBarChart userData={userData} />
       <h2>Viimeisimmät harjoitukset:</h2>

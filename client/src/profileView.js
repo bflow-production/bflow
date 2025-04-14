@@ -9,6 +9,7 @@ const ProfileView = ({ userData, showNotification }) => {
   const { userId, role } = userData;
   const [editMode, setEditMode] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [uploadedImage, setUploadedImage] = useState(null);
 
   const [profile, setProfile] = useState({
     username: "",
@@ -89,6 +90,7 @@ const ProfileView = ({ userData, showNotification }) => {
     }
   };
 
+
   return (
     <div className="profile-container">
       {/* Top Section: Player Info and Image */}
@@ -98,9 +100,9 @@ const ProfileView = ({ userData, showNotification }) => {
           <div className="player-image">
             <PlayerCard
               rating={90}
-              name="Cristiano Ronaldo"
-              position="ST"
-              image="/penaldo6.jpg"
+              name={profile.name}
+              position={profile.position}
+              image={uploadedImage || "/penaldo3.jpg"}
               pace={90}
               shooting={95}
               passing={85}
@@ -109,6 +111,7 @@ const ProfileView = ({ userData, showNotification }) => {
               physical={80}
             />
           </div>
+          
         </div>
         <div className="player-info">
           <h2>{profile.name}</h2>
@@ -119,13 +122,12 @@ const ProfileView = ({ userData, showNotification }) => {
                   {field === "username"
                     ? "Käyttäjätunnus"
                     : field === "birthYear"
-                    ? "Syntymävuosi"
-                    : field === "position"
-                    ? "Pelipaikka"
-                    : field === "team"
-                    ? "Joukkue"
-                    : "Numero"}
-                  :
+                      ? "Syntymävuosi"
+                      : field === "position"
+                        ? "Pelipaikka"
+                        : field === "team"
+                          ? "Joukkue"
+                          : "Numero"}
                 </strong>
                 {editMode ? (
                   <input
