@@ -3,7 +3,7 @@ import "./settings.css";
 
 const SettingsView = ({ showNotification }) => {
   const [language, setLanguage] = useState("fi");
-  const [shareWith, setShareWith] = useState("");
+  const [shareWith, setShareWith] = useState([]);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
@@ -20,7 +20,7 @@ const SettingsView = ({ showNotification }) => {
       <h1 className="settings-title">Asetukset</h1>
       <div className="settings-box">
         <div>
-          <label className="label">Kieli:</label>
+          <label className="label-language">Kieli:</label>
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
@@ -30,26 +30,36 @@ const SettingsView = ({ showNotification }) => {
             <option value="en">Englanti</option>
           </select>
         </div>
-        <div className="radiobutton-box">
+        <div className="checkbox-box">
           <label className="label">Harjoitusten jakaminen:</label>
           <label>
             <input
-              type="radio"
-              value="coach"
-              checked={shareWith === "coach"}
-              onChange={(e) => setShareWith(e.target.value)}
-            />
-            Valmentaja
-          </label>
-          <label>
-            <input
-              type="radio"
-              value="parent"
-              checked={shareWith === "parent"}
-              onChange={(e) => setShareWith(e.target.value)}
-            />
-            Huoltaja
-          </label>
+              type="checkbox"
+              checked={shareWith.includes("coach")}
+              onChange={() => {
+                setShareWith((prev) =>
+                  prev.includes("coach")
+                    ? prev.filter((item) => item !== "coach")
+                    : [...prev, "coach"]
+              );
+            }}
+          />
+          <span>Valmentaja</span>
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={shareWith.includes("parent")}
+            onChange={() => {
+              setShareWith((prev) =>
+                prev.includes("parent")
+                  ? prev.filter((item) => item !== "parent")
+                  : [...prev, "parent"]
+              );
+          }}
+        />
+        <span>Huoltaja</span>
+        </label>
         </div>
         <div>
           <label className="label">Vaihda salasana:</label>
