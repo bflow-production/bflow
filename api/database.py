@@ -1,6 +1,6 @@
 import sqlite3
 import os
-
+import hashlib
 from datetime import datetime
 
 class Database:
@@ -634,4 +634,38 @@ class Database:
             """, (parent_id, child_id))
             
             conn.commit()
+
+    def change_password(self, username, current_password, new_password): #Tämä on vielä kesken
+        """
+        Change the password for a user after verifying the current password.
+        :param username: The username of the user.
+        :param current_password: The user's current password.
+        :param new_password: The new password to set.
+        :return: A success message or raises an exception if validation fails.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+
+            # Retrieve the user's current hashed password
+            cursor.execute("SELECT password FROM PLAYER WHERE username = ?", (username,))
+            user = cursor.fetchone()
+
+            if not user:
+                raise ValueError("Käyttäjää ei löytynyt.")  # User not found
+
+            stored_password = user[0]
+
+            # Verify the current password
+            if hashlib.sha256(current_password.encode()).hexdigest() != stored_password:
+                raise ValueError("Nykyinen salasana on virheellinen.")  # Incorrect current password
+
+            # Hash the new password
+            hashed_new_password = hashlib.sha256(new_password.encode()).hexdigest()
+
+            # Update the password in the database
+            cursor.execute("UPDATE PLAYER SET password = ? WHERE username = ?", (hashed_new_password, username))
+            conn.commit()
+
+            return "Salasana vaihdettu onnistuneesti."
+    
     

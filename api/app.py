@@ -344,6 +344,22 @@ def link_child(decoded_token):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route("/api/change-password", methods=["POST"]) #Tämä on vielä kesken
+def change_password():
+    data = request.json
+    username = data.get("username")  # Replace with session-based user identification
+    current_password = data.get("currentPassword")
+    new_password = data.get("newPassword")
+
+    if not username or not current_password or not new_password:
+        return jsonify({"message": "Kaikki kentät ovat pakollisia."}), 400
+
+    try:
+        message = db.change_password(username, current_password, new_password)
+        return jsonify({"message": message}), 200
+    except ValueError as e:
+        return jsonify({"message": str(e)}), 400
+
 
 if __name__ == '__main__':
     app.run(debug=True)
