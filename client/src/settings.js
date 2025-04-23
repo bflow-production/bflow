@@ -9,6 +9,7 @@ const SettingsView = ({ showNotification }) => {
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
   const handleSave = async () => {
+    const token = localStorage.getItem("jwtToken");
     // Validate password fields
     if (newPassword && newPassword !== confirmNewPassword) {
       showNotification("Uusi salasana ja vahvistus eivät täsmää.", "error");
@@ -19,7 +20,7 @@ const SettingsView = ({ showNotification }) => {
       // Save other settings (language, shareWith)
       const settingsResponse = await fetch("/api/settings", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify({
           language,
           shareWith,
@@ -38,7 +39,7 @@ const SettingsView = ({ showNotification }) => {
       if (newPassword) {
         const passwordResponse = await fetch("/api/change-password", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}`},
           body: JSON.stringify({
             currentPassword,
             newPassword,

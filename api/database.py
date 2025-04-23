@@ -2,6 +2,7 @@ import sqlite3
 import os
 import hashlib
 from datetime import datetime
+from werkzeug.security import check_password_hash, generate_password_hash
 
 class Database:
     def __init__(self, db_name="BFLOW.db"):
@@ -635,34 +636,32 @@ class Database:
             
             conn.commit()
 
-    def change_password(self, username, current_password, new_password): #Tämä on vielä kesken
+    def change_password(self, username, current_password, new_password):
         """
         Change the password for a user after verifying the current password.
-        :param username: The username of the user.
-        :param current_password: The user's current password.
-        :param new_password: The new password to set.
-        :return: A success message or raises an exception if validation fails.
         """
         with self._get_connection() as conn:
             cursor = conn.cursor()
 
-            # Retrieve the user's current hashed password
+            # Hae nykyinen hashattu salasana
             cursor.execute("SELECT password FROM PLAYER WHERE username = ?", (username,))
             user = cursor.fetchone()
 
             if not user:
-                raise ValueError("Käyttäjää ei löytynyt.")  # User not found
+                raise ValueError("Käyttäjää ei löytynyt.")
 
             stored_password = user[0]
+            print(f"Tallennettu hash: {stored_password}")
+            print(f"Syötetty salasana: {current_password}")
 
-            # Verify the current password
-            if hashlib.sha256(current_password.encode()).hexdigest() != stored_password:
-                raise ValueError("Nykyinen salasana on virheellinen.")  # Incorrect current password
+            # Tarkista nykyinen salasana hashin avulla
+            if not check_password_hash(stored_password, current_password):
+                raise ValueError("Nykyinen salasana on virheellinen.")
 
-            # Hash the new password
-            hashed_new_password = hashlib.sha256(new_password.encode()).hexdigest()
+            # Luo uusi hashattu salasana
+            hashed_new_password = generate_password_hash(new_password)
 
-            # Update the password in the database
+            # Päivitä salasana tietokantaan
             cursor.execute("UPDATE PLAYER SET password = ? WHERE username = ?", (hashed_new_password, username))
             conn.commit()
 

@@ -15,11 +15,12 @@ db = Database("BFLOW.db")
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'secret_key')
 
-def generate_token(user_id, role):
+def generate_token(user_id, role, user_name):
     expiration_time = timedelta(hours=1)
     payload = {
         'user_id': user_id,
         'role': role,
+        'username': user_name,
         'exp': datetime.now(timezone.utc) + expiration_time 
     }
     token = jwt.encode(payload, app.config['SECRET_KEY'], algorithm='HS256')
@@ -61,7 +62,7 @@ def login():
     if not user or not check_password_hash(user[2], password): 
         return jsonify({"error": "Invalid username or password"}), 401
     
-    token = generate_token(user[0], role)
+    token = generate_token(user[0], role, user[1])  
     
     return jsonify({
         "message": "Login successful",
@@ -344,21 +345,51 @@ def link_child(decoded_token):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route("/api/change-password", methods=["POST"]) #Tämä on vielä kesken
-def change_password():
+@app.route('/api/change-password', methods=['POST'])
+@token_required
+def change_password_route(decoded_token):
+    print(request.headers)
+    print(request.json)
+    print(decoded_token)
     data = request.json
-    username = data.get("username")  # Replace with session-based user identification
+
     current_password = data.get("currentPassword")
     new_password = data.get("newPassword")
+    username = decoded_token.get("username")
 
-    if not username or not current_password or not new_password:
-        return jsonify({"message": "Kaikki kentät ovat pakollisia."}), 400
+    if not username:
+        return jsonify({"message": "Käyttäjänimi puuttuu"}), 400
+
+    if not current_password or not new_password:
+        return jsonify({"message": "Kaikki kentät ovat pakollisia"}), 400
 
     try:
         message = db.change_password(username, current_password, new_password)
         return jsonify({"message": message}), 200
-    except ValueError as e:
-        return jsonify({"message": str(e)}), 400
+    except ValueError as ve:
+        return jsonify({"message": str(ve)}), 400
+    except Exception as e:
+        return jsonify({"message": "Jotain meni pieleen: " + str(e)}), 500
+
+@app.route('/api/settings', methods=['POST'])
+@token_required
+def save_settings(decoded_token):
+    user_id = decoded_token.get("user_id")
+    data = request.json
+
+    # Extract settings data from the request
+    language = data.get("language")
+    share_with = data.get("shareWith")
+
+    if not language:
+        return jsonify({"error": "Language is required"}), 400
+
+    try:
+        # Save settings to the database (you need to implement this in your database class)
+        #db.update_user(user_id, decoded_token.get("role"), language=language, shareWith=','.join(share_with))
+        return jsonify({"message": "Settings saved successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == '__main__':
