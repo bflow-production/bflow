@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Rectangle, ResponsiveContainer } from "recharts";
 import trainingService from "./services/trainings";
+import "./chart.css";
 
 const SimpleBarChart = ({ userData }) => {
   const [trainingData, setTrainingData] = useState([]);
@@ -69,13 +70,13 @@ const SimpleBarChart = ({ userData }) => {
   const data = processData(trainingData);
 
   return (
-    <div className="chart">
-      <ResponsiveContainer width="100%" height={400}>
+    <div className="chart-container">
+      <ResponsiveContainer width={1000} height={400}>
         <BarChart
           data={data}
           margin={{ top: 20, right: 30, left: 30, bottom: 20 }}
         >
-          <XAxis dataKey="day" label={{ value: "Päivät", position: "insideBottom", offset: -10 }} />
+          <XAxis dataKey="day" label={{ value: "Päivät", position: "insideBottom", offset: -20 }} />
           <YAxis label={{ value: "Tunnit", angle: -90, position: "insideLeft" }} />
           <Tooltip formatter={(value, name, props) => [props.payload.formattedTime, "Treenattu aika"]} />
           <defs>
