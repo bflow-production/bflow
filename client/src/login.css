@@ -129,3 +129,20 @@ form button:hover {
     max-width: 100%;
   }
 }
+  .forgotPasswordContainer {
+    text-align: right;
+    margin-top: 4px;
+    margin-bottom: 20px;
+    padding-left: 250px;
+  }
+  
+  .forgotPasswordBtn {
+    background: none !important; 
+    border: none !important; 
+    color: #696969 !important; 
+    cursor: pointer; 
+    font-size: 0.9em;
+    padding: 0; 
+    width: auto; 
+  }
+  

@@ -53,6 +53,15 @@ const Login = ({setAuthView, setUserData, showNotification}) => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
+        <div className="forgotPasswordContainer">
+          <button
+            type="button"
+            className="forgotPasswordBtn"
+            onClick={() => showNotification("Salasanan palautus ei ole vielä käytössä.", true)}
+          >
+            Unohditko salasanasi?
+          </button>
+        </div>
         <button type="submit">Kirjaudu sisään</button>
       </form>
       <p className="notRegistered">
