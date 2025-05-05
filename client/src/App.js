@@ -206,7 +206,7 @@ const App = () => {
         </h1>
         <h2>{userData?.name}</h2>
         <button className="logout-button" onClick={handleLogout}>
-          <img src={logoutIcon} className="logout-icon" />
+          <img src={logoutIcon} className="logout-icon" alt="Logout" />
         </button>
       </header>
 

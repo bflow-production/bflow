@@ -1,4 +1,5 @@
 import { useState } from "react";
+import settingService from "./services/settingservice";
 import "./settings.css";
 
 const SettingsView = ({ showNotification }) => {
@@ -9,56 +10,28 @@ const SettingsView = ({ showNotification }) => {
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
   const handleSave = async () => {
-    const token = localStorage.getItem("jwtToken");
     // Validate password fields
     if (newPassword && newPassword !== confirmNewPassword) {
-      showNotification("Uusi salasana ja vahvistus eivät täsmää.", "error");
+      showNotification("Uusi salasana ja vahvistus eivät täsmää.", true);
       return;
     }
-  
+
     try {
       // Save other settings (language, shareWith)
-      const settingsResponse = await fetch("/api/settings", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-        body: JSON.stringify({
-          language,
-          shareWith,
-        }),
-      });
-  
-      const settingsData = await settingsResponse.json();
-  
-      if (settingsResponse.ok) {
-        showNotification("Asetukset tallennettu onnistuneesti.", "success");
-      } else {
-        showNotification(settingsData.message || "Asetusten tallennus epäonnistui.", "error");
-      }
-  
+      await settingService.updateSettings({ language, shareWith });
+
       // Handle password change if a new password is provided
       if (newPassword) {
-        const passwordResponse = await fetch("/api/change-password", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}`},
-          body: JSON.stringify({
-            currentPassword,
-            newPassword,
-          }),
-        });
-  
-        const passwordData = await passwordResponse.json();
-  
-        if (passwordResponse.ok) {
-          showNotification("Salasana vaihdettu onnistuneesti.", "success");
-          setCurrentPassword("");
-          setNewPassword("");
-          setConfirmNewPassword("");
-        } else {
-          showNotification(passwordData.message || "Salasanan vaihto epäonnistui.", "error");
-        }
+        await settingService.changePassword(currentPassword, newPassword);
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmNewPassword("");
       }
+
+      showNotification("Asetukset tallennettu onnistuneesti");
     } catch (error) {
-      showNotification("Virhe asetusten tallentamisessa: " + error.message, "error");
+      showNotification("Virhe asetusten tallentamisessa", true);
+      console.error("Error saving settings:", error);
     }
   };
 
@@ -88,25 +61,25 @@ const SettingsView = ({ showNotification }) => {
                   prev.includes("coach")
                     ? prev.filter((item) => item !== "coach")
                     : [...prev, "coach"]
-              );
-            }}
-          />
-          <span>Valmentaja</span>
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            checked={shareWith.includes("parent")}
-            onChange={() => {
-              setShareWith((prev) =>
-                prev.includes("parent")
-                  ? prev.filter((item) => item !== "parent")
-                  : [...prev, "parent"]
-              );
-          }}
-        />
-        <span>Huoltaja</span>
-        </label>
+                );
+              }}
+            />
+            <span>Valmentaja</span>
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              checked={shareWith.includes("parent")}
+              onChange={() => {
+                setShareWith((prev) =>
+                  prev.includes("parent")
+                    ? prev.filter((item) => item !== "parent")
+                    : [...prev, "parent"]
+                );
+              }}
+            />
+            <span>Huoltaja</span>
+          </label>
         </div>
         <div>
           <label className="label">Vaihda salasana:</label>
@@ -131,8 +104,10 @@ const SettingsView = ({ showNotification }) => {
             onChange={(e) => setConfirmNewPassword(e.target.value)}
             className="password-input"
           />
-          </div>
-        <button className="save-button" onClick={handleSave}>Tallenna</button>
+        </div>
+        <button className="save-button" onClick={handleSave}>
+          Tallenna
+        </button>
       </div>
     </div>
   );

@@ -3,8 +3,6 @@ import userService from "../services/user";
 import "../profileView.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
-//Tulisiko valmentajalla ja huoltajalla olla toistensa tiedot, jos lapsi on linkitetty?
-
 const ParentProfile = ({ userData, showNotification }) => {
   const { userId, role } = userData;
   const [editMode, setEditMode] = useState(false);
@@ -132,16 +130,22 @@ const ParentProfile = ({ userData, showNotification }) => {
       <div className="buttonDiv">
         {/* Edit Button */}
         {!editMode ? (
-          <button className="edit-button" onClick={() => setEditMode(true)}>
-            Muokkaa
-          </button>
+          <>
+            <button className="edit-button" onClick={() => setEditMode(true)}>
+              Muokkaa
+            </button>
+            <button className="edit-button">Poista profiili</button>
+          </>
         ) : (
-          <button className="edit-button" onClick={handleSave}>
-            Tallenna
-          </button>
+          <>
+            <button className="edit-button" onClick={handleSave}>
+              Tallenna
+            </button>
+            <button className="edit-button" onClick={() => setEditMode(false)}>
+              Peruuta
+            </button>
+          </>
         )}
-        {/* Delete Button */}
-        <button className="edit-button">Poista profiili</button>
       </div>
     </div>
   );

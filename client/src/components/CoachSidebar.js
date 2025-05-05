@@ -6,15 +6,8 @@ const CoachSidebar = ({ onViewChange, sidebarOpen, handleLogout }) => {
         Luo harjoitus
       </button>
       <button onClick={() => onViewChange("createTeam")}>Luo joukkue</button>
-      <button
-        className="settings-button"
-        onClick={() => onViewChange("settings")}
-      >
-        Asetukset
-      </button>
-      <button className="logout-button" onClick={handleLogout}>
-        Kirjaudu ulos
-      </button>
+      <button onClick={() => onViewChange("settings")}>Asetukset</button>
+      <button onClick={handleLogout}>Kirjaudu ulos</button>
     </nav>
   );
 };

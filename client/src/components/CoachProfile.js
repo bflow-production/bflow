@@ -123,16 +123,22 @@ const CoachProfile = ({ userData, showNotification }) => {
       <div className="buttonDiv">
         {/* Edit Button */}
         {!editMode ? (
-          <button className="edit-button" onClick={() => setEditMode(true)}>
-            Muokkaa
-          </button>
+          <>
+            <button className="edit-button" onClick={() => setEditMode(true)}>
+              Muokkaa
+            </button>
+            <button className="edit-button">Poista profiili</button>
+          </>
         ) : (
-          <button className="edit-button" onClick={handleSave}>
-            Tallenna
-          </button>
+          <>
+            <button className="edit-button" onClick={handleSave}>
+              Tallenna
+            </button>
+            <button className="edit-button" onClick={() => setEditMode(false)}>
+              Peruuta
+            </button>
+          </>
         )}
-        {/* Delete Button */}
-        <button className="edit-button">Poista profiili</button>
       </div>
     </div>
   );
