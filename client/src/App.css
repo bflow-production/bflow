@@ -175,3 +175,19 @@ body {
     position: absolute;
   }
 }
+
+.logout-button {
+  background: none; 
+  border: none; 
+  cursor: pointer; 
+  padding: 0; 
+  margin-left: auto; 
+  display: flex;
+  align-items: center;
+}
+
+.logout-icon {
+  width: 25px; 
+  height: 25px; 
+  
+}

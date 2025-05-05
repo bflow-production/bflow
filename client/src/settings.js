@@ -3,24 +3,71 @@ import "./settings.css";
 
 const SettingsView = ({ showNotification }) => {
   const [language, setLanguage] = useState("fi");
-  const [shareWith, setShareWith] = useState("");
+  const [shareWith, setShareWith] = useState([]);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
   const handleSave = async () => {
-    if(newPassword !== confirmNewPassword) {
-      showNotification("Uusi salasana ja vahvistus eivät täsmää");
+    const token = localStorage.getItem("jwtToken");
+    // Validate password fields
+    if (newPassword && newPassword !== confirmNewPassword) {
+      showNotification("Uusi salasana ja vahvistus eivät täsmää.", "error");
       return;
     }
-  }
+  
+    try {
+      // Save other settings (language, shareWith)
+      const settingsResponse = await fetch("/api/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+        body: JSON.stringify({
+          language,
+          shareWith,
+        }),
+      });
+  
+      const settingsData = await settingsResponse.json();
+  
+      if (settingsResponse.ok) {
+        showNotification("Asetukset tallennettu onnistuneesti.", "success");
+      } else {
+        showNotification(settingsData.message || "Asetusten tallennus epäonnistui.", "error");
+      }
+  
+      // Handle password change if a new password is provided
+      if (newPassword) {
+        const passwordResponse = await fetch("/api/change-password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}`},
+          body: JSON.stringify({
+            currentPassword,
+            newPassword,
+          }),
+        });
+  
+        const passwordData = await passwordResponse.json();
+  
+        if (passwordResponse.ok) {
+          showNotification("Salasana vaihdettu onnistuneesti.", "success");
+          setCurrentPassword("");
+          setNewPassword("");
+          setConfirmNewPassword("");
+        } else {
+          showNotification(passwordData.message || "Salasanan vaihto epäonnistui.", "error");
+        }
+      }
+    } catch (error) {
+      showNotification("Virhe asetusten tallentamisessa: " + error.message, "error");
+    }
+  };
 
   return (
     <div className="settings-view">
       <h1 className="settings-title">Asetukset</h1>
       <div className="settings-box">
         <div>
-          <label className="label">Kieli:</label>
+          <label className="label-language">Kieli:</label>
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
@@ -30,26 +77,36 @@ const SettingsView = ({ showNotification }) => {
             <option value="en">Englanti</option>
           </select>
         </div>
-        <div className="radiobutton-box">
+        <div className="checkbox-box">
           <label className="label">Harjoitusten jakaminen:</label>
           <label>
             <input
-              type="radio"
-              value="coach"
-              checked={shareWith === "coach"}
-              onChange={(e) => setShareWith(e.target.value)}
-            />
-            Valmentaja
-          </label>
-          <label>
-            <input
-              type="radio"
-              value="parent"
-              checked={shareWith === "parent"}
-              onChange={(e) => setShareWith(e.target.value)}
-            />
-            Huoltaja
-          </label>
+              type="checkbox"
+              checked={shareWith.includes("coach")}
+              onChange={() => {
+                setShareWith((prev) =>
+                  prev.includes("coach")
+                    ? prev.filter((item) => item !== "coach")
+                    : [...prev, "coach"]
+              );
+            }}
+          />
+          <span>Valmentaja</span>
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={shareWith.includes("parent")}
+            onChange={() => {
+              setShareWith((prev) =>
+                prev.includes("parent")
+                  ? prev.filter((item) => item !== "parent")
+                  : [...prev, "parent"]
+              );
+          }}
+        />
+        <span>Huoltaja</span>
+        </label>
         </div>
         <div>
           <label className="label">Vaihda salasana:</label>
@@ -74,7 +131,7 @@ const SettingsView = ({ showNotification }) => {
             onChange={(e) => setConfirmNewPassword(e.target.value)}
             className="password-input"
           />
-        </div>
+          </div>
         <button className="save-button" onClick={handleSave}>Tallenna</button>
       </div>
     </div>

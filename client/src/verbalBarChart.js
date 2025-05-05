@@ -94,6 +94,7 @@ const VerbalBarChart = ({ userData, exercise }) => {
             fill="url(#barGradient)"
             radius={[5, 5, 0, 0]}
             barSize={50}
+            minPointSize={10}
             label={{ position: "top", formatter: (value) => ratingToVerbal[value] }}
           />
         </BarChart>

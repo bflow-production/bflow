@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Rectangle, ResponsiveContainer } from "recharts";
 import trainingService from "./services/trainings";
+import "./chart.css";
 
 const SimpleBarChart = ({ userData }) => {
   const [trainingData, setTrainingData] = useState([]);
@@ -69,26 +70,27 @@ const SimpleBarChart = ({ userData }) => {
   const data = processData(trainingData);
 
   return (
-    <div className="chart.js">
-      <ResponsiveContainer width="100%" height={400}>
+    <div className="chart-container">
+      <ResponsiveContainer width={1000} height={400}>
         <BarChart
           data={data}
           margin={{ top: 20, right: 30, left: 30, bottom: 20 }}
         >
-          <XAxis dataKey="day" label={{ value: "Päivät", position: "insideBottom", offset: -10 }} />
+          <XAxis dataKey="day" label={{ value: "Päivät", position: "insideBottom", offset: -20 }} />
           <YAxis label={{ value: "Tunnit", angle: -90, position: "insideLeft" }} />
           <Tooltip formatter={(value, name, props) => [props.payload.formattedTime, "Treenattu aika"]} />
-          <Bar
-            dataKey="hours"
-            fill="grey"
-            barSize={50} // Set the maximum width of the bars
-            label={{
-              position: "top",
-              formatter: (value) => `${Math.floor(value)}h ${Math.round((value % 1) * 60)}m`,
-            }}
-            activeBar={({ x, y, width, height }) => (
-              <Rectangle fill="green" stroke="black" x={x} y={y} width={width} height={height} />
-            )}
+          <defs>
+            <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#4CAF50" stopOpacity={0.9} />
+              <stop offset="100%" stopColor="#2E7D32" stopOpacity={0.8} /> 
+            </linearGradient>
+          </defs>   
+          <Bar 
+            dataKey="hours" 
+            fill="url(#barGradient)"
+            radius={[5, 5, 0, 0]}
+            barSize={50}
+            label={{ position: 'top', formatter: (value) => `${Math.floor(value)}h ${Math.round((value % 1) * 60)}m` }}
           />
         </BarChart>
       </ResponsiveContainer>

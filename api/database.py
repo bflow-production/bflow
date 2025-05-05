@@ -1,7 +1,8 @@
 import sqlite3
 import os
-
+import hashlib
 from datetime import datetime
+from werkzeug.security import check_password_hash, generate_password_hash
 
 class Database:
     def __init__(self, db_name="BFLOW.db"):
@@ -634,4 +635,36 @@ class Database:
             """, (parent_id, child_id))
             
             conn.commit()
+
+    def change_password(self, username, current_password, new_password):
+        """
+        Change the password for a user after verifying the current password.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+
+            # Hae nykyinen hashattu salasana
+            cursor.execute("SELECT password FROM PLAYER WHERE username = ?", (username,))
+            user = cursor.fetchone()
+
+            if not user:
+                raise ValueError("Käyttäjää ei löytynyt.")
+
+            stored_password = user[0]
+            print(f"Tallennettu hash: {stored_password}")
+            print(f"Syötetty salasana: {current_password}")
+
+            # Tarkista nykyinen salasana hashin avulla
+            if not check_password_hash(stored_password, current_password):
+                raise ValueError("Nykyinen salasana on virheellinen.")
+
+            # Luo uusi hashattu salasana
+            hashed_new_password = generate_password_hash(new_password)
+
+            # Päivitä salasana tietokantaan
+            cursor.execute("UPDATE PLAYER SET password = ? WHERE username = ?", (hashed_new_password, username))
+            conn.commit()
+
+            return "Salasana vaihdettu onnistuneesti."
+    
     

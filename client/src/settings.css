@@ -3,8 +3,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  background: linear-gradient(135deg, #a3e6ac9d, #93d49da6);
+  height: 100%;
   font-family: "Poppins", sans-serif;
 }
 
@@ -31,7 +30,7 @@
   align-items: center;
   border-radius: 20px;
   backdrop-filter: blur(15px) brightness(1.4);
-  background: rgba(58, 202, 39, 0.521);
+  background: rgba(58, 197, 40, 0.637);
   border: 2px solid rgba(255, 255, 255, 0.4);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
   display: flex;
@@ -46,6 +45,14 @@
   font-weight: 600;
   margin-bottom: 9px;
   color: #333;
+}
+
+.label-language {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 9px;
+  color: #333;
+  text-align: center;
 }
 
 .select-box {
@@ -82,53 +89,62 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-.radiobutton-box {
+.checkbox-box {
   display: flex;
+  flex-direction: column;
   gap: 15px;
   margin: 15px 0;
   align-self: flex-start;
 }
 
-.radiobutton-box label {
+.checkbox-box label {
   display: flex;
   align-items: center;
   font-size: 17px;
   color: #555;
+  gap: 10px;
+  cursor: pointer;
+  position: relative;
+  padding-left: 5px;
+  transition: color 0.2s;
 }
 
-input[type="radio"] {
+.checkbox-box label span {
+  transform: translateY(-5px);
+  display: inline-block;
+}
+
+.checkbox-box input[type="checkbox"] {
   appearance: none;
   width: 18px;
   height: 18px;
-  border: 2px solid #000000;
-  border-radius: 50%;
-  display: inline-block;
+  border: 2px solid #333;
+  border-radius: 4px;
+  background-color: white;
+  transition: all 0.2s ease-in-out;
   position: relative;
   cursor: pointer;
-  background-color: white;
-  transition: all 0.3s ease-in-out;
 }
 
-input[type="radio"]:checked {
-  border-color: #2f5f33; 
-  background-color: white;
+.checkbox-box input[type="checkbox"]:checked {
+  background-color: #2ecc71;
+  border-color: #333;
+  transition: all 0.2s ease-in-out;
+  transform: scale(1.1);
 }
 
-input[type="radio"]::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  background-color: #16b831; 
-  border-radius: 50%;
+.checkbox-box input[type="checkbox"]::before {
+  content: "✓";
+  color: white;
+  font-size: 14px;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  transition: transform 0.2s ease-in-out;
+  top: 0px;
+  left: 4px;
+  display: none;
 }
 
-input[type="radio"]:checked::before {
-  transform: translate(-50%, -50%) scale(1);
+.checkbox-box input[type="checkbox"]:checked::before {
+  display: block;
 }
 
 .save-button {

@@ -19,6 +19,7 @@ import ParentSidebar from "./components/ParentSidebar";
 import CoachProfile from "./components/CoachProfile";
 import ParentProfile from "./components/ParentProfile";
 import CreateExerciseForm from "./components/CreateExerciseForm";
+import logoutIcon from "./logout.png";
 
 const App = () => {
   const [userData, setUserData] = useState(null);
@@ -204,6 +205,9 @@ const App = () => {
           <span className="app-title">B'FLOW</span>
         </h1>
         <h2>{userData?.name}</h2>
+        <button className="logout-button" onClick={handleLogout}>
+          <img src={logoutIcon} className="logout-icon" />
+        </button>
       </header>
 
       <Notification notification={notification} />
