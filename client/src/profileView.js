@@ -90,7 +90,6 @@ const ProfileView = ({ userData, showNotification }) => {
     }
   };
 
-
   return (
     <div className="profile-container">
       {/* Top Section: Player Info and Image */}
@@ -111,7 +110,6 @@ const ProfileView = ({ userData, showNotification }) => {
               physical={80}
             />
           </div>
-          
         </div>
         <div className="player-info">
           <h2>{profile.name}</h2>
@@ -122,12 +120,12 @@ const ProfileView = ({ userData, showNotification }) => {
                   {field === "username"
                     ? "Käyttäjätunnus"
                     : field === "birthYear"
-                      ? "Syntymävuosi"
-                      : field === "position"
-                        ? "Pelipaikka"
-                        : field === "team"
-                          ? "Joukkue"
-                          : "Numero"}
+                    ? "Syntymävuosi"
+                    : field === "position"
+                    ? "Pelipaikka"
+                    : field === "team"
+                    ? "Joukkue"
+                    : "Numero"}
                 </strong>
                 {editMode ? (
                   <input
@@ -229,7 +227,7 @@ const ProfileView = ({ userData, showNotification }) => {
               <span className="flip-icon" onClick={handleCardClick}>
                 <i className="fas fa-sync-alt"></i>
               </span>
-              <h3>Huoltajan Tiedot</h3>
+              <h3>Huoltajan tiedot</h3>
               {["parent", "parentEmail"].map((field) => (
                 <p key={field}>
                   <strong>
@@ -264,16 +262,22 @@ const ProfileView = ({ userData, showNotification }) => {
       <div className="buttonDiv">
         {/* Edit Button */}
         {!editMode ? (
-          <button className="edit-button" onClick={() => setEditMode(true)}>
-            Muokkaa
-          </button>
+          <>
+            <button className="edit-button" onClick={() => setEditMode(true)}>
+              Muokkaa
+            </button>
+            <button className="edit-button">Poista profiili</button>
+          </>
         ) : (
-          <button className="edit-button" onClick={handleSave}>
-            Tallenna
-          </button>
+          <>
+            <button className="edit-button" onClick={handleSave}>
+              Tallenna
+            </button>
+            <button className="edit-button" onClick={() => setEditMode(false)}>
+              Peruuta
+            </button>
+          </>
         )}
-        {/* Delete Button */}
-        <button className="edit-button">Poista profiili</button>
       </div>
     </div>
   );

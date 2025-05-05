@@ -1,10 +1,11 @@
 .link-child-view {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #4caf50;
+  border-radius: 8px;
+  margin-top: 60px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   }
   
   .header-link-child {
@@ -52,6 +53,7 @@
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
+    font-size: 18px;
   }
   
   input[type="text"] {
@@ -63,16 +65,23 @@
   }
   
   .hbox-button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
     margin-top: 20px;
+    padding: 12px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    background: linear-gradient(#006644d7);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.363);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
   }
   
   .hbox-button:hover {
-    background-color: #0056b3;
+    background: linear-gradient(#00801c7e);
+    transform: scale(1.02);
+  }
+
+  .hbox-button:active {
+    transform: scale(0.98);
   }

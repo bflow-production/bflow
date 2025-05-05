@@ -15,10 +15,10 @@ const PlayerSidebar = ({ onViewChange, sidebarOpen, handleLogout }) => {
         Liity joukkueeseen
       </button>
 
-      <button className="settings-button" onClick={() => onViewChange("settings")}>
+      <button onClick={() => onViewChange("settings")}>
         Asetukset
       </button>
-      <button className="logout-button" onClick={handleLogout}>
+      <button onClick={handleLogout}>
         Kirjaudu ulos
       </button>
     </nav>

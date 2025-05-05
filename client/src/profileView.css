@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   width: 100%;
   overflow-x: hidden;
 }
@@ -8,33 +9,29 @@ html, body {
   align-items: center;
   padding: 50px;
   border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  font-family: 'Arial', sans-serif;
-  background: linear-gradient(to right, #45a049, #29622c, #0e210f);
+  font-family: "Arial", sans-serif;
   flex-grow: 1;
 }
 
-.player-info .editable-field
-{
-  color: #ffffff; 
-  font-size: 16px; 
-
+.player-info .editable-field {
+  color: #ffffff;
+  font-size: 16px;
 }
 
-.coach-info .editable-field, 
+.coach-info .editable-field,
 .parent-card .editable-field {
-  color: #6d6d6d; 
-  font-size: 16px; 
-  
+  color: #6d6d6d;
+  font-size: 16px;
 }
 
 .top-section {
+  background: #4caf50;
   display: flex;
   flex-wrap: wrap;
-  
+
   width: 100%;
-  justify-content: center; 
-  align-items: center; 
+  justify-content: center;
+  align-items: center;
   border-radius: 20px;
   padding-bottom: 20px;
   border-bottom: 2px solid #ddd;
@@ -43,62 +40,7 @@ html, body {
   /* Glow Effect */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   box-sizing: border-box;
-  overflow: hidden
-}
-
-.card-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.6s;
-  
-}
-
-.flipped {
-  transform: rotateY(180deg);
-}
-
-.card-front {
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  flex: 1;
-  display: flex;
-  position: absolute;
-  flex-direction: column;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 15px; 
-  box-sizing: border-box; 
-  min-height: 100%;
-  height: max-content;
-}
-.card-back {
-  width: 100%;
-  height: 100%;
-  height: max-content;
-  backface-visibility: hidden;
-  flex: 1;
-  display: flex;
-
-  flex-direction: column;
-  position: absolute;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 15px; 
-  box-sizing: border-box; 
-  min-height: 100%;
-}
-
-
-.card-back {
-  transform: rotateY(180deg);
-  background: #f3f3f3;
-  display: flex; flex-direction: column;
-  
+  overflow: hidden;
 }
 
 .player-info {
@@ -106,17 +48,7 @@ html, body {
   flex-direction: column;
   flex: 1;
   padding: 20px;
-  
-}
-
-.player-info {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  padding: 20px;
-  display: flex;
   flex-wrap: wrap;
-  
 }
 
 .player-info p,
@@ -125,39 +57,38 @@ html, body {
   display: flex;
   width: 90%;
   margin: 5px 0;
-  gap: 10px; 
-  flex-wrap: wrap; 
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .player-info strong {
-  margin-right: 10px; 
+  margin-right: 10px;
 }
 
-.coach-info strong, .parent-card strong{
-  margin-right: 10px; 
-
- }
+.coach-info strong,
+.parent-card strong {
+  margin-right: 10px;
+}
 
 .profile-input {
-  width: 100%; 
-  max-width: 400px; 
+  width: 100%;
+  max-width: 400px;
   height: 25px;
-  padding: 10px; 
-  font-size: 16px; 
-  border: 2px solid #000000; 
-  border-radius: 8px; 
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
   backdrop-filter: blur(20px) brightness(1.4);
   border: 2px solid rgba(255, 255, 255, 0.4);
+
   /* Glow Effect */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-
-  box-sizing: border-box; 
-  transition: border-color 0.3s ease, box-shadow 0.3s ease; 
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .edit-icon {
   cursor: pointer;
- 
+
   color: #007bff;
   font-size: 16px;
   margin-left: 15px;
@@ -181,47 +112,101 @@ html, body {
 .bottom-section {
   display: flex;
   flex-wrap: wrap;
-  position:relative;
+  position: relative;
   justify-content: space-between;
   width: 100%;
   margin-top: 20px;
   gap: 20px;
   padding: 15px;
-
 }
 
 .coach-info {
-  width: 48%;  
+  width: 48%;
   position: relative;
   min-height: max-content;
-  background-color: #fff;
+  background: #4caf50;
   border-radius: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 15px; 
-  box-sizing: border-box
+  padding: 15px;
+
+  /* Glow Effect */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .parent-card {
+  background: transparent;
   position: relative;
-    min-height: max-content;
-    display: flex;
-    padding-bottom: 100px;
-    width: 48%;
-    perspective: 1000px;
+  min-height: max-content;
+  display: flex;
+  width: 48%;
+  perspective: 1000px;
+  overflow: hidden;
+  border-radius: 20px;
+}
 
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-front {
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  flex: 1;
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  background-color: #4caf50;
+  border-radius: 20px;
+  padding: 15px;
+  min-height: 100%;
+
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.card-back {
+  width: 100%;
+  height: 100%;
+  height: max-content;
+  backface-visibility: hidden;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  background-color: #4caf50;
+  border-radius: 20px;
+  padding: 15px;
+  min-height: 100%;
+  transform: rotateY(180deg);
+
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .buttonDiv {
   display: flex;
-  justify-content: space-evenly; 
-  width: 100%; 
-  margin-top: 20px; 
+  justify-content: space-evenly;
+  width: 100%;
+  margin-top: 20px;
 }
 
-.coach-info h3, .card-front h3 {
+.coach-info h3,
+.card-front h3 {
   color: #333;
   margin-bottom: 15px;
 }
@@ -229,7 +214,7 @@ html, body {
 .edit-button {
   margin-top: 20px;
   padding: 10px 20px;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border: none;
   border-radius: 5px;
@@ -239,61 +224,60 @@ html, body {
 }
 
 .edit-icon i {
-  font-size: 15px;  
-  color: #000000;   
+  font-size: 15px;
+  color: #000000;
   margin-left: 10px;
-  transition: color 0.2s ease; 
-  
+  transition: color 0.2s ease;
 }
 
-.flip-icon i{
+.flip-icon i {
   position: absolute;
   top: 10px;
   right: 10px;
 }
 
 .flip-icon:hover i {
-  color: #00a6f2;  
-  transform: scale(1.1); 
+  color: #00a6f2;
+  transform: scale(1.1);
 }
 
 .edit-icon:hover i {
-  color: #00a6f2;  
-  transform: scale(1.1); 
+  color: #00a6f2;
+  transform: scale(1.1);
 }
 
 .edit-button:hover {
   background-color: #45a049;
-  transform: scale(1.1); 
+  transform: scale(1.1);
 }
 
-h2, h3 {
+h2,
+h3 {
   color: #333;
   margin-bottom: 10px;
 }
 
 p {
   margin: 5px 0;
- 
 }
 
 @media (max-width: 768px) {
-  
   .top-section {
-    flex-direction: column; 
-    padding: 10px;  
-   flex-wrap: wrap;
-   flex-shrink: 1;         
+    flex-direction: column;
+    padding: 10px;
+    flex-wrap: wrap;
+    flex-shrink: 1;
   }
 
-  .player-info, .coach-info, .parent-card {
-    width: 100%; 
+  .player-info,
+  .coach-info,
+  .parent-card {
+    width: 100%;
     min-width: 50px;
   }
 
   .player-info strong {
-    white-space: nowrap; 
-  
+    white-space: nowrap;
   }
 
   .bottom-section {
@@ -304,7 +288,7 @@ p {
 
   .profile-input {
     width: 80%;
-    max-width: 300px; 
+    max-width: 300px;
   }
 
   .edit-button {
@@ -316,24 +300,55 @@ p {
   .buttonDiv {
     flex-direction: column;
     align-items: center;
-    margin-top: 150px; 
+    margin-top: 150px;
+  }
+
+  .parent-card {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 220px;
+    box-sizing: border-box;
+  }
+
+  .card-inner {
+    width: 100%;
+    height: auto;
+    display: flex;
+    position: relative;
+  }
+
+  .card-front,
+  .card-back {
+    width: 100%;
+    height: auto;
+    position: absolute;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .card-back {
+    transform: rotateY(180deg);
   }
 }
 
 @media (max-width: 480px) {
   .profile-container {
-  
     padding: 1px;
   }
 
-  h2, h3 {
+  h2,
+  h3 {
     font-size: 4vw;
   }
   .top-section {
-    flex-direction: column; 
+    flex-direction: column;
     flex-wrap: wrap;
-    padding: 10px;     
-    justify-content: center;      
+    padding: 10px;
+    justify-content: center;
   }
 
   .player-image {
@@ -349,24 +364,10 @@ p {
   .edit-button {
     font-size: 14px;
     padding: 8px 15px;
-   
   }
   .buttonDiv {
     flex-direction: column;
     align-items: center;
-    margin-top: 150px; 
+    margin-top: 150px;
   }
 }
-
-
-
-
-
-  
-  
- 
-  
-  
-  
-  
-  
