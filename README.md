@@ -32,7 +32,7 @@ To initialize and run the project locally:
 3.  **Run the Project:**
     *   Execute the `start.bat` script: `cmd /c start.bat` ( You may need to modify thi to fit your system)
 
-If everything worked you should see the message hello in your browser
+If everything worked, you should see the message hello in your browser!
 
 
 ---
@@ -69,9 +69,9 @@ However, if you make changes to the frontend, you must rebuild the frontend and 
 
 When using Render, you must use **Relative URLs** in API Calls:
 
-    ✅ Correct: ```const baseUrl = "/api/categories";```
+   ✅ Correct: ```const baseUrl = "/api/categories";```
 
-    ❌ Avoid hardcoded URLs like: ```http://localhost:3001/api/login```
+   ❌ Avoid hardcoded URLs like: ```http://localhost:3001/api/login```
 
 This ensures API calls work in production when the frontend and backend are served from the same domain.
 
