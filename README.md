@@ -55,6 +55,15 @@ However, if you make changes to the frontend, you must rebuild the frontend and 
 2. **Move Build Folder to Backend Root**
     * After the build completes, move the generated "build" folder into the backend root directory.
 
+3. **Commit and Push changes**
+   * Commit the changes to your Git repository and push them to GitHub
+
+4. **Go to Render page**
+   * Go to your [Render dashboard](https://dashboard.render.com/)
+   * Click on the service named bflow_prod
+   * In the top right corner, click the Manual Deploy button
+   * Select Deploy latest commit
+   * From the "logs" page, you can monitor the deployment status and check for any errors
 
 ### Note!
 
